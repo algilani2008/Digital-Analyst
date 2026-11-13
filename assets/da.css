@@ -18,6 +18,7 @@
   --bad:#FF8A8F;--bad-soft:#3B1D20;--side:#0A1418;--side-fg:#B9CFCC;color-scheme:dark}
 *{box-sizing:border-box}
 html,body{margin:0}
+[hidden]{display:none!important}
 body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.7}
 h1,h2,h3,h4{font-family:var(--f-display);line-height:1.35;margin:0}
 h1{font-size:1.6rem}h2{font-size:1.2rem}h3{font-size:1.02rem}
