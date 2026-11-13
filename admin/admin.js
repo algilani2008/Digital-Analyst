@@ -23,7 +23,7 @@
     var open = D.requests.filter(function (r) { return r.status !== "مغلق"; }).length;
     $("nav").innerHTML = NAV.map(function (n) { var c = n[0] === "requests" && open ? '<span class="cnt">' + open + "</span>" : ""; return '<button type="button" data-v="' + n[0] + '"' + (n[0] === v || (v === "client" && n[0] === "clients") ? ' aria-current="page"' : "") + "><span>" + n[1] + "</span>" + c + "</button>"; }).join("");
     $("side").classList.remove("open");
-    V[v]($("main"));
+    await V[v]($("main"));
     $("main").querySelectorAll("[data-menu]").forEach(function (b) { b.onclick = function () { $("side").classList.toggle("open"); }; });
     $("main").focus({ preventScroll: true });
   }
@@ -138,23 +138,29 @@
       bind("[data-goset]", function () { go("settings"); });
       bind("[data-pkg]", function (el) { packageForm(D.packages.find(function (x) { return x.id === el.dataset.pkg; })); });
     },
-    rents: function (m) {
+    rents: async function (m) {
+      m.innerHTML = head("أسعار الإيجار") + '<p class="empty">جاري التحميل…</p>';
+      var all = await DA.rents(), meta = await DA.rentsMeta();
       var T = DA.RENT_TYPES, city = opt.city || "", type = opt.type || "", q = opt.q || "";
-      var cities = Array.from(new Set(D.rents.map(function (r) { return r.city; }))).sort();
-      var list = D.rents.filter(function (r) { return (!city || r.city === city) && (!type || r.type === type) && (!q || (r.district + r.city).indexOf(q) >= 0); })
+      var cities = Array.from(new Set(all.map(function (r) { return r.city; }))).sort();
+      var list = all.filter(function (r) { return (!city || r.city === city) && (!type || r.type === type) && (!q || (r.district + r.city).indexOf(q) >= 0); })
         .sort(function (a, b) { return a.city.localeCompare(b.city, "ar") || a.district.localeCompare(b.district, "ar") || a.type.localeCompare(b.type); });
-      var nS = D.rents.filter(function (r) { return r.sample; }).length;
+      var cnt = function (c) { return all.filter(function (r) { return r.confidence === c; }).length; };
+      function badge(r) { return r.auto ? UI.pill(r.confidence === "estimate" ? "تقديري" : DA.CONF[r.confidence] || "آلي") : '<span class="pill ok">تعديلك</span>'; }
       m.innerHTML = head("أسعار الإيجار", '<button class="btn ghost" data-rx type="button">تصدير CSV</button><button class="btn" data-rnew type="button">سعر جديد</button>') +
-        '<p class="small muted" style="margin-bottom:12px">تظهر للزوار في أداة «أسعار الإيجار» بالموقع. ' + (nS ? '<b>' + nS + " سعر تقديري للتجربة</b>، يظهر للزائر بعلامة «تقديري». حدّثه من منصة إيجار أو الهيئة العامة للعقار أو العروض الفعلية، واكتب المصدر والشهر." : "كل الأسعار موثقة بمصدر.") + "</p>" +
+        '<section class="card" style="margin-bottom:12px"><h2>التحديث الآلي</h2><p class="small">' + E(meta.method || "") + '</p><p class="small muted" style="margin-top:6px">آخر تحديث: <b class="num">' + E(meta.updated || "—") + "</b> · رسمي " + cnt("official") + " · تقارير " + cnt("report") + " · تقديري " + cnt("estimate") + " · تعديلاتك " + all.filter(function (r) { return !r.auto; }).length + "</p>" +
+        (meta.log.length ? '<details style="margin-top:8px"><summary class="small">سجل التحديثات</summary><ul class="small" style="margin:6px 0 0;padding-inline-start:18px">' + meta.log.slice(-8).reverse().map(function (l) { return "<li><span class=\"num\">" + E(l.at) + "</span> " + E(l.note) + "</li>"; }).join("") + "</ul></details>" : "") +
+        '<p class="small muted" style="margin-top:6px">تعديلك لأي سعر يتقدم على التحديث الآلي لنفس الحي والنوع. احذف تعديلك يرجع السعر الآلي.</p></section>' +
         '<div style="margin-bottom:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px"><select id="rf-city" aria-label="المدينة"><option value="">كل المدن</option>' + cities.map(function (c) { return "<option" + (c === city ? " selected" : "") + ">" + E(c) + "</option>"; }).join("") + '</select><select id="rf-type" aria-label="النوع"><option value="">كل الأنواع</option>' + Object.keys(T).map(function (k) { return '<option value="' + k + '"' + (k === type ? " selected" : "") + ">" + E(T[k][0]) + "</option>"; }).join("") + '</select><input id="rf-q" placeholder="ابحث باسم الحي" value="' + E(q) + '"></div>' +
         '<section class="card">' + table(["المدينة", "الحي", "النوع", "الأدنى", "المتوسط", "الأعلى", "الوحدة", "المصدر", ""], list.map(function (r) {
-          return '<tr class="rowlink" data-rent="' + r.id + '"><td>' + E(r.city) + "</td><td>" + E(r.district) + "</td><td>" + E((T[r.type] || ["—"])[0]) + '</td><td class="num">' + UI.sar(r.min) + '</td><td class="num"><b>' + UI.sar(r.avg) + '</b></td><td class="num">' + UI.sar(r.max) + '</td><td class="small">' + ((T[r.type] || [])[1] === "unit" ? "ر.س/سنة للوحدة" : "ر.س/م²/سنة") + '</td><td class="small">' + (r.sample ? UI.pill("تقديري") + " " : "") + E(r.source || "—") + ' <span class="muted num">' + E(r.date || "") + "</span></td><td>" + '<button class="btn ghost sm" data-rdel="' + r.id + '" type="button">حذف</button></td></tr>'; }), "ما فيه أسعار بهذا الفلتر.") + "</section>";
+          return '<tr class="rowlink" data-rent="' + E(r.id) + '"><td>' + E(r.city) + "</td><td>" + E(r.district) + "</td><td>" + E((T[r.type] || ["—"])[0]) + '</td><td class="num">' + UI.sar(r.min) + '</td><td class="num"><b>' + UI.sar(r.avg) + '</b></td><td class="num">' + UI.sar(r.max) + '</td><td class="small">' + ((T[r.type] || [])[1] === "unit" ? "ر.س/سنة للوحدة" : "ر.س/م²/سنة") + '</td><td class="small">' + badge(r) + " " + (r.url ? '<a href="' + E(r.url) + '" target="_blank" rel="noopener noreferrer">' + E(r.source) + "</a>" : E(r.source || "—")) + ' <span class="muted num">' + E(r.date || "") + "</span></td><td>" + (r.auto ? "" : '<button class="btn ghost sm" data-rdel="' + E(r.id) + '" type="button">حذف</button>') + "</td></tr>"; }), "ما فيه أسعار بهذا الفلتر.") + "</section>";
       function refilter() { go("rents", { city: $("rf-city").value, type: $("rf-type").value, q: $("rf-q").value.trim() }); }
       $("rf-city").onchange = refilter; $("rf-type").onchange = refilter; $("rf-q").onchange = refilter;
       bind("[data-rnew]", function () { rentForm({ city: city, type: type || "shop" }); });
-      m.querySelectorAll("[data-rent]").forEach(function (tr) { tr.onclick = function (e) { if (e.target.closest("[data-rdel]")) return; rentForm(D.rents.find(function (x) { return x.id === tr.dataset.rent; })); }; });
+      m.querySelectorAll("[data-rent]").forEach(function (tr) { tr.onclick = function (e) { if (e.target.closest("[data-rdel],a")) return; var r = all.find(function (x) { return x.id === tr.dataset.rent; });
+        rentForm(r.auto ? { city: r.city, district: r.district, type: r.type, min: r.min, avg: r.avg, max: r.max, date: r.date, fromAuto: true } : r); }; });
       bind("[data-rdel]", async function (el) { if (!UI.confirm2(el, "تأكيد")) return; await DA.remove("rents", el.dataset.rdel); UI.toast("انحذف."); go("rents", opt); });
-      bind("[data-rx]", function () { var rows = [["المدينة", "الحي", "النوع", "الأدنى", "المتوسط", "الأعلى", "المصدر", "الشهر", "تقديري"]].concat(list.map(function (r) { return [r.city, r.district, (T[r.type] || [r.type])[0], r.min, r.avg, r.max, r.source, r.date, r.sample ? "نعم" : ""]; }));
+      bind("[data-rx]", function () { var rows = [["المدينة", "الحي", "النوع", "الأدنى", "المتوسط", "الأعلى", "المصدر", "الفترة", "الدرجة"]].concat(list.map(function (r) { return [r.city, r.district, (T[r.type] || [r.type])[0], r.min, r.avg, r.max, r.source, r.date, r.auto ? DA.CONF[r.confidence] || "" : "تعديل المالك"]; }));
         var csv = "\ufeff" + rows.map(function (r) { return r.map(function (v) { v = v == null ? "" : String(v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(","); }).join("\n");
         var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" })); a.download = "rents-" + DA.day(0) + ".csv"; a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000); });
     },
@@ -254,7 +260,7 @@
   }
   function rentForm(r) {
     var T = DA.RENT_TYPES, isNew = !r.id;
-    UI.dialog(isNew ? "سعر إيجار جديد" : "تعديل سعر " + r.district, '<div class="formgrid"><label>المدينة<input name="city" required maxlength="40" value="' + E(r.city || "") + '"></label><label>الحي أو المنطقة<input name="district" required maxlength="80" value="' + E(r.district || "") + '"></label>' +
+    UI.dialog(r.fromAuto ? "تعديل السعر الآلي لـ " + r.district : isNew ? "سعر إيجار جديد" : "تعديل سعر " + r.district, '<div class="formgrid"><label>المدينة<input name="city" required maxlength="40" value="' + E(r.city || "") + '"></label><label>الحي أو المنطقة<input name="district" required maxlength="80" value="' + E(r.district || "") + '"></label>' +
       '<label class="full">نوع العقار<select name="type">' + Object.keys(T).map(function (k) { return '<option value="' + k + '"' + (k === r.type ? " selected" : "") + ">" + E(T[k][0]) + " (" + (T[k][1] === "unit" ? "ر.س/سنة للوحدة" : "ر.س/م² سنويًا") + ")</option>"; }).join("") + "</select></label>" +
       '<label>الأدنى<input type="number" min="0" step="any" name="min" value="' + E(r.min == null ? "" : r.min) + '"></label><label>المتوسط<input type="number" min="0" step="any" name="avg" required value="' + E(r.avg == null ? "" : r.avg) + '"></label><label>الأعلى<input type="number" min="0" step="any" name="max" value="' + E(r.max == null ? "" : r.max) + '"></label><label>الشهر<input type="month" name="date" value="' + E(r.date || DA.day(0).slice(0, 7)) + '"></label>' +
       '<label class="full">المصدر<input name="source" maxlength="120" placeholder="مثال: منصة إيجار، عروض عقار، الهيئة العامة للعقار" value="' + E(r.sample ? "" : r.source || "") + '"></label>' +
@@ -265,6 +271,7 @@
         if (!o.city || !o.district) throw new Error("اكتب المدينة والحي."); if (!(o.avg > 0)) throw new Error("اكتب متوسط السعر.");
         if (o.min != null && o.max != null && o.min > o.max) throw new Error("الأدنى أكبر من الأعلى.");
         if (!o.sample && !o.source) throw new Error("اكتب المصدر، أو علّمه تقديري.");
+        delete o.fromAuto; delete o.auto; delete o.confidence; delete o.url;
         await DA.save("rents", o); UI.toast("حُفظ السعر."); go("rents", opt);
       });
   }

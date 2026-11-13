@@ -45,20 +45,22 @@
      التقديرية (sample) أرقام تقريبية للتجربة وتظهر بعلامة «تقديري» لين المالك يحدّثها من إيجار أو الهيئة العامة للعقار أو العروض.
      الوحدة: m2 = ريال للمتر المربع سنويًا، unit = ريال للوحدة سنويًا (الشقق والفلل). */
   var RENT_TYPES = { shop: ["محل تجاري", "m2"], office: ["مكتب", "m2"], mall: ["محل في مركز تسوق", "m2"], warehouse: ["مستودع", "m2"], factory: ["مصنع", "m2"], farm: ["مزرعة", "m2"], apartment: ["شقة سكنية", "unit"], villa: ["فيلا", "unit"] };
-  function sampleRents() {
-    var S = "تقدير للتجربة، غير معتمد", rows = [
-      ["الرياض", "العليا", "shop", 1500, 2000, 3000], ["الرياض", "العليا", "office", 1100, 1400, 1900], ["الرياض", "الملقا", "shop", 1200, 1600, 2200], ["الرياض", "الملقا", "office", 1000, 1250, 1600], ["الرياض", "الملقا", "villa", 120000, 160000, 220000],
-      ["الرياض", "النرجس", "shop", 800, 1000, 1400], ["الرياض", "النرجس", "apartment", 45000, 60000, 75000], ["الرياض", "النرجس", "villa", 90000, 120000, 160000], ["الرياض", "الياسمين", "shop", 1000, 1300, 1800], ["الرياض", "الياسمين", "apartment", 50000, 65000, 85000],
-      ["الرياض", "السليمانية", "shop", 1200, 1600, 2200], ["الرياض", "الروضة", "shop", 600, 800, 1100], ["الرياض", "الروضة", "apartment", 30000, 40000, 50000], ["الرياض", "النسيم", "shop", 400, 550, 800], ["الرياض", "النسيم", "apartment", 20000, 27000, 35000],
-      ["الرياض", "العزيزية", "shop", 400, 550, 750], ["الرياض", "السلي", "warehouse", 120, 160, 220], ["الرياض", "المدينة الصناعية الثانية", "warehouse", 100, 140, 180], ["الرياض", "المدينة الصناعية الثانية", "factory", 80, 110, 150], ["الرياض", "العمارية", "farm", 3, 6, 10], ["الخرج", "الخرج", "farm", 2, 4, 6],
-      ["جدة", "الروضة", "shop", 900, 1200, 1600], ["جدة", "الروضة", "office", 700, 900, 1200], ["جدة", "الحمراء", "shop", 800, 1100, 1500], ["جدة", "الشاطئ", "shop", 1200, 1600, 2200], ["جدة", "الشاطئ", "apartment", 45000, 60000, 80000], ["جدة", "الصفا", "shop", 450, 600, 850], ["جدة", "الصفا", "apartment", 22000, 28000, 38000],
-      ["جدة", "الخمرة", "warehouse", 100, 130, 170], ["جدة", "المدينة الصناعية", "factory", 80, 100, 140],
-      ["الدمام", "الفيصلية", "shop", 500, 650, 900], ["الدمام", "الشاطئ", "shop", 700, 950, 1300], ["الدمام", "الشاطئ", "apartment", 30000, 40000, 55000], ["الدمام", "المدينة الصناعية الثانية", "warehouse", 90, 120, 160], ["الدمام", "المدينة الصناعية الثانية", "factory", 70, 95, 130],
-      ["مكة المكرمة", "العزيزية", "shop", 900, 1200, 1700], ["مكة المكرمة", "العوالي", "shop", 600, 800, 1100], ["مكة المكرمة", "العوالي", "apartment", 28000, 35000, 45000],
-      ["المدينة المنورة", "قربان", "shop", 600, 800, 1100], ["المدينة المنورة", "قربان", "apartment", 25000, 30000, 40000], ["القصيم", "بريدة", "farm", 2, 3.5, 6]];
-    var out = rows.map(function (r) { return { id: uid("t"), city: r[0], district: r[1], type: r[2], min: r[3], avg: r[4], max: r[5], source: S, date: day(0).slice(0, 7), sample: true }; });
-    out.push({ id: uid("t"), city: "الرياض", district: "المراكز التجارية الإقليمية (متوسط المدينة)", type: "mall", min: null, avg: 2650, max: null, source: "نايت فرانك، النصف الأول 2026 (عبر الاقتصادية)", date: "2026-08", sample: false });
-    return out;
+  /* الأسعار المنشورة في data/rents.json يحدّثها وكيل ذكاء اصطناعي أسبوعيًا (انظر data/README.md).
+     تعديلات المالك من مركز التحكم تتقدم عليها لنفس المدينة والحي والنوع. */
+  var BASE = (function () { var c = document.currentScript && document.currentScript.src; return c ? c.replace(/assets\/api\.js.*$/, "") : ""; })();
+  var CONF = { official: "رسمي", report: "تقرير منشور", estimate: "تقدير ذكاء اصطناعي" };
+  var pubP = null;
+  function published() {
+    if (!pubP) pubP = fetch(BASE + "data/rents.json", { cache: "no-cache" }).then(function (r) { if (!r.ok) throw 0; return r.json(); }).catch(function () { return { rows: [], sources: [] }; });
+    return pubP;
+  }
+  function rkey(r) { return [r.city, r.district, r.type].join("|"); }
+  function fromPub(doc) {
+    var src = {}; (doc.sources || []).forEach(function (x) { src[x.id] = x; });
+    return (doc.rows || []).map(function (r) { var ss = (r.sources || []).map(function (id) { return src[id]; }).filter(Boolean);
+      return { id: "p:" + rkey(r), city: r.city, district: r.district, type: r.type, min: r.min, avg: r.avg, max: r.max, date: r.period || doc.updated,
+        source: ss.length ? ss.map(function (x) { return x.title; }).join("، ") : (CONF[r.confidence] || "تقدير") + (r.note ? " · " + r.note : ""), url: ss[0] && ss[0].url,
+        sample: r.confidence === "estimate", confidence: r.confidence, auto: true }; });
   }
 
   /* ---------- قاعدة البيانات التجريبية ---------- */
@@ -75,7 +77,8 @@
     d.packages.forEach(function (p) { var l = p.limits || (p.limits = {});
       if (!("credits" in l)) { l.credits = l.sales == null && "sales" in l ? null : ((l.sales || 0) + (l.traffic || 0)) * COSTS.file; }
       delete l.sales; delete l.traffic; });
-    if (!d.meta.rentsSeeded) { d.meta.rentsSeeded = true; d.rents = d.rents.concat(sampleRents()); try { localStorage.setItem(KEY, JSON.stringify(d)); } catch (e) {} }
+    /* الأسعار التقديرية القديمة صارت في data/rents.json، فتنشال من نسخة المتصفح ويبقى تعديل المالك فقط */
+    if (d.meta.rentsSeeded && !d.meta.rentsV2) { d.meta.rentsV2 = true; d.rents = d.rents.filter(function (r) { return r.source !== "تقدير للتجربة، غير معتمد" && String(r.source || "").indexOf("نايت فرانك") !== 0; }); try { localStorage.setItem(KEY, JSON.stringify(d)); } catch (e) {} }
     return d;
   }
   function logAct(d, who, action) { d.log.push({ id: uid("l"), at: now(), who: who, action: action }); d.log = d.log.slice(-500); }
@@ -266,7 +269,14 @@
     setCosts: async function (c) { if (!isOwner()) throw new Error("للمالك فقط."); if (MODE === "server") return http("/admin/costs", c);
       var d = db(); Object.keys(COSTS).forEach(function (k) { var v = Number(c[k]); if (isFinite(v) && v >= 0) d.meta.costs[k] = Math.round(v * 100) / 100; });
       logAct(d, session().name, "عدّل أسعار الرصيد"); store(d); return clone(d.meta.costs); },
-    rents: async function () { if (MODE === "server") return http("/public/rents"); return clone(db().rents); },
+    rents: async function () {
+      if (MODE === "server") return http("/public/rents");
+      var doc = await published(), mine = db().rents, keys = {};
+      mine.forEach(function (r) { keys[rkey(r)] = 1; });
+      return clone(mine.map(function (r) { return Object.assign({ confidence: r.sample ? "estimate" : "owner" }, r); }).concat(fromPub(doc).filter(function (r) { return !keys[rkey(r)]; })));
+    },
+    rentsMeta: async function () { var d = await published(); return { updated: d.updated, method: d.method, log: d.log || [], sources: d.sources || [] }; },
+    CONF: CONF,
 
     /* تستخدمها الأدوات في الصفحة الرئيسية لما يكون العميل داخل */
     portalLimits: function () {

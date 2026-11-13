@@ -1,7 +1,7 @@
 /* أداة أسعار الإيجار: سعر المتر حسب المدينة والحي ونوع العقار، وكم يطلع إيجار مساحتك، ومقارنة إيجارك الفعلي. */
 (function () {
   var root = document.getElementById("rent-app"); if (!root || !window.DA) return;
-  var T = DA.RENT_TYPES, E = UI.esc, R = [], KEY = "da_rent_v1";
+  var T = DA.RENT_TYPES, E = UI.esc, R = [], META = {}, KEY = "da_rent_v1";
   var st = { city: "الرياض", type: "shop", district: "", area: 120, units: 1, mine: "" };
   try { Object.assign(st, JSON.parse(localStorage.getItem(KEY) || "{}") || {}); } catch (e) {}
   function save() { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} }
@@ -35,7 +35,7 @@
     var mine = +st.mine > 0 ? +st.mine : null, diff = mine ? (mine / yr(cur.avg) - 1) : null;
     var max = list[0].avg;
     o.innerHTML =
-      '<p class="rent-src">' + (cur.sample ? '<span class="flag">تقديري</span> ' : '<span class="flag good">موثق</span> ') + "المصدر: " + E(cur.source || "—") + (cur.date ? " · " + E(cur.date) : "") + "</p>" +
+      '<p class="rent-src">' + (cur.sample ? '<span class="flag">' + (cur.auto ? "تقدير ذكاء اصطناعي" : "تقديري") + "</span> " : '<span class="flag good">' + E(DA.CONF[cur.confidence] || "موثق") + "</span> ") + "المصدر: " + (cur.url ? '<a href="' + E(cur.url) + '" target="_blank" rel="noopener noreferrer">' + E(cur.source) + "</a>" : E(cur.source || "—")) + (cur.date ? " · " + E(cur.date) : "") + (META.updated ? " · آخر تحديث آلي " + E(META.updated) : "") + "</p>" +
       '<div class="res-kpis">' +
       kpi("سعر " + (unit ? "الوحدة" : "المتر") + " (المتوسط)", f2(cur.avg) + " ر.س", lbl) +
       kpi("المدى", cur.min != null && cur.max != null ? f0(cur.min) + " – " + f0(cur.max) : "—", lbl) +
@@ -43,7 +43,7 @@
       kpi("شهريًا", f0(yr(cur.avg) / 12) + " ر.س", unit ? q + " وحدة" : f0(q) + " م²") + "</div>" +
       '<div class="grid2" style="margin-top:14px"><div><p class="card-t">' + E(T[st.type][0]) + " في " + E(st.city) + " (" + lbl + ')</p><div class="hbars">' +
       list.slice(0, 12).map(function (r) { return '<div class="hb' + (r === cur ? " on" : "") + '"><span class="nm" title="' + E(r.district) + '">' + E(r.district) + (r.sample ? " *" : "") + '</span><span class="track"><span class="fill' + (r === cur ? " warn" : "") + '" style="width:' + Math.max(2, r.avg / max * 100) + '%;display:block"></span></span><span class="num">' + f0(r.avg) + "</span></div>"; }).join("") +
-      "</div>" + (list.some(function (r) { return r.sample; }) ? '<p class="fmt" style="margin-top:6px">* سعر تقديري للتجربة. تأكد من العروض الفعلية قبل أي قرار.</p>' : "") + "</div>" +
+      "</div>" + (list.some(function (r) { return r.sample; }) ? '<p class="fmt" style="margin-top:6px">* سعر تقديري يحدّثه الذكاء الاصطناعي من أقرب البيانات المنشورة. تأكد من العروض الفعلية قبل أي قرار.</p>' : "") + "</div>" +
       '<div><p class="card-t">قارن إيجارك الفعلي</p><div class="field"><label for="rt-mine">إيجارك السنوي (ر.س)</label><input id="rt-mine" type="number" min="0" step="500" value="' + E(st.mine) + '" placeholder="' + E(f0(yr(cur.avg))) + '"></div>' +
       '<p class="verdict' + (diff != null && diff > 0.1 ? " bad" : "") + '" id="rt-v" style="margin-top:10px">' + verdict(mine, diff, q, unit, cur) + "</p>" +
       '<div class="res-actions" style="margin-top:12px"><button type="button" class="btn btn-primary btn-sm" id="rt-use">استخدمه في حاسبة التكلفة</button><span class="status" id="rt-st" aria-live="polite"></span></div></div></div>';
@@ -80,6 +80,6 @@
     if (ok) setTimeout(function () { var c = document.getElementById("costing"); if (c) c.scrollIntoView({ behavior: "smooth", block: "start" }); }, 700);
   });
 
-  DA.rents().then(function (list) { R = (list || []).filter(function (r) { return r && r.city && r.district && T[r.type] && r.avg > 0; }); render(); })
+  Promise.all([DA.rents(), DA.rentsMeta()]).then(function (x) { var list = x[0]; META = x[1] || {}; R = (list || []).filter(function (r) { return r && r.city && r.district && T[r.type] && r.avg > 0; }); render(); })
     .catch(function () { root.innerHTML = '<p class="msg">ما قدرنا نحمّل الأسعار. حدّث الصفحة.</p>'; });
 })();
