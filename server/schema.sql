@@ -10,8 +10,7 @@ CREATE TABLE packages (
   name        VARCHAR(40)  NOT NULL,
   price       DECIMAL(12,2) NULL,                 -- NULL = حسب عرض السعر
   period      ENUM('monthly','once') NOT NULL DEFAULT 'monthly',
-  lim_sales   INT NULL,                           -- NULL = بدون حد
-  lim_traffic INT NULL,
+  lim_credits DECIMAL(10,2) NULL,                 -- رصيد التحليل الشهري، NULL = بدون حد
   lim_maint   INT NULL,
   lim_requests INT NULL,
   features    JSON NULL
@@ -124,12 +123,34 @@ CREATE TABLE invoices (
 
 CREATE TABLE usage_counts (
   client_id   CHAR(36)    NOT NULL,
-  tool        ENUM('sales','traffic','maint','requests') NOT NULL,
+  tool        ENUM('credits','maint','requests') NOT NULL,
   month       CHAR(7)     NOT NULL,               -- 2026-11
-  count       INT         NOT NULL DEFAULT 0,
+  count       DECIMAL(10,2) NOT NULL DEFAULT 0,   -- الرصيد يقبل كسور (مثل 0.5 للإدخال اليدوي)
   PRIMARY KEY (client_id, tool, month),
   CONSTRAINT fk_use_client FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
+
+-- كم يخصم كل نوع استخدام من رصيد التحليل (يعدّلها المالك من الإعدادات)
+CREATE TABLE credit_costs (
+  action      ENUM('manual','file','ai') PRIMARY KEY,
+  cost        DECIMAL(6,2) NOT NULL
+) ENGINE=InnoDB;
+INSERT INTO credit_costs VALUES ('manual',1),('file',2),('ai',5);
+
+-- أسعار الإيجار: m2 = ريال للمتر سنويًا، unit = ريال للوحدة سنويًا (حسب النوع)
+CREATE TABLE rents (
+  id          CHAR(36)     PRIMARY KEY,
+  city        VARCHAR(40)  NOT NULL,
+  district    VARCHAR(80)  NOT NULL,
+  type        ENUM('shop','office','mall','warehouse','factory','farm','apartment','villa') NOT NULL,
+  min         DECIMAL(12,2) NULL,
+  avg         DECIMAL(12,2) NOT NULL,
+  max         DECIMAL(12,2) NULL,
+  source      VARCHAR(120) NULL,
+  date        CHAR(7)      NULL,
+  sample      TINYINT(1)   NOT NULL DEFAULT 0,  -- 1 = تقديري، يظهر للزائر بعلامة «تقديري»
+  INDEX ix_rent (city, type)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE activity_log (
   id          BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -138,9 +159,9 @@ CREATE TABLE activity_log (
   action      VARCHAR(300) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO packages (id, name, price, period, lim_sales, lim_traffic, lim_maint, lim_requests, features) VALUES
- ('free',   'التجربة المجانية', 0,    'once',    1,    1,    3,    1,    JSON_ARRAY('تجربة الأدوات على بياناتك','استشارة أولى')),
- ('start',  'الانطلاقة',        NULL, 'once',    5,    5,    20,   5,    JSON_ARRAY('موقع تعريفي حتى 5 صفحات','نموذج تواصل وربط واتساب','إعداد Google Analytics 4')),
- ('growth', 'النمو',            NULL, 'monthly', 30,   30,   100,  20,   JSON_ARRAY('كل ما في الانطلاقة','لوحة مؤشرات أداء','تتبع مصادر العملاء والإعلانات','تقرير شهري بالتوصيات')),
- ('pro',    'المتكامل',         NULL, 'monthly', NULL, NULL, NULL, NULL, JSON_ARRAY('وثيقة متطلبات النظام','مخططات سير العمل وقاعدة البيانات','واجهات وصلاحيات','لوحة إدارية لمتابعة الأداء'));
+INSERT INTO packages (id, name, price, period, lim_credits, lim_maint, lim_requests, features) VALUES
+ ('free',   'التجربة المجانية', 0,    'once',    4,    3,    1,    JSON_ARRAY('تجربة الأدوات على بياناتك','استشارة أولى')),
+ ('start',  'الانطلاقة',        NULL, 'once',    30,   20,   5,    JSON_ARRAY('موقع تعريفي حتى 5 صفحات','نموذج تواصل وربط واتساب','إعداد Google Analytics 4')),
+ ('growth', 'النمو',            NULL, 'monthly', 150,  100,  20,   JSON_ARRAY('كل ما في الانطلاقة','لوحة مؤشرات أداء','تتبع مصادر العملاء والإعلانات','تقرير شهري بالتوصيات')),
+ ('pro',    'المتكامل',         NULL, 'monthly', NULL, NULL, NULL, JSON_ARRAY('وثيقة متطلبات النظام','مخططات سير العمل وقاعدة البيانات','واجهات وصلاحيات','لوحة إدارية لمتابعة الأداء'));
 -- حساب المالك يُنشأ مرة وحدة بسكربت setup.php يحذف نفسه بعد التشغيل (انظر API.md).

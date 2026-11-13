@@ -40,14 +40,18 @@
 | POST | `/requests/reply` | المالك أو العميل صاحب الطلب | `{ id, text, status? }` | الطلب مع رسائله |
 | GET | `/client/mine` | العميل | — | `{ client, package, projects, requests, reports, invoices, usage }` |
 | POST | `/client/request` | العميل | `{ title, type, priority, text }` | الطلب الجديد (يرفض لو تعدى حد الباقة) |
-| GET | `/client/limits` | العميل | — | `{ pkg, company, limits, used }` للأدوات في الصفحة الرئيسية |
-| POST | `/client/usage` | العميل | `{ tool }` | `{ used, limit }` (يرفض لو تعدى الحد) |
+| GET | `/client/limits` | العميل | — | `{ pkg, company, limits: { credits, maint }, used: { credits, maint } }` |
+| POST | `/client/usage` | العميل | `{ action }` واحد من `manual` أو `file` أو `ai`، أو `{ tool: "maint" }` | `{ used, limit }`: الخادم يخصم `credit_costs.cost` ويرفض لو الرصيد ما يكفي |
+| GET | `/public/costs` | الكل | — | `{ manual, file, ai }` |
+| GET | `/public/rents` | الكل | — | قائمة `rents` |
+| POST | `/admin/costs` | المالك | `{ manual, file, ai }` | الأسعار بعد الحفظ |
+| POST | `/client/ai` | العميل | `{ tool, rows }` | تحليل بالذكاء الاصطناعي (المرحلة الجاية). مفتاح نموذج الذكاء الاصطناعي ينحفظ في الخادم فقط، وما يوصل للمتصفح أبدًا |
 
-`entity` واحد من: `clients`، `packages`، `projects`، `requests`، `reports`، `invoices`.
+`entity` واحد من: `clients`، `packages`، `projects`، `requests`، `reports`، `invoices`، `rents`.
 
 ## شكل البيانات
 
 نفس الحقول المستخدمة في `assets/api.js` (الوضع التجريبي)، ويطابقها `schema.sql`:
 - `requests.messages` = صفوف `request_messages` مرتبة بالوقت.
 - `projects.stages` = JSON: `[{ name, done, date }]`.
-- `packages.limits` = `{ sales, traffic, maint, requests }` و`null` يعني بدون حد.
+- `packages.limits` = `{ credits, maint, requests }` و`null` يعني بدون حد. `credits` رصيد تحليل مشترك، وكل استخدام يخصم حسب `credit_costs`.

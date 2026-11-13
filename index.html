@@ -402,6 +402,10 @@ footer a{color:var(--muted)}
 input.qty{max-width:110px;min-width:64px}
 .cs-lines select{min-width:150px}
 .cs-split{display:grid;grid-template-columns:240px 1fr;gap:16px;align-items:start;margin-top:14px}
+.rent-f{grid-template-columns:repeat(4,1fr);margin-bottom:12px}
+.rent-src{font-size:.85rem;color:var(--muted);margin:0 0 10px}
+.hb.on .nm{font-weight:600}
+@media (max-width:760px){.rent-f{grid-template-columns:1fr 1fr}}
 .cs-split>*{min-width:0}
 .cs-list{display:flex;flex-direction:column;gap:6px}
 .cs-list>button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:right;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:10px;padding:8px 10px;cursor:pointer;font:inherit}
@@ -426,6 +430,7 @@ input.qty{max-width:110px;min-width:64px}
       <li><a href="#services">الخدمات</a></li>
       <li><a href="#discover">وش أحتاج؟</a></li>
       <li><a href="#costing">تكلفة المنتج</a></li>
+      <li><a href="#rent">أسعار الإيجار</a></li>
       <li><a href="#feasibility">دراسات الجدوى</a></li>
       <li><a href="#work">نماذج أعمال</a></li>
       <li><a href="#packages">الباقات</a></li>
@@ -649,7 +654,7 @@ input.qty{max-width:110px;min-width:64px}
           <button type="button" class="btn btn-ghost" data-manual="sales">أدخل البيانات يدويًا</button>
           <button type="button" class="btn btn-ghost" id="demo-sales">جرّب ببيانات تجريبية</button>
         </div>
-        <p class="fmt">ارفع ملفك زي ما هو. نكتشف أعمدة المبلغ والفرع والصنف والتاريخ تلقائياً حتى لو أسماؤها مختلفة أو فوقها عنوان تقرير.</p>
+        <p class="fmt">الإدخال اليدوي يخصم من رصيدك أقل من رفع الملف. ارفع ملفك زي ما هو. نكتشف أعمدة المبلغ والفرع والصنف والتاريخ تلقائياً حتى لو أسماؤها مختلفة أو فوقها عنوان تقرير.</p>
         <div class="locked" id="lock-sales" hidden><span>خلص رصيد التحليلات المجانية. اطلب باقة النمو عشان تكمل بدون حدود.</span><a class="btn btn-primary btn-sm" href="#contact" data-pkg="تحليل بيانات ولوحة معلومات">اطلب الباقة</a></div>
         <div class="manual" id="man-sales" hidden></div>
         <div id="err-sales" class="msg" hidden></div>
@@ -775,6 +780,15 @@ input.qty{max-width:110px;min-width:64px}
       <p>من البهارات بالجرام والزيت بالمل إلى سعر البيع والعمولات وصافي ربح الشهر. اختر نشاطك، وعدّل الوصفة والأسعار، وتطلع لك التكلفة لكل منتج والسعر المقترح وجاهزيتك للتوسع.</p>
     </div>
     <div class="tool-wrap" id="costing-app"><noscript>الحاسبة تحتاج JavaScript.</noscript></div>
+  </section>
+
+  <section class="block" id="rent">
+    <div class="sec-head">
+      <p class="eyebrow">أسعار الإيجار</p>
+      <h2>كم سعر المتر في الحي اللي تبيه؟</h2>
+      <p>محلات ومكاتب ومستودعات ومصانع ومزارع وسكني، حسب المدينة والحي. اكتب المساحة ويطلع لك الإيجار السنوي والشهري، وقارن عرضك بمتوسط الحي، وأضفه لحاسبة التكلفة بضغطة.</p>
+    </div>
+    <div class="tool-wrap" id="rent-app"><p class="fmt">جاري التحميل…</p></div>
   </section>
 
   <section class="block" id="feasibility">
@@ -1136,7 +1150,7 @@ input.qty{max-width:110px;min-width:64px}
 
 <!-- SheetJS 0.20.3 (fixes CVE-2023-30533 and CVE-2024-22363), served from this site, not a third-party CDN -->
 <script src="xlsx-0.20.3.full.min.js"></script>
-<script src="assets/api.js?v=3"></script>
+<script src="assets/api.js?v=4"></script>
 <script>
 (function(){
   /* ---------- helpers ---------- */
@@ -1159,7 +1173,10 @@ input.qty{max-width:110px;min-width:64px}
   function monthLabel(k){var p=k.split("-");return monthNames[+p[1]-1]+" "+p[0].slice(2)}
 
   /* ---------- free quota: kept on the account when signed in, else in this browser ---------- */
-  var Q={sales:1,traffic:1,maint:3},mem={},DB=null,UID=null,shared=false;
+  /* رصيد التحليل مشترك بين المبيعات والزيارات: الملف يخصم أكثر من الإدخال اليدوي */
+  var COST=window.DA&&DA.costs?DA.costs():{manual:1,file:2,ai:5};
+  var Q={credits:window.DA&&DA.freeCredits?DA.freeCredits():4,maint:3},mem={},DB=null,UID=null,shared=false;
+  function cr(v){v=Number(v);return isFinite(v)&&v>=0?Math.min(Math.round(v*100)/100,1e6):0}
   function int(v){v=Math.floor(Number(v));return isFinite(v)&&v>=0?Math.min(v,1e6):0}
   var PR={high:1,mid:1,low:1};
   function cleanReq(r){if(!r||typeof r!=="object")return null;
@@ -1169,7 +1186,7 @@ input.qty{max-width:110px;min-width:64px}
   function load(){var raw;try{raw=JSON.parse(localStorage.getItem("da_free")||"{}")}catch(e){raw={}}
     if(!raw||typeof raw!=="object"||Array.isArray(raw))raw={};
     var u=raw.used&&typeof raw.used==="object"?raw.used:{};
-    mem={used:{sales:int(u.sales),traffic:int(u.traffic)},made:int(raw.made),seeded:!!raw.seeded,
+    mem={used:{credits:"credits" in u?cr(u.credits):(int(u.sales)+int(u.traffic))*COST.file},made:int(raw.made),seeded:!!raw.seeded,
       reqs:(Array.isArray(raw.reqs)?raw.reqs:[]).slice(0,200).map(cleanReq).filter(Boolean)};
     if(!mem.seeded){mem.seeded=true;var now=Date.now();
       mem.reqs=[{id:"ص-مثال1",title:"تسريب مكيف في غرفة الاجتماعات",loc:"الدور الثاني",pr:"high",who:"الفني خالد",st:1,at:now-3*864e5,ex:true},
@@ -1177,19 +1194,24 @@ input.qty{max-width:110px;min-width:64px}
   var usageBusy=Promise.resolve(),usageSent="";
   function save(){var out=mem;if(PORTAL){try{PORTAL.sync(mem)}catch(e){}out=Object.assign({},mem,{used:FREE.used,made:FREE.made})}
     try{localStorage.setItem("da_free",JSON.stringify(out))}catch(e){}
-    if(!DB||!UID)return;var key=[mem.used.sales,mem.used.traffic,mem.made].join();if(key===usageSent)return;usageSent=key;
-    var body={sales:mem.used.sales,traffic:mem.used.traffic,maint:mem.made,at:Date.now()};
+    if(!DB||!UID)return;var key=[mem.used.credits,mem.made].join();if(key===usageSent)return;usageSent=key;
+    var body={credits:mem.used.credits,maint:mem.made,at:Date.now()};
     usageBusy=usageBusy.then(function(){return DB.doc("usage/"+UID).set(body)}).catch(function(){})}
-  function used(k){return k==="maint"?mem.made:mem.used[k]}
-  function left(k){return Math.max(0,Q[k]-used(k))}
-  function meter(k){var r=left(k),el=$("m-"+k);
-    if(Q[k]===Infinity){el.querySelector(".mt").textContent="بدون حد ضمن باقة "+PORTAL.pkg;el.querySelector("i").style.width="100%";$("lock-"+k).hidden=true;return}
-    el.querySelector(".mt").textContent="متبقي "+r+" من "+Q[k]+(k==="maint"?" طلبات":" ملف")+(PORTAL?" (باقة "+PORTAL.pkg+")":"");
-    el.querySelector("i").style.width=(r/Q[k]*100)+"%";$("lock-"+k).hidden=r>0}
+  function qk(k){return k==="maint"?"maint":"credits"}
+  function used(k){return k==="maint"?mem.made:mem.used.credits}
+  function left(k){return Math.max(0,Q[qk(k)]-used(k))}
+  /* يكفي الرصيد لهذا النوع؟ mode: file أو manual أو ai */
+  function can(mode){return Q.credits===Infinity||left("sales")>=COST[mode]}
+  function spend(mode){mem.used.credits=cr(mem.used.credits+COST[mode]);save();meter("sales");meter("traffic")}
+  function nf(v){return String(Math.round(v*100)/100)}
+  function meter(k){var r=left(k),el=$("m-"+k),q=Q[qk(k)];if(!el)return;
+    if(q===Infinity){el.querySelector(".mt").textContent="بدون حد ضمن باقة "+PORTAL.pkg;el.querySelector("i").style.width="100%";$("lock-"+k).hidden=true;return}
+    el.querySelector(".mt").textContent=k==="maint"?"متبقي "+r+" من "+q+" طلبات"+(PORTAL?" (باقة "+PORTAL.pkg+")":""):"رصيدك "+nf(r)+" من "+nf(q)+(PORTAL?" (باقة "+PORTAL.pkg+")":"")+" · الملف "+nf(COST.file)+" واليدوي "+nf(COST.manual);
+    el.querySelector("i").style.width=(q?r/q*100:0)+"%";$("lock-"+k).hidden=k==="maint"?r>0:can("manual")}
   load();
   /* العميل الداخل بحسابه: الحدود من باقته بدل الحد المجاني، والاستخدام يتسجل على حسابه */
   var PORTAL=null,FREE=null;try{PORTAL=window.DA&&DA.portalLimits?DA.portalLimits():null}catch(e){PORTAL=null}
-  if(PORTAL){FREE={used:mem.used,made:mem.made};Q=PORTAL.limits;mem.used={sales:PORTAL.used.sales,traffic:PORTAL.used.traffic};mem.made=PORTAL.used.maint;
+  if(PORTAL){FREE={used:mem.used,made:mem.made};Q=PORTAL.limits;mem.used={credits:PORTAL.used.credits};mem.made=PORTAL.used.maint;
     var pb=document.createElement("p");pb.className="safe";pb.innerHTML="<span>أنت داخل بحساب <b></b>، والأدوات تشتغل بحدود باقة <b></b>. <a href=\"portal/\">ارجع لبوابتك</a></span>";
     pb.querySelectorAll("b")[0].textContent=PORTAL.company;pb.querySelectorAll("b")[1].textContent=PORTAL.pkg;
     var tw=document.querySelector("#tools .tool-wrap");if(tw)tw.insertBefore(pb,tw.firstChild)}
@@ -1366,8 +1388,8 @@ input.qty{max-width:110px;min-width:64px}
   }
   $("demo-sales").addEventListener("click",function(){runSales(sampleSales(),"بيانات تجريبية: متجر عطور بثلاثة فروع")});
   $("f-sales").addEventListener("change",function(e){var f=e.target.files[0];e.target.value="";if(!f)return;
-    if(!left("sales")){meter("sales");return}
-    readFile(f,function(rows){mem.used.sales++;save();meter("sales");runSales(rows,f.name,null,true)},function(m){err("sales",m)})});
+    if(!can("file")){meter("sales");err("sales",noCredit("file"));return}
+    readFile(f,function(rows){spend("file");runSales(rows,f.name,null,true)},function(m){err("sales",m)})});
 
   /* ---------- traffic analyzer ---------- */
   function sampleTraffic(){return [["بحث قوقل",4200,126],["انستقرام",3100,40],["سناب شات",2600,21],["مباشر",1500,52],["إعلانات قوقل",1800,45],["واتساب",600,38]].map(function(r){return {"المصدر":r[0],"الزيارات":r[1],"الطلبات":r[2]}})}
@@ -1403,11 +1425,13 @@ input.qty{max-width:110px;min-width:64px}
   }
   $("demo-traffic").addEventListener("click",function(){runTraffic(sampleTraffic(),"بيانات تجريبية: متجر إلكتروني لشهر واحد")});
   $("f-traffic").addEventListener("change",function(e){var f=e.target.files[0];e.target.value="";if(!f)return;
-    if(!left("traffic")){meter("traffic");return}
-    readFile(f,function(rows){mem.used.traffic++;save();meter("traffic");runTraffic(rows,f.name,null,true)},function(m){err("traffic",m)})});
+    if(!can("file")){meter("traffic");err("traffic",noCredit("file"));return}
+    readFile(f,function(rows){spend("file");runTraffic(rows,f.name,null,true)},function(m){err("traffic",m)})});
   /* الإدخال اليدوي ينحسب من الرصيد مثل رفع الملف */
-  window.__daManual=function(tool,rows){if(!left(tool)){meter(tool);return false}
-    mem.used[tool]++;save();meter(tool);(tool==="sales"?runSales:runTraffic)(rows,"بيانات أدخلتها يدويًا",null,false);return true};
+  function noCredit(mode){return can("manual")&&mode==="file"?"رصيدك "+nf(left("sales"))+" ما يكفي لتحليل ملف ("+nf(COST.file)+"). تقدر تدخل البيانات يدويًا بـ "+nf(COST.manual)+" أو تطلب باقة.":"خلص رصيدك. اطلب باقة عشان تكمل."}
+  window.__daManual=function(tool,rows){if(!can("manual")){meter(tool);return false}
+    spend("manual");(tool==="sales"?runSales:runTraffic)(rows,"بيانات أدخلتها يدويًا",null,false);return true};
+  window.__daCredits=function(){return {left:Q.credits===Infinity?Infinity:left("sales"),cost:COST}};
 
   /* ---------- maintenance requests ---------- */
   var stN=["جديد","قيد التنفيذ","مكتمل"],prN={high:"عالية",mid:"متوسطة",low:"منخفضة"},prO={high:0,mid:1,low:2};
@@ -1475,7 +1499,7 @@ input.qty{max-width:110px;min-width:64px}
     DB=db;UID=id;
     /* usage: the higher of this browser and the account, so clearing the browser does not reset it */
     try{var s=await db.doc("usage/"+id).get();if(s.exists){var u=s.data();
-      mem.used.sales=Math.max(mem.used.sales,int(u.sales));mem.used.traffic=Math.max(mem.used.traffic,int(u.traffic));mem.made=Math.max(mem.made,int(u.maint))}}catch(x){}
+      mem.used.credits=Math.max(mem.used.credits,"credits" in u?cr(u.credits):(int(u.sales)+int(u.traffic))*COST.file);mem.made=Math.max(mem.made,int(u.maint))}}catch(x){}
     save();["sales","maint","traffic"].forEach(meter);
     /* shared maintenance board */
     var timer=setTimeout(function(){if(!sharedReqs){shared=false;renderReqs()}},10000);
@@ -2086,6 +2110,7 @@ input.qty{max-width:110px;min-width:64px}
 })();
 </script>
 
-<script src="assets/manual.js?v=3"></script>
-<script src="assets/costing.js?v=3"></script>
+<script src="assets/manual.js?v=4"></script>
+<script src="assets/costing.js?v=4"></script>
+<script src="assets/rent.js?v=4"></script>
 </body></html>

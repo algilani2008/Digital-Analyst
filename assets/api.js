@@ -7,7 +7,7 @@
   var BASE_URL = "/api"; /* مثال للمرحلة الجاية: https://example.com/api */
 
   var KEY = "da_db_v1", SKEY = "da_session";
-  var ENT = ["users", "packages", "clients", "projects", "requests", "reports", "invoices", "usage", "log"];
+  var ENT = ["users", "packages", "clients", "projects", "requests", "reports", "invoices", "usage", "log", "rents"];
   function now() { return Date.now(); }
   function uid(p) { return (p || "") + now().toString(36) + Math.random().toString(36).slice(2, 7); }
   function day(off) { var d = new Date(); d.setDate(d.getDate() + (off || 0)); return d.toISOString().slice(0, 10); }
@@ -24,17 +24,42 @@
     return s.slice(0, 5) + "-" + s.slice(5);
   }
 
+  /* ---------- الرصيد: كل باقة لها رصيد تحليل شهري، وكل نوع استخدام يخصم بقدر جهده ----------
+     الإدخال اليدوي أرخص من رفع الملف، والتحليل بالذكاء الاصطناعي أغلى. المالك يعدّلها من الإعدادات. */
+  var COSTS = { manual: 1, file: 2, ai: 5 };
+  var COST_N = { manual: "تحليل بيانات مدخلة يدويًا", file: "تحليل ملف Excel أو CSV", ai: "تحليل بالذكاء الاصطناعي" };
+
   /* ---------- الباقات الافتراضية (الحدود شهرية، null = بدون حد) ---------- */
   var PACKAGES = [
-    { id: "free", name: "التجربة المجانية", price: 0, period: "once", limits: { sales: 1, traffic: 1, maint: 3, requests: 1 },
+    { id: "free", name: "التجربة المجانية", price: 0, period: "once", limits: { credits: 4, maint: 3, requests: 1 },
       features: ["تجربة الأدوات على بياناتك", "استشارة أولى"] },
-    { id: "start", name: "الانطلاقة", price: null, period: "once", limits: { sales: 5, traffic: 5, maint: 20, requests: 5 },
+    { id: "start", name: "الانطلاقة", price: null, period: "once", limits: { credits: 30, maint: 20, requests: 5 },
       features: ["موقع تعريفي حتى 5 صفحات", "نموذج تواصل وربط واتساب", "إعداد Google Analytics 4"] },
-    { id: "growth", name: "النمو", price: null, period: "monthly", limits: { sales: 30, traffic: 30, maint: 100, requests: 20 },
+    { id: "growth", name: "النمو", price: null, period: "monthly", limits: { credits: 150, maint: 100, requests: 20 },
       features: ["كل ما في الانطلاقة", "لوحة مؤشرات أداء", "تتبع مصادر العملاء والإعلانات", "تقرير شهري بالتوصيات"] },
-    { id: "pro", name: "المتكامل", price: null, period: "monthly", limits: { sales: null, traffic: null, maint: null, requests: null },
+    { id: "pro", name: "المتكامل", price: null, period: "monthly", limits: { credits: null, maint: null, requests: null },
       features: ["وثيقة متطلبات النظام", "مخططات سير العمل وقاعدة البيانات", "واجهات وصلاحيات", "لوحة إدارية لمتابعة الأداء"] }
   ];
+
+  /* ---------- أسعار الإيجار ----------
+     التقديرية (sample) أرقام تقريبية للتجربة وتظهر بعلامة «تقديري» لين المالك يحدّثها من إيجار أو الهيئة العامة للعقار أو العروض.
+     الوحدة: m2 = ريال للمتر المربع سنويًا، unit = ريال للوحدة سنويًا (الشقق والفلل). */
+  var RENT_TYPES = { shop: ["محل تجاري", "m2"], office: ["مكتب", "m2"], mall: ["محل في مركز تسوق", "m2"], warehouse: ["مستودع", "m2"], factory: ["مصنع", "m2"], farm: ["مزرعة", "m2"], apartment: ["شقة سكنية", "unit"], villa: ["فيلا", "unit"] };
+  function sampleRents() {
+    var S = "تقدير للتجربة، غير معتمد", rows = [
+      ["الرياض", "العليا", "shop", 1500, 2000, 3000], ["الرياض", "العليا", "office", 1100, 1400, 1900], ["الرياض", "الملقا", "shop", 1200, 1600, 2200], ["الرياض", "الملقا", "office", 1000, 1250, 1600], ["الرياض", "الملقا", "villa", 120000, 160000, 220000],
+      ["الرياض", "النرجس", "shop", 800, 1000, 1400], ["الرياض", "النرجس", "apartment", 45000, 60000, 75000], ["الرياض", "النرجس", "villa", 90000, 120000, 160000], ["الرياض", "الياسمين", "shop", 1000, 1300, 1800], ["الرياض", "الياسمين", "apartment", 50000, 65000, 85000],
+      ["الرياض", "السليمانية", "shop", 1200, 1600, 2200], ["الرياض", "الروضة", "shop", 600, 800, 1100], ["الرياض", "الروضة", "apartment", 30000, 40000, 50000], ["الرياض", "النسيم", "shop", 400, 550, 800], ["الرياض", "النسيم", "apartment", 20000, 27000, 35000],
+      ["الرياض", "العزيزية", "shop", 400, 550, 750], ["الرياض", "السلي", "warehouse", 120, 160, 220], ["الرياض", "المدينة الصناعية الثانية", "warehouse", 100, 140, 180], ["الرياض", "المدينة الصناعية الثانية", "factory", 80, 110, 150], ["الرياض", "العمارية", "farm", 3, 6, 10], ["الخرج", "الخرج", "farm", 2, 4, 6],
+      ["جدة", "الروضة", "shop", 900, 1200, 1600], ["جدة", "الروضة", "office", 700, 900, 1200], ["جدة", "الحمراء", "shop", 800, 1100, 1500], ["جدة", "الشاطئ", "shop", 1200, 1600, 2200], ["جدة", "الشاطئ", "apartment", 45000, 60000, 80000], ["جدة", "الصفا", "shop", 450, 600, 850], ["جدة", "الصفا", "apartment", 22000, 28000, 38000],
+      ["جدة", "الخمرة", "warehouse", 100, 130, 170], ["جدة", "المدينة الصناعية", "factory", 80, 100, 140],
+      ["الدمام", "الفيصلية", "shop", 500, 650, 900], ["الدمام", "الشاطئ", "shop", 700, 950, 1300], ["الدمام", "الشاطئ", "apartment", 30000, 40000, 55000], ["الدمام", "المدينة الصناعية الثانية", "warehouse", 90, 120, 160], ["الدمام", "المدينة الصناعية الثانية", "factory", 70, 95, 130],
+      ["مكة المكرمة", "العزيزية", "shop", 900, 1200, 1700], ["مكة المكرمة", "العوالي", "shop", 600, 800, 1100], ["مكة المكرمة", "العوالي", "apartment", 28000, 35000, 45000],
+      ["المدينة المنورة", "قربان", "shop", 600, 800, 1100], ["المدينة المنورة", "قربان", "apartment", 25000, 30000, 40000], ["القصيم", "بريدة", "farm", 2, 3.5, 6]];
+    var out = rows.map(function (r) { return { id: uid("t"), city: r[0], district: r[1], type: r[2], min: r[3], avg: r[4], max: r[5], source: S, date: day(0).slice(0, 7), sample: true }; });
+    out.push({ id: uid("t"), city: "الرياض", district: "المراكز التجارية الإقليمية (متوسط المدينة)", type: "mall", min: null, avg: 2650, max: null, source: "نايت فرانك، النصف الأول 2026 (عبر الاقتصادية)", date: "2026-08", sample: false });
+    return out;
+  }
 
   /* ---------- قاعدة البيانات التجريبية ---------- */
   function load() { try { return JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) { return null; } }
@@ -45,6 +70,12 @@
     ENT.forEach(function (k) { if (!Array.isArray(d[k])) d[k] = []; });
     if (!d.packages.length) d.packages = clone(PACKAGES);
     if (!d.meta) d.meta = { seq: { request: 100, invoice: 1000 }, created: now() };
+    if (!d.meta.costs) d.meta.costs = clone(COSTS);
+    /* ترحيل الباقات القديمة (ملفات لكل أداة) إلى رصيد موحد */
+    d.packages.forEach(function (p) { var l = p.limits || (p.limits = {});
+      if (!("credits" in l)) { l.credits = l.sales == null && "sales" in l ? null : ((l.sales || 0) + (l.traffic || 0)) * COSTS.file; }
+      delete l.sales; delete l.traffic; });
+    if (!d.meta.rentsSeeded) { d.meta.rentsSeeded = true; d.rents = d.rents.concat(sampleRents()); try { localStorage.setItem(KEY, JSON.stringify(d)); } catch (e) {} }
     return d;
   }
   function logAct(d, who, action) { d.log.push({ id: uid("l"), at: now(), who: who, action: action }); d.log = d.log.slice(-500); }
@@ -152,7 +183,7 @@
       if (ent === "requests" && !obj.no) obj.no = ++d.meta.seq.request;
       if (ent === "invoices" && !obj.no) obj.no = ++d.meta.seq.invoice;
       if (i >= 0) list[i] = obj; else list.push(obj);
-      logAct(d, session().name, (i >= 0 ? "عدّل " : "أضاف ") + ({ clients: "عميل", projects: "مشروع", requests: "طلب", reports: "تقرير", invoices: "فاتورة", packages: "باقة" }[ent] || ent) + (obj.title || obj.name || obj.desc ? ": " + (obj.title || obj.name || obj.desc) : ""));
+      logAct(d, session().name, (i >= 0 ? "عدّل " : "أضاف ") + ({ clients: "عميل", projects: "مشروع", requests: "طلب", reports: "تقرير", invoices: "فاتورة", packages: "باقة", rents: "سعر إيجار" }[ent] || ent) + (obj.title || obj.name || obj.desc || obj.district ? ": " + (obj.title || obj.name || obj.desc || (obj.city + " · " + obj.district)) : ""));
       store(d); return clone(obj);
     },
     remove: async function (ent, id) {
@@ -218,23 +249,37 @@
     },
     month: function () { return new Date().toISOString().slice(0, 7); },
     usageOf: function (d, clientId) {
-      var m = DA.month(), o = { sales: 0, traffic: 0, maint: 0, requests: 0 };
-      d.usage.forEach(function (u) { if (u.client_id === clientId && u.month === m) o[u.tool] = u.count; }); return o;
+      var m = DA.month(), o = { credits: 0, maint: 0, requests: 0 };
+      d.usage.forEach(function (u) { if (u.client_id !== clientId || u.month !== m) return;
+        if (u.tool === "sales" || u.tool === "traffic") o.credits += u.count * COSTS.file; else o[u.tool] = (o[u.tool] || 0) + u.count; });
+      o.credits = Math.round(o.credits * 100) / 100; return o;
     },
     bump: function (d, clientId, tool, n) {
       var m = DA.month(), u = d.usage.find(function (x) { return x.client_id === clientId && x.tool === tool && x.month === m; });
       if (!u) { u = { id: uid("g"), client_id: clientId, tool: tool, month: m, count: 0 }; d.usage.push(u); }
       u.count = n != null ? Math.max(u.count, n) : u.count + 1;
     },
+    /* ---------- عامة (بدون دخول): أسعار الرصيد وأسعار الإيجار ---------- */
+    COST_N: COST_N, RENT_TYPES: RENT_TYPES,
+    costs: function () { var d = load(), c = d && d.meta && d.meta.costs; return Object.assign({}, COSTS, c || {}); },
+    freeCredits: function () { var d = load(), p = d && Array.isArray(d.packages) && d.packages.find(function (x) { return x.id === "free"; }); var v = p && p.limits && p.limits.credits; return typeof v === "number" ? v : PACKAGES[0].limits.credits; },
+    setCosts: async function (c) { if (!isOwner()) throw new Error("للمالك فقط."); if (MODE === "server") return http("/admin/costs", c);
+      var d = db(); Object.keys(COSTS).forEach(function (k) { var v = Number(c[k]); if (isFinite(v) && v >= 0) d.meta.costs[k] = Math.round(v * 100) / 100; });
+      logAct(d, session().name, "عدّل أسعار الرصيد"); store(d); return clone(d.meta.costs); },
+    rents: async function () { if (MODE === "server") return http("/public/rents"); return clone(db().rents); },
+
     /* تستخدمها الأدوات في الصفحة الرئيسية لما يكون العميل داخل */
     portalLimits: function () {
       var s = session(); if (!s || s.role !== "client" || MODE !== "demo") return null;
       var d = db(), c = d.clients.find(function (x) { return x.id === s.client_id; }); if (!c || c.status !== "active") return null;
       var p = d.packages.find(function (x) { return x.id === c.package_id; }); if (!p) return null;
       var u = DA.usageOf(d, c.id);
-      return { pkg: p.name, company: c.company, limits: { sales: p.limits.sales == null ? Infinity : p.limits.sales, traffic: p.limits.traffic == null ? Infinity : p.limits.traffic, maint: p.limits.maint == null ? Infinity : p.limits.maint },
-        used: { sales: u.sales, traffic: u.traffic, maint: u.maint },
-        sync: function (m) { var dd = db(); DA.bump(dd, c.id, "sales", m.used.sales); DA.bump(dd, c.id, "traffic", m.used.traffic); DA.bump(dd, c.id, "maint", m.made); store(dd); } };
+      return { pkg: p.name, company: c.company, limits: { credits: p.limits.credits == null ? Infinity : p.limits.credits, maint: p.limits.maint == null ? Infinity : p.limits.maint },
+        used: { credits: u.credits, maint: u.maint },
+        sync: function (m) { var dd = db(), had = DA.usageOf(dd, c.id).credits, add = m.used.credits - had;
+          if (add > 0) { var mo = DA.month(), g = dd.usage.find(function (x) { return x.client_id === c.id && x.tool === "credits" && x.month === mo; });
+            if (!g) { g = { id: uid("g"), client_id: c.id, tool: "credits", month: mo, count: 0 }; dd.usage.push(g); } g.count = Math.round((g.count + add) * 100) / 100; }
+          DA.bump(dd, c.id, "maint", m.made); store(dd); } };
     }
   };
   window.DA = DA;

@@ -274,6 +274,8 @@
     var c = document.getElementById("contact"); if (c) c.scrollIntoView({ behavior: "smooth", block: "start" });
     setTimeout(function () { var nm = document.getElementById("f-name"); if (nm) nm.focus({ preventScroll: true }); }, 500);
   }
-  window.__daCosting = { metrics: metrics, unitCost: unitCost, totals: totals, state: function () { return st; } };
+  window.__daCosting = { metrics: metrics, unitCost: unitCost, totals: totals, state: function () { return st; },
+    /* أداة الإيجار تحط إيجار الحي في المصاريف الثابتة */
+    setFixed: function (name, monthly) { var f = st.settings.fixed.find(function (x) { return x[0] === name; }); if (f) f[1] = monthly; else st.settings.fixed.unshift([name, monthly]); save(); tab = "fixed"; render(); return true; } };
   render();
 })();

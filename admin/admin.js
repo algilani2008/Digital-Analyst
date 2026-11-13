@@ -7,7 +7,7 @@
 
   var STATUS_C = { active: "نشط", paused: "موقوف مؤقتًا", ended: "منتهي" };
   var REQ_ST = ["جديد", "قيد التنفيذ", "بانتظار العميل", "مغلق"];
-  var NAV = [["home", "الرئيسية"], ["clients", "العملاء"], ["requests", "الطلبات"], ["projects", "المشاريع"], ["reports", "التقارير واللوحات"], ["invoices", "الفواتير"], ["packages", "الباقات"], ["log", "سجل النشاط"], ["settings", "الإعدادات"]];
+  var NAV = [["home", "الرئيسية"], ["clients", "العملاء"], ["requests", "الطلبات"], ["projects", "المشاريع"], ["reports", "التقارير واللوحات"], ["invoices", "الفواتير"], ["packages", "الباقات"], ["rents", "أسعار الإيجار"], ["log", "سجل النشاط"], ["settings", "الإعدادات"]];
 
   function cname(id) { var c = D.clients.find(function (x) { return x.id === id; }); return c ? c.company : "—"; }
   function pkg(id) { return D.packages.find(function (p) { return p.id === id; }) || { name: "—", limits: {} }; }
@@ -77,7 +77,7 @@
         row("الباقة", E(p.name)) + row("من", UI.date(c.start)) + row("إلى", UI.date(c.end)) + row("الحالة", UI.pill(STATUS_C[c.status])) + row("ملاحظات", E(c.notes || "—")) + "</tbody></table></section>" +
         '<section class="card"><h2>حساب الدخول لبوابة العملاء</h2>' + (u ? '<p>اسم المستخدم: <b class="num">' + E(u.username) + "</b></p><p class=\"small muted\">آخر دخول: " + (u.last_login ? UI.date(u.last_login) + " (" + UI.ago(u.last_login) + ")" : "ما دخل للحين") + "</p>" + (u.must_change ? '<p class="small"><span class="pill warn">لازم يغير كلمة المرور أول دخول</span></p>' : "") : '<p class="muted">ما له حساب دخول. أصدر له اسم مستخدم وكلمة مرور مؤقتة.</p>') +
         '<div class="row" style="margin-top:12px"><button class="btn" data-login type="button">' + (u ? "كلمة مرور جديدة" : "إصدار بيانات الدخول") + "</button>" + (u ? '<button class="btn ghost" data-toggle type="button">' + (u.active ? "إيقاف الدخول" : "تفعيل الدخول") + "</button>" : "") + "</div>" +
-        '<h3 style="margin-top:18px">استخدام هذا الشهر</h3><div class="grid2" style="margin-top:8px">' + meter("لوحة المبيعات", use.sales, p.limits.sales) + meter("مصادر الزيارات", use.traffic, p.limits.traffic) + meter("طلبات الصيانة", use.maint, p.limits.maint) + meter("طلبات الخدمة", use.requests, p.limits.requests) + "</div></section></div>" +
+        '<h3 style="margin-top:18px">استخدام هذا الشهر</h3><div class="grid2" style="margin-top:8px">' + meter("رصيد التحليل", use.credits, p.limits.credits) + meter("طلبات الصيانة", use.maint, p.limits.maint) + meter("طلبات الخدمة", use.requests, p.limits.requests) + "</div></section></div>" +
         '<section class="card"><div class="top" style="margin:0 0 10px"><h2>المشاريع</h2><button class="btn sm" data-new-proj type="button">مشروع جديد</button></div>' + table(["المشروع", "الإنجاز", "التسليم", ""], projs.map(projRow), "ما فيه مشاريع.") + "</section>" +
         '<div class="grid2"><section class="card"><div class="top" style="margin:0 0 10px"><h2>الطلبات</h2></div>' + table(["الرقم", "الطلب", "الحالة"], reqs.map(function (r) { return '<tr class="rowlink" data-req="' + r.id + '"><td class="num">#' + r.no + "</td><td>" + E(r.title) + "</td><td>" + UI.pill(r.status) + "</td></tr>"; }), "ما رفع طلبات.") + "</section>" +
         '<section class="card"><div class="top" style="margin:0 0 10px"><h2>الفواتير</h2><button class="btn sm" data-new-inv type="button">فاتورة جديدة</button></div>' + table(["الرقم", "البيان", "الإجمالي", "الحالة"], invs.map(function (i) { return '<tr class="rowlink" data-inv="' + i.id + '"><td class="num">' + i.no + "</td><td>" + E(i.desc) + '</td><td class="num">' + UI.sar(i.total) + "</td><td>" + UI.pill(invState(i)) + "</td></tr>"; }), "ما فيه فواتير.") + "</section></div>" +
@@ -130,20 +130,45 @@
       bind("[data-paid]", async function (el) { var i = D.invoices.find(function (x) { return x.id === el.dataset.paid; }); i.status = "مدفوعة"; i.paid_at = DA.day(0); await DA.save("invoices", i); UI.toast("سُجّل الدفع."); go("invoices", opt); });
     },
     packages: function (m) {
-      m.innerHTML = head("الباقات") + '<p class="small muted" style="margin-bottom:12px">الحدود شهرية لكل عميل. اترك الحد فاضي = بدون حد. السعر فاضي يعني «حسب عرض السعر».</p><div class="grid2">' + D.packages.map(function (p) {
+      m.innerHTML = head("الباقات") + '<p class="small muted" style="margin-bottom:12px">الحدود شهرية لكل عميل. اترك الحد فاضي = بدون حد. السعر فاضي يعني «حسب عرض السعر». رصيد التحليل مشترك بين أدوات التحليل، وكل استخدام يخصم حسب نوعه: ' + costLine() + '. تعدّلها من <a href="#" data-goset>الإعدادات</a>.</p><div class="grid2">' + D.packages.map(function (p) {
         var n = D.clients.filter(function (c) { return c.package_id === p.id && c.status === "active"; }).length;
         return '<section class="card"><div class="top" style="margin:0 0 8px"><h2>' + E(p.name) + '</h2><button class="btn ghost sm" data-pkg="' + p.id + '" type="button">تعديل</button></div><p class="kpi" style="border:0;padding:0"><span class="v" style="text-align:right">' + (p.price ? UI.sar(p.price) + ' <span class="small muted">ر.س ' + (p.period === "monthly" ? "شهريًا" : "مرة وحدة") + "</span>" : '<span class="small muted">حسب عرض السعر</span>') + "</span></p>" +
-          '<table style="margin-top:8px"><tbody><tr><th>لوحة المبيعات</th><td>' + lim(p.limits.sales) + "</td></tr><tr><th>مصادر الزيارات</th><td>" + lim(p.limits.traffic) + "</td></tr><tr><th>طلبات الصيانة</th><td>" + lim(p.limits.maint) + "</td></tr><tr><th>طلبات الخدمة</th><td>" + lim(p.limits.requests) + '</td></tr></tbody></table><p class="small muted" style="margin-top:8px">' + n + " عميل نشط</p></section>";
+          '<table style="margin-top:8px"><tbody><tr><th>رصيد التحليل</th><td>' + lim(p.limits.credits) + creditHint(p.limits.credits) + "</td></tr><tr><th>طلبات الصيانة</th><td>" + lim(p.limits.maint) + "</td></tr><tr><th>طلبات الخدمة</th><td>" + lim(p.limits.requests) + '</td></tr></tbody></table><p class="small muted" style="margin-top:8px">' + n + " عميل نشط</p></section>";
       }).join("") + "</div>";
+      bind("[data-goset]", function () { go("settings"); });
       bind("[data-pkg]", function (el) { packageForm(D.packages.find(function (x) { return x.id === el.dataset.pkg; })); });
+    },
+    rents: function (m) {
+      var T = DA.RENT_TYPES, city = opt.city || "", type = opt.type || "", q = opt.q || "";
+      var cities = Array.from(new Set(D.rents.map(function (r) { return r.city; }))).sort();
+      var list = D.rents.filter(function (r) { return (!city || r.city === city) && (!type || r.type === type) && (!q || (r.district + r.city).indexOf(q) >= 0); })
+        .sort(function (a, b) { return a.city.localeCompare(b.city, "ar") || a.district.localeCompare(b.district, "ar") || a.type.localeCompare(b.type); });
+      var nS = D.rents.filter(function (r) { return r.sample; }).length;
+      m.innerHTML = head("أسعار الإيجار", '<button class="btn ghost" data-rx type="button">تصدير CSV</button><button class="btn" data-rnew type="button">سعر جديد</button>') +
+        '<p class="small muted" style="margin-bottom:12px">تظهر للزوار في أداة «أسعار الإيجار» بالموقع. ' + (nS ? '<b>' + nS + " سعر تقديري للتجربة</b>، يظهر للزائر بعلامة «تقديري». حدّثه من منصة إيجار أو الهيئة العامة للعقار أو العروض الفعلية، واكتب المصدر والشهر." : "كل الأسعار موثقة بمصدر.") + "</p>" +
+        '<div style="margin-bottom:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px"><select id="rf-city" aria-label="المدينة"><option value="">كل المدن</option>' + cities.map(function (c) { return "<option" + (c === city ? " selected" : "") + ">" + E(c) + "</option>"; }).join("") + '</select><select id="rf-type" aria-label="النوع"><option value="">كل الأنواع</option>' + Object.keys(T).map(function (k) { return '<option value="' + k + '"' + (k === type ? " selected" : "") + ">" + E(T[k][0]) + "</option>"; }).join("") + '</select><input id="rf-q" placeholder="ابحث باسم الحي" value="' + E(q) + '"></div>' +
+        '<section class="card">' + table(["المدينة", "الحي", "النوع", "الأدنى", "المتوسط", "الأعلى", "الوحدة", "المصدر", ""], list.map(function (r) {
+          return '<tr class="rowlink" data-rent="' + r.id + '"><td>' + E(r.city) + "</td><td>" + E(r.district) + "</td><td>" + E((T[r.type] || ["—"])[0]) + '</td><td class="num">' + UI.sar(r.min) + '</td><td class="num"><b>' + UI.sar(r.avg) + '</b></td><td class="num">' + UI.sar(r.max) + '</td><td class="small">' + ((T[r.type] || [])[1] === "unit" ? "ر.س/سنة للوحدة" : "ر.س/م²/سنة") + '</td><td class="small">' + (r.sample ? UI.pill("تقديري") + " " : "") + E(r.source || "—") + ' <span class="muted num">' + E(r.date || "") + "</span></td><td>" + '<button class="btn ghost sm" data-rdel="' + r.id + '" type="button">حذف</button></td></tr>'; }), "ما فيه أسعار بهذا الفلتر.") + "</section>";
+      function refilter() { go("rents", { city: $("rf-city").value, type: $("rf-type").value, q: $("rf-q").value.trim() }); }
+      $("rf-city").onchange = refilter; $("rf-type").onchange = refilter; $("rf-q").onchange = refilter;
+      bind("[data-rnew]", function () { rentForm({ city: city, type: type || "shop" }); });
+      m.querySelectorAll("[data-rent]").forEach(function (tr) { tr.onclick = function (e) { if (e.target.closest("[data-rdel]")) return; rentForm(D.rents.find(function (x) { return x.id === tr.dataset.rent; })); }; });
+      bind("[data-rdel]", async function (el) { if (!UI.confirm2(el, "تأكيد")) return; await DA.remove("rents", el.dataset.rdel); UI.toast("انحذف."); go("rents", opt); });
+      bind("[data-rx]", function () { var rows = [["المدينة", "الحي", "النوع", "الأدنى", "المتوسط", "الأعلى", "المصدر", "الشهر", "تقديري"]].concat(list.map(function (r) { return [r.city, r.district, (T[r.type] || [r.type])[0], r.min, r.avg, r.max, r.source, r.date, r.sample ? "نعم" : ""]; }));
+        var csv = "\ufeff" + rows.map(function (r) { return r.map(function (v) { v = v == null ? "" : String(v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(","); }).join("\n");
+        var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" })); a.download = "rents-" + DA.day(0) + ".csv"; a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000); });
     },
     log: function (m) {
       m.innerHTML = head("سجل النشاط") + '<section class="card">' + table(["الوقت", "من", "العملية"], D.log.slice().reverse().slice(0, 200).map(function (l) { return "<tr><td class=\"num small\">" + new Date(l.at).toLocaleString("en-GB") + "</td><td>" + E(l.who) + "</td><td>" + E(l.action) + "</td></tr>"; }), "ما فيه نشاط.") + "</section>";
     },
     settings: function (m) {
       m.innerHTML = head("الإعدادات") + '<div class="grid2"><section class="card"><h2>كلمة المرور</h2><form id="pw" class="formgrid" novalidate><label class="full">الحالية<input type="password" name="o" autocomplete="current-password" required></label><label>الجديدة<input type="password" name="n" autocomplete="new-password" required></label><label>تأكيدها<input type="password" name="n2" autocomplete="new-password" required></label><p class="err full" id="pwe"></p><div class="full"><button class="btn" type="submit">تغيير كلمة المرور</button></div></form></section>' +
+        '<section class="card"><h2>أسعار الرصيد</h2><p class="small muted">كم يخصم كل نوع استخدام من رصيد التحليل في الباقة. الإدخال اليدوي أقل جهد فيخصم أقل.</p><form id="costs" class="formgrid" novalidate style="margin-top:10px">' +
+          Object.keys(DA.COST_N).map(function (k) { return "<label>" + E(DA.COST_N[k]) + (k === "ai" ? ' <span class="small muted">(قريبًا، يحتاج خادم Hostinger)</span>' : "") + '<input type="number" min="0" step="0.5" name="' + k + '" value="' + E(DA.costs()[k]) + '"></label>'; }).join("") +
+          '<div class="full"><button class="btn" type="submit">حفظ الأسعار</button></div></form></section>' +
         '<section class="card"><h2>البيانات</h2><p class="small muted">نسخة احتياطية من كل البيانات بصيغة JSON، تنفع وقت النقل لخادم Hostinger.</p><div class="row" style="margin-top:12px"><button class="btn ghost" data-backup type="button">تنزيل نسخة احتياطية</button>' + (DA.MODE === "demo" ? '<button class="btn danger" data-reset type="button">رجّع البيانات التجريبية</button>' : "") + "</div></section></div>";
       $("pw").onsubmit = async function (e) { e.preventDefault(); var f = new FormData(e.target); if (f.get("n") !== f.get("n2")) { $("pwe").textContent = "كلمتا المرور غير متطابقتين."; return; } try { await DA.changePassword(f.get("o"), f.get("n")); e.target.reset(); $("pwe").textContent = ""; UI.toast("تغيرت كلمة المرور."); } catch (x) { $("pwe").textContent = x.message; } };
+      $("costs").onsubmit = async function (e) { e.preventDefault(); var f = new FormData(e.target), o = {}; Object.keys(DA.COST_N).forEach(function (k) { o[k] = f.get(k); }); await DA.setCosts(o); UI.toast("حُفظت أسعار الرصيد."); go("settings"); };
       bind("[data-backup]", function () { var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([DA.backup()], { type: "application/json" })); a.download = "digital-analyst-backup-" + DA.day(0) + ".json"; a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000); });
       bind("[data-reset]", async function (el) { if (!UI.confirm2(el, "يمسح كل العملاء ويرجع التجريبي، اضغط للتأكيد")) return; await DA.resetDemo(); UI.toast("رجعت البيانات التجريبية."); go("home"); });
     }
@@ -157,6 +182,8 @@
     lateP.forEach(function (p) { items.push('<li><a href="#" data-client="' + p.client_id + '">مشروع «' + E(p.title) + "» تعدى موعد التسليم</a></li>"); });
     return items.length ? '<ul style="margin:0;padding-inline-start:18px;display:flex;flex-direction:column;gap:6px">' + items.join("") + "</ul>" : '<p class="empty">كل شي تحت السيطرة.</p>';
   }
+  function costLine() { var c = DA.costs(); return Object.keys(DA.COST_N).map(function (k) { return E(DA.COST_N[k]) + " " + c[k]; }).join("، "); }
+  function creditHint(v) { if (v == null) return ""; var c = DA.costs(); return ' <span class="small muted">(' + Math.floor(v / c.file) + " ملف أو " + Math.floor(v / c.manual) + " يدوي)</span>"; }
   function meter(label, used, max) { var inf = max == null, pct = inf ? 0 : Math.min(100, used / Math.max(1, max) * 100); return '<div class="meter"><div class="row" style="justify-content:space-between"><span class="small">' + E(label) + '</span><span class="small num">' + used + (inf ? " / بدون حد" : " / " + max) + '</span></div><div class="bar"><i class="' + (pct >= 80 ? "hot" : "") + '" style="width:' + (inf ? 100 : pct) + '%;opacity:' + (inf ? ".35" : "1") + '"></i></div></div>'; }
   function projRow(p, withClient) { var done = p.stages.filter(function (s) { return s.done; }).length, pct = p.stages.length ? Math.round(done / p.stages.length * 100) : 0, n = UI.daysTo(p.due);
     return "<tr><td><b>" + E(p.title) + "</b>" + (p.status === "done" ? ' <span class="pill ok">مكتمل</span>' : "") + "</td>" + (withClient ? "<td>" + E(cname(p.client_id)) + "</td>" : "") + '<td style="min-width:140px"><div class="progress"><i style="width:' + pct + '%"></i></div><span class="small num">' + done + "/" + p.stages.length + "</span></td><td>" + UI.date(p.due) + (p.status !== "done" && n !== null && n < 0 ? ' <span class="pill bad">متأخر</span>' : "") + '</td><td><button class="btn ghost sm" data-proj="' + p.id + '" type="button">فتح</button></td></tr>'; }
@@ -225,12 +252,28 @@
       await DA.save("invoices", o); UI.toast("حُفظت الفاتورة."); go(view, opt);
     });
   }
+  function rentForm(r) {
+    var T = DA.RENT_TYPES, isNew = !r.id;
+    UI.dialog(isNew ? "سعر إيجار جديد" : "تعديل سعر " + r.district, '<div class="formgrid"><label>المدينة<input name="city" required maxlength="40" value="' + E(r.city || "") + '"></label><label>الحي أو المنطقة<input name="district" required maxlength="80" value="' + E(r.district || "") + '"></label>' +
+      '<label class="full">نوع العقار<select name="type">' + Object.keys(T).map(function (k) { return '<option value="' + k + '"' + (k === r.type ? " selected" : "") + ">" + E(T[k][0]) + " (" + (T[k][1] === "unit" ? "ر.س/سنة للوحدة" : "ر.س/م² سنويًا") + ")</option>"; }).join("") + "</select></label>" +
+      '<label>الأدنى<input type="number" min="0" step="any" name="min" value="' + E(r.min == null ? "" : r.min) + '"></label><label>المتوسط<input type="number" min="0" step="any" name="avg" required value="' + E(r.avg == null ? "" : r.avg) + '"></label><label>الأعلى<input type="number" min="0" step="any" name="max" value="' + E(r.max == null ? "" : r.max) + '"></label><label>الشهر<input type="month" name="date" value="' + E(r.date || DA.day(0).slice(0, 7)) + '"></label>' +
+      '<label class="full">المصدر<input name="source" maxlength="120" placeholder="مثال: منصة إيجار، عروض عقار، الهيئة العامة للعقار" value="' + E(r.sample ? "" : r.source || "") + '"></label>' +
+      '<label class="full" style="flex-direction:row;align-items:center;gap:8px"><input type="checkbox" name="sample"' + (r.sample && !isNew ? " checked" : "") + ' style="width:auto;min-height:0"> سعر تقديري (يظهر للزائر بعلامة «تقديري»)</label></div>', "حفظ", async function (f) {
+        var num = function (k) { var v = f.get(k); return v === "" ? null : Math.max(0, Number(v)); };
+        var o = Object.assign({}, r, { city: String(f.get("city")).trim(), district: String(f.get("district")).trim(), type: f.get("type"), min: num("min"), avg: num("avg"), max: num("max"), date: f.get("date"), sample: !!f.get("sample") });
+        o.source = String(f.get("source")).trim() || (o.sample ? "تقدير للتجربة، غير معتمد" : "");
+        if (!o.city || !o.district) throw new Error("اكتب المدينة والحي."); if (!(o.avg > 0)) throw new Error("اكتب متوسط السعر.");
+        if (o.min != null && o.max != null && o.min > o.max) throw new Error("الأدنى أكبر من الأعلى.");
+        if (!o.sample && !o.source) throw new Error("اكتب المصدر، أو علّمه تقديري.");
+        await DA.save("rents", o); UI.toast("حُفظ السعر."); go("rents", opt);
+      });
+  }
   function packageForm(p) {
     UI.dialog("تعديل باقة " + p.name, '<div class="formgrid"><label>الاسم<input name="name" value="' + E(p.name) + '" required maxlength="40"></label><label>السعر (ر.س)<input type="number" name="price" min="0" value="' + E(p.price == null ? "" : p.price) + '"></label><label>الفوترة<select name="period"><option value="monthly"' + (p.period === "monthly" ? " selected" : "") + '>شهريًا</option><option value="once"' + (p.period === "once" ? " selected" : "") + '>مرة وحدة</option></select></label>' +
-      [["sales", "لوحة المبيعات (ملفات/شهر)"], ["traffic", "مصادر الزيارات (ملفات/شهر)"], ["maint", "طلبات الصيانة/شهر"], ["requests", "طلبات الخدمة/شهر"]].map(function (x) { return "<label>" + x[1] + '<input type="number" min="0" name="' + x[0] + '" value="' + E(p.limits[x[0]] == null ? "" : p.limits[x[0]]) + '" placeholder="بدون حد"></label>'; }).join("") +
+      [["credits", "رصيد التحليل/شهر"], ["maint", "طلبات الصيانة/شهر"], ["requests", "طلبات الخدمة/شهر"]].map(function (x) { return "<label>" + x[1] + '<input type="number" min="0" name="' + x[0] + '" value="' + E(p.limits[x[0]] == null ? "" : p.limits[x[0]]) + '" placeholder="بدون حد"></label>'; }).join("") +
       '<label class="full">المزايا (سطر لكل ميزة)<textarea name="features">' + E((p.features || []).join("\n")) + "</textarea></label></div>", "حفظ", async function (f) {
         var o = Object.assign({}, p, { name: String(f.get("name")).trim() || p.name, price: f.get("price") === "" ? null : Number(f.get("price")), period: f.get("period"), features: String(f.get("features")).split("\n").map(function (s) { return s.trim(); }).filter(Boolean), limits: {} });
-        ["sales", "traffic", "maint", "requests"].forEach(function (k) { o.limits[k] = f.get(k) === "" ? null : Math.max(0, Math.floor(Number(f.get(k)))); });
+        ["credits", "maint", "requests"].forEach(function (k) { o.limits[k] = f.get(k) === "" ? null : Math.max(0, Math.floor(Number(f.get(k)))); });
         await DA.save("packages", o); UI.toast("حُفظت الباقة."); go("packages");
       });
   }
