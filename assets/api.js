@@ -275,6 +275,11 @@
       mine.forEach(function (r) { keys[rkey(r)] = 1; });
       return clone(mine.map(function (r) { return Object.assign({ confidence: r.sample ? "estimate" : "owner" }, r); }).concat(fromPub(doc).filter(function (r) { return !keys[rkey(r)]; })));
     },
+    /* العنوان الوطني المختصر ← إحداثيات. مفتاح سبل (SPL) سري، فالطلب يمر من الخادم فقط */
+    geocodeShort: async function (code) {
+      if (MODE === "server") { var g = await http("/public/geocode?code=" + encodeURIComponent(code)); return { lat: +g.lat, lng: +g.lng }; }
+      throw new Error("تحديد العنوان الوطني يشتغل بعد ربط الموقع بخادم Hostinger (مفتاح العنوان الوطني ما يصير يكون في المتصفح). للحين افتحه من «خرائط العنوان الوطني» فوق.");
+    },
     rentsMeta: async function () { var d = await published(); return { updated: d.updated, method: d.method, log: d.log || [], sources: d.sources || [] }; },
     CONF: CONF,
 

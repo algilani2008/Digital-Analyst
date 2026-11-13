@@ -44,6 +44,7 @@
 | POST | `/client/usage` | العميل | `{ action }` واحد من `manual` أو `file` أو `ai`، أو `{ tool: "maint" }` | `{ used, limit }`: الخادم يخصم `credit_costs.cost` ويرفض لو الرصيد ما يكفي |
 | GET | `/public/costs` | الكل | — | `{ manual, file, ai }` |
 | GET | `/public/rents` | الكل | — | قائمة `rents` |
+| GET | `/public/geocode?code=RRRD2929` | الكل | — | `{ lat, lng }`: الخادم يطلب `apina.address.gov.sa/NationalAddress/GeoCodeByShortAddress` بمفتاح سبل المحفوظ في الخادم. حد 30 طلب/ساعة لكل IP |
 | POST | `/admin/costs` | المالك | `{ manual, file, ai }` | الأسعار بعد الحفظ |
 | POST | `/client/ai` | العميل | `{ tool, rows }` | تحليل بالذكاء الاصطناعي (المرحلة الجاية). مفتاح نموذج الذكاء الاصطناعي ينحفظ في الخادم فقط، وما يوصل للمتصفح أبدًا |
 

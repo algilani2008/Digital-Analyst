@@ -402,10 +402,18 @@ footer a{color:var(--muted)}
 input.qty{max-width:110px;min-width:64px}
 .cs-lines select{min-width:150px}
 .cs-split{display:grid;grid-template-columns:240px 1fr;gap:16px;align-items:start;margin-top:14px}
-.rent-f{grid-template-columns:repeat(4,1fr);margin-bottom:12px}
+.rent-f{grid-template-columns:repeat(5,1fr);margin-bottom:12px}
+.rent-map-wrap{position:relative;margin-bottom:8px}
+.rent-map{height:420px;border-radius:12px;border:1px solid var(--line);background:#dfe7e6;overflow:hidden;z-index:0}
+.rent-map-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px}
+.rent-links{font-size:.88rem;margin:0 0 12px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.rent-na{margin-top:14px;font-size:.92rem}
+.rent-na summary{cursor:pointer;color:var(--accent)}
+.leaflet-container{font-family:inherit}
+.leaflet-tooltip{direction:rtl;text-align:right}
 .rent-src{font-size:.85rem;color:var(--muted);margin:0 0 10px}
 .hb.on .nm{font-weight:600}
-@media (max-width:760px){.rent-f{grid-template-columns:1fr 1fr}}
+@media (max-width:760px){.rent-f{grid-template-columns:1fr 1fr}.rent-map{height:320px}}
 .cs-split>*{min-width:0}
 .cs-list{display:flex;flex-direction:column;gap:6px}
 .cs-list>button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:right;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:10px;padding:8px 10px;cursor:pointer;font:inherit}
@@ -786,7 +794,7 @@ input.qty{max-width:110px;min-width:64px}
     <div class="sec-head">
       <p class="eyebrow">أسعار الإيجار</p>
       <h2>كم سعر المتر في الحي اللي تبيه؟</h2>
-      <p>محلات ومكاتب ومستودعات ومصانع ومزارع وسكني، حسب المدينة والحي. اكتب المساحة ويطلع لك الإيجار السنوي والشهري، وقارن عرضك بمتوسط الحي، وأضفه لحاسبة التكلفة بضغطة.</p>
+      <p>اختر المنطقة ثم المدينة أو المحافظة ثم الحي، أو اضغط على الخريطة. صور أقمار صناعية وحدود الأحياء من العنوان الوطني، وأسعار المحلات والمكاتب والمستودعات والمصانع والمزارع والسكني، وكم يطلع إيجار مساحتك.</p>
     </div>
     <div class="tool-wrap" id="rent-app"><p class="fmt">جاري التحميل…</p></div>
   </section>
@@ -1150,7 +1158,7 @@ input.qty{max-width:110px;min-width:64px}
 
 <!-- SheetJS 0.20.3 (fixes CVE-2023-30533 and CVE-2024-22363), served from this site, not a third-party CDN -->
 <script src="xlsx-0.20.3.full.min.js"></script>
-<script src="assets/api.js?v=6"></script>
+<script src="assets/api.js?v=7"></script>
 <script>
 (function(){
   /* ---------- helpers ---------- */
@@ -2110,7 +2118,7 @@ input.qty{max-width:110px;min-width:64px}
 })();
 </script>
 
-<script src="assets/manual.js?v=6"></script>
-<script src="assets/costing.js?v=6"></script>
-<script src="assets/rent.js?v=6"></script>
+<script src="assets/manual.js?v=7"></script>
+<script src="assets/costing.js?v=7"></script>
+<script src="assets/rent.js?v=7"></script>
 </body></html>
