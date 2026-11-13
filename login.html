@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>تسجيل الدخول | المحلل الرقمي</title>
+<meta name="description" content="دخول مركز التحكم وبوابة العملاء في المحلل الرقمي.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Crect width=%2224%22 height=%2224%22 rx=%225%22 fill=%22%230B7A75%22/%3E%3Cpath d=%22M5 18v-6M10 18V6M15 18v-5M20 18H4%22 stroke=%22white%22 stroke-width=%222.2%22 stroke-linecap=%22round%22 fill=%22none%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Readex+Pro:wght@500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="assets/da.css">
+</head>
+<body>
+<div class="auth">
+  <aside class="auth-side">
+    <div>
+      <a class="brand" href="./" style="color:#fff">
+        <span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V11M10 19V5M16 19v-6M22 19H2"/></svg></span>
+        المحلل الرقمي
+      </a>
+      <h1 id="side-title">بوابة العملاء</h1>
+      <p id="side-lead" style="margin-top:10px;max-width:30em">كل شي يخص مشروعك في مكان واحد.</p>
+      <ul id="side-list"></ul>
+    </div>
+    <p class="small" style="color:#8FB3AF">© المحلل الرقمي · <a href="./" style="color:#CFE3E1">الموقع الرئيسي</a> · <a href="./#privacy" style="color:#CFE3E1">الخصوصية</a></p>
+  </aside>
+
+  <main class="auth-main">
+    <div class="auth-box">
+      <div class="seg" role="group" aria-label="نوع الدخول">
+        <button type="button" data-role="client" aria-pressed="true">بوابة العملاء</button>
+        <button type="button" data-role="owner" aria-pressed="false">مركز التحكم</button>
+      </div>
+
+      <form id="login" novalidate>
+        <h2 id="form-title">دخول العملاء</h2>
+        <p class="muted small" id="form-lead">استخدم اسم المستخدم وكلمة المرور اللي وصلتك منا.</p>
+        <label>اسم المستخدم<input id="u" autocomplete="username" dir="ltr" style="text-align:right" required></label>
+        <label>كلمة المرور<span class="pw"><input id="p" type="password" autocomplete="current-password" dir="ltr" style="text-align:right" required><button type="button" class="link" id="show">إظهار</button></span></label>
+        <p class="err" id="err" role="alert"></p>
+        <button class="btn" type="submit" id="go">دخول</button>
+        <p class="small muted" id="help">نسيت كلمة المرور؟ <a id="wa" href="#" target="_blank" rel="noopener noreferrer">تواصل معنا على واتساب</a> ونصدر لك كلمة مرور جديدة.</p>
+      </form>
+
+      <form id="setup" novalidate hidden>
+        <h2>إعداد مركز التحكم لأول مرة</h2>
+        <p class="muted small">أنشئ حساب المالك. هذا الحساب يدير العملاء والباقات والفواتير.</p>
+        <label>اسمك<input id="s-name" autocomplete="name" required></label>
+        <label>اسم المستخدم (إنجليزي)<input id="s-u" autocomplete="username" dir="ltr" style="text-align:right" required></label>
+        <label>كلمة المرور (8 أحرف على الأقل، حرف ورقم)<input id="s-p" type="password" autocomplete="new-password" dir="ltr" style="text-align:right" required></label>
+        <label>تأكيد كلمة المرور<input id="s-p2" type="password" autocomplete="new-password" dir="ltr" style="text-align:right" required></label>
+        <p class="err" id="s-err" role="alert"></p>
+        <button class="btn" type="submit">إنشاء الحساب والدخول</button>
+      </form>
+
+      <p class="demo-bar" id="demo-note" hidden></p>
+    </div>
+  </main>
+</div>
+<script src="assets/api.js"></script>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)},role="client";
+  var TXT={
+    client:{t:"بوابة العملاء",lead:"كل شي يخص مشروعك في مكان واحد.",list:["أدوات التحليل بحدود باقتك","مراحل مشروعك وحالة كل مرحلة","تقاريرك ولوحاتك الشهرية","طلباتك وردودنا عليها","فواتيرك واشتراكك"],ft:"دخول العملاء",fl:"استخدم اسم المستخدم وكلمة المرور اللي وصلتك منا."},
+    owner:{t:"مركز التحكم",lead:"إدارة العملاء والباقات والمشاريع من شاشة وحدة.",list:["العملاء وحسابات دخولهم","الباقات وحدود الاستخدام","المشاريع ومراحلها","الطلبات والردود","التقارير والفواتير"],ft:"دخول المالك",fl:"هذا الدخول لمالك الموقع فقط."}};
+  $("wa").href="https://wa.me/966569184730?text="+encodeURIComponent("السلام عليكم، نسيت كلمة مرور بوابة العملاء في المحلل الرقمي.");
+  function paint(){var x=TXT[role];$("side-title").textContent=x.t;$("side-lead").textContent=x.lead;
+    $("side-list").innerHTML=x.list.map(function(l){return "<li>"+UI.esc(l)+"</li>"}).join("");
+    $("form-title").textContent=x.ft;$("form-lead").textContent=x.fl;$("help").hidden=role!=="client";
+    document.querySelectorAll("[data-role]").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.role===role))});
+    $("err").textContent="";document.title=x.t+" | المحلل الرقمي";checkSetup()}
+  async function checkSetup(){var has=true;try{has=await DA.hasOwner()}catch(e){}
+    var setup=role==="owner"&&!has;$("setup").hidden=!setup;$("login").hidden=setup;
+    var n=$("demo-note");n.hidden=DA.MODE!=="demo";
+    if(DA.MODE==="demo")n.innerHTML="<b>وضع تجريبي:</b> الحسابات والبيانات محفوظة في هذا المتصفح فقط لين نربط الموقع بخادم Hostinger."+(role==="client"&&has?" للتجربة: اسم المستخدم <span class=\"num\">cafe</span> وكلمة المرور <span class=\"num\">Demo-2026</span>.":role==="client"?" ادخل مركز التحكم أول عشان تتجهز البيانات التجريبية.":"")}
+  document.querySelectorAll("[data-role]").forEach(function(b){b.onclick=function(){role=b.dataset.role;paint()}});
+  $("show").onclick=function(){var p=$("p");p.type=p.type==="password"?"text":"password";this.textContent=p.type==="password"?"إظهار":"إخفاء"};
+  function go(s){location.href=s.role==="owner"?"admin/":"portal/"}
+  $("login").onsubmit=async function(e){e.preventDefault();var u=$("u").value.trim(),p=$("p").value;
+    if(!u||!p){$("err").textContent="اكتب اسم المستخدم وكلمة المرور.";return}
+    $("go").disabled=true;$("go").textContent="جاري التحقق…";
+    try{go(await DA.login(u,p,role))}catch(x){$("err").textContent=x.message;$("go").disabled=false;$("go").textContent="دخول"}};
+  $("setup").onsubmit=async function(e){e.preventDefault();var er=$("s-err");
+    if($("s-p").value!==$("s-p2").value){er.textContent="كلمتا المرور غير متطابقتين.";return}
+    try{go(await DA.setupOwner($("s-name").value.trim(),$("s-u").value.trim(),$("s-p").value))}catch(x){er.textContent=x.message}};
+  var s=DA.session();if(s){go(s);return}
+  if(new URLSearchParams(location.search).get("as")==="owner")role="owner";
+  paint();
+})();
+</script>
+</body>
+</html>

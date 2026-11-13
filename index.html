@@ -413,6 +413,7 @@ footer a{color:var(--muted)}
       <li><a href="#faq">أسئلة شائعة</a></li>
       <li><a href="#contact">اطلب مشروع</a></li>
     </ul>
+    <a class="btn btn-ghost btn-sm" href="login.html" style="min-height:40px">دخول العملاء</a>
   </nav>
 
   <header class="hero" id="top">
@@ -1102,6 +1103,7 @@ footer a{color:var(--muted)}
 
 <!-- SheetJS 0.20.3 (fixes CVE-2023-30533 and CVE-2024-22363), served from this site, not a third-party CDN -->
 <script src="xlsx-0.20.3.full.min.js"></script>
+<script src="assets/api.js"></script>
 <script>
 (function(){
   /* ---------- helpers ---------- */
@@ -1140,16 +1142,24 @@ footer a{color:var(--muted)}
       mem.reqs=[{id:"ص-مثال1",title:"تسريب مكيف في غرفة الاجتماعات",loc:"الدور الثاني",pr:"high",who:"الفني خالد",st:1,at:now-3*864e5,ex:true},
                 {id:"ص-مثال2",title:"لمبة معطلة في الممر",loc:"المدخل الرئيسي",pr:"low",who:"الفني سامي",st:0,at:now-5*36e5,ex:true}]}}
   var usageBusy=Promise.resolve(),usageSent="";
-  function save(){try{localStorage.setItem("da_free",JSON.stringify(mem))}catch(e){}
+  function save(){var out=mem;if(PORTAL){try{PORTAL.sync(mem)}catch(e){}out=Object.assign({},mem,{used:FREE.used,made:FREE.made})}
+    try{localStorage.setItem("da_free",JSON.stringify(out))}catch(e){}
     if(!DB||!UID)return;var key=[mem.used.sales,mem.used.traffic,mem.made].join();if(key===usageSent)return;usageSent=key;
     var body={sales:mem.used.sales,traffic:mem.used.traffic,maint:mem.made,at:Date.now()};
     usageBusy=usageBusy.then(function(){return DB.doc("usage/"+UID).set(body)}).catch(function(){})}
   function used(k){return k==="maint"?mem.made:mem.used[k]}
   function left(k){return Math.max(0,Q[k]-used(k))}
   function meter(k){var r=left(k),el=$("m-"+k);
-    el.querySelector(".mt").textContent="متبقي "+r+" من "+Q[k]+(k==="maint"?" طلبات":" ملف");
+    if(Q[k]===Infinity){el.querySelector(".mt").textContent="بدون حد ضمن باقة "+PORTAL.pkg;el.querySelector("i").style.width="100%";$("lock-"+k).hidden=true;return}
+    el.querySelector(".mt").textContent="متبقي "+r+" من "+Q[k]+(k==="maint"?" طلبات":" ملف")+(PORTAL?" (باقة "+PORTAL.pkg+")":"");
     el.querySelector("i").style.width=(r/Q[k]*100)+"%";$("lock-"+k).hidden=r>0}
   load();
+  /* العميل الداخل بحسابه: الحدود من باقته بدل الحد المجاني، والاستخدام يتسجل على حسابه */
+  var PORTAL=null,FREE=null;try{PORTAL=window.DA&&DA.portalLimits?DA.portalLimits():null}catch(e){PORTAL=null}
+  if(PORTAL){FREE={used:mem.used,made:mem.made};Q=PORTAL.limits;mem.used={sales:PORTAL.used.sales,traffic:PORTAL.used.traffic};mem.made=PORTAL.used.maint;
+    var pb=document.createElement("p");pb.className="safe";pb.innerHTML="<span>أنت داخل بحساب <b></b>، والأدوات تشتغل بحدود باقة <b></b>. <a href=\"portal/\">ارجع لبوابتك</a></span>";
+    pb.querySelectorAll("b")[0].textContent=PORTAL.company;pb.querySelectorAll("b")[1].textContent=PORTAL.pkg;
+    var tw=document.querySelector("#tools .tool-wrap");if(tw)tw.insertBefore(pb,tw.firstChild)}
 
   /* ---------- tabs ---------- */
   function showTool(t){
@@ -1158,6 +1168,7 @@ footer a{color:var(--muted)}
   }
   document.querySelectorAll("[data-t]").forEach(function(b){b.addEventListener("click",function(){showTool(b.dataset.t)})});
   document.querySelectorAll("[data-tool]").forEach(function(a){a.addEventListener("click",function(){showTool(a.dataset.tool)})});
+  (function(){var tq=new URLSearchParams(location.search).get("tool");if(tq&&["sales","maint","traffic"].indexOf(tq)>=0)showTool(tq)})();
 
   /* ---------- file reading ---------- */
   function filled(c){return !(c===""||c==null||(typeof c==="string"&&!c.trim()))}
