@@ -1,0 +1,39 @@
+# تحديث أسعار الإيجار بالذكاء الاصطناعي كل أسبوع، أو يدويًا من تبويب Actions.
+name: تحديث أسعار الإيجار
+on:
+  schedule:
+    - cron: "20 23 * * 5"   # السبت 2:20 فجرًا بتوقيت الرياض
+  workflow_dispatch:
+    inputs:
+      cities:
+        description: "مدن محددة مفصولة بفاصلة (فاضي = كل المدن)"
+        required: false
+permissions:
+  contents: write
+  pages: write
+concurrency: rents
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: البحث وتحديث الأسعار
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          RENTS_CITIES: ${{ github.event.inputs.cities }}
+        run: node scripts/update-rents.mjs
+      - name: نشر التحديث
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet data/rents.json; then echo "ما فيه تغيير"; exit 0; fi
+          git config user.name "rents-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/rents.json
+          git commit -m "تحديث أسعار الإيجار $(TZ=Asia/Riyadh date +%F)"
+          git push
+          gh api -X POST "repos/${{ github.repository }}/pages/builds" || true
