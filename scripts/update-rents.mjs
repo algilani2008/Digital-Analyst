@@ -123,7 +123,7 @@ async function ask(city, rows) {
   const got = []; let searches = 0;
   for (const who of ORDER) {
     try { const r = await ASK[who](city, rows); searches += r.searches; got.push({ who, data: r.data }); if (MODE === "fallback") break; }
-    catch (e) { console.error(city + " / " + PROV[who].name + ": " + e.message); }
+    catch (e) { console.error(city + " / " + PROV[who].name + ": " + ((e && e.message) || String(e))); }
   }
   if (!got.length) throw new Error("كل النماذج فشلت");
   return { data: merge(got), searches };
