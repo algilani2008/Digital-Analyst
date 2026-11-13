@@ -23,9 +23,15 @@ jobs:
           node-version: 20
       - name: البحث وتحديث الأسعار
         env:
+          # المفاتيح الثلاثة اختيارية، يكفي واحد. لو أكثر من واحد، كل نموذج يبحث لحاله ونعتمد اللي يتفقون عليه.
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          RENTS_MODEL: ${{ vars.RENTS_MODEL }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
+          CLAUDE_MODEL: ${{ vars.CLAUDE_MODEL }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL }}
+          RENTS_MODE: ${{ vars.RENTS_MODE }}
+          RENTS_PROVIDERS: ${{ vars.RENTS_PROVIDERS }}
           RENTS_CITIES: ${{ github.event.inputs.cities }}
         run: node scripts/update-rents.mjs
       - name: نشر التحديث

@@ -1,16 +1,24 @@
 // تحديث أسعار الإيجار بالذكاء الاصطناعي: يبحث في الويب عن آخر الأرقام المنشورة لكل مدينة، ويحدّث data/rents.json.
 // يشتغل من GitHub Actions (.github/workflows/rents.yml) ولاحقًا من خادم Hostinger بنفس المنطق.
-// يحتاج سر GEMINI_API_KEY (أو ANTHROPIC_API_KEY) في إعدادات المستودع، وما ينكتب في الكود أبدًا.
+// يقبل ثلاث مفاتيح كأسرار في المستودع: GEMINI_API_KEY و ANTHROPIC_API_KEY و OPENAI_API_KEY. ما تنكتب في الكود أبدًا.
+// لو فيه أكثر من مفتاح، كل نموذج يبحث لحاله ونعتمد الرقم اللي يتفقون عليه (RENTS_MODE=all، الافتراضي)، أو نستخدم أول واحد شغال (RENTS_MODE=fallback).
 import fs from "node:fs";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const FILE = path.join(ROOT, "data", "rents.json");
-const GEMINI = process.env.GEMINI_API_KEY, KEY = GEMINI || process.env.ANTHROPIC_API_KEY;
-const MODEL = process.env.RENTS_MODEL || (GEMINI ? "gemini-3.5-flash" : "claude-sonnet-5-5");
-const ONLY = (process.env.RENTS_CITIES || "").split(",").map(s => s.trim()).filter(Boolean);
-if (!KEY) { console.error("GEMINI_API_KEY مو موجود. أضفه في Settings > Secrets and variables > Actions."); process.exit(1); }
+const ENV = process.env;
+const PROV = {
+  gemini: { name: "Gemini", key: ENV.GEMINI_API_KEY, model: ENV.GEMINI_MODEL || "gemini-3.5-flash" },
+  claude: { name: "Claude", key: ENV.ANTHROPIC_API_KEY, model: ENV.CLAUDE_MODEL || "claude-sonnet-5-5" },
+  openai: { name: "ChatGPT", key: ENV.OPENAI_API_KEY, model: ENV.OPENAI_MODEL || "gpt-6-astra" }
+};
+const ORDER = (ENV.RENTS_PROVIDERS || "gemini,claude,openai").split(",").map(s => s.trim()).filter(k => PROV[k] && PROV[k].key);
+const MODE = ENV.RENTS_MODE === "fallback" ? "fallback" : "all";
+const ONLY = (ENV.RENTS_CITIES || "").split(",").map(s => s.trim()).filter(Boolean);
+if (!ORDER.length) { console.error("ما فيه أي مفتاح. أضف GEMINI_API_KEY أو ANTHROPIC_API_KEY أو OPENAI_API_KEY في Settings > Secrets and variables > Actions."); process.exit(1); }
+console.log("النماذج: " + ORDER.map(k => PROV[k].name + " (" + PROV[k].model + ")").join("، ") + " · الطريقة: " + (MODE === "all" ? "كلها وتتأكد من بعض" : "أول واحد شغال"));
 
 const TYPES = { shop: "محل تجاري (ريال/م²/سنة)", office: "مكتب (ريال/م²/سنة)", mall: "محل في مركز تسوق (ريال/م²/سنة)", warehouse: "مستودع (ريال/م²/سنة)", factory: "مصنع (ريال/م²/سنة)", farm: "مزرعة (ريال/م²/سنة)", apartment: "شقة سكنية (ريال/سنة للوحدة)", villa: "فيلا (ريال/سنة للوحدة)" };
 const RANGE = { shop: [50, 15000], office: [50, 10000], mall: [100, 20000], warehouse: [10, 1500], factory: [5, 1500], farm: [0.1, 200], apartment: [3000, 1000000], villa: [10000, 3000000] }; // نفس data/validate.js
@@ -49,38 +57,76 @@ function parse(text) {
   if (!m) throw new Error("ما رجع JSON");
   return JSON.parse(m[1]);
 }
-/* Gemini مع البحث في قوقل. نقبل رابط المصدر فقط لو موقعه من النتائج اللي بحث فيها فعلًا، عشان ما ينخترع رابط. */
-async function askGemini(city, rows) {
-  const res = await fetch("https://generativelanguage.googleapis.com/v1beta/models/" + MODEL + ":generateContent", {
-    method: "POST",
-    headers: { "content-type": "application/json", "x-goog-api-key": KEY },
-    body: JSON.stringify({ systemInstruction: { parts: [{ text: SYSTEM }] }, contents: [{ role: "user", parts: [{ text: prompt(city, rows) }] }], tools: [{ google_search: {} }] })
+const BLOCK = ["sa.aqar.fm", "aqar.fm", "bayut.sa", "haraj.com.sa", "sa.opensooq.com"];
+const host = u => { try { return new URL(u).hostname.toLowerCase().replace(/^www\./, ""); } catch (e) { return ""; } };
+/* نقبل رابط المصدر فقط لو موقعه ظهر في نتائج البحث الفعلية لنفس الطلب، عشان ما ينخترع رابط */
+function keepReal(data, hosts) {
+  data.sources = (data.sources || []).filter(s => { const h = host(s.url); return h && !BLOCK.some(b => h === b || h.endsWith("." + b)) && [...hosts].some(x => h === x || h.endsWith("." + x) || x.endsWith("." + h)); });
+  return data;
+}
+async function post(url, headers, body, who) {
+  const res = await fetch(url, { method: "POST", headers: Object.assign({ "content-type": "application/json" }, headers), body: JSON.stringify(body) });
+  if (!res.ok) throw new Error(who + " " + res.status + ": " + (await res.text()).slice(0, 200));
+  return res.json();
+}
+const ASK = {
+  async gemini(city, rows) {
+    const P = PROV.gemini, out = await post("https://generativelanguage.googleapis.com/v1beta/models/" + P.model + ":generateContent", { "x-goog-api-key": P.key },
+      { systemInstruction: { parts: [{ text: SYSTEM }] }, contents: [{ role: "user", parts: [{ text: prompt(city, rows) }] }], tools: [{ google_search: {} }] }, "Gemini");
+    const cand = (out.candidates || [])[0] || {}, gm = cand.groundingMetadata || {}, hosts = new Set();
+    (gm.groundingChunks || []).forEach(c => { const t = String((c.web || {}).title || "").toLowerCase().replace(/^www\./, ""); if (t) hosts.add(t); });
+    return { data: keepReal(parse(((cand.content || {}).parts || []).map(p => p.text || "").join("\n")), hosts), searches: (gm.webSearchQueries || []).length };
+  },
+  async claude(city, rows) {
+    const P = PROV.claude, out = await post("https://api.anthropic.com/v1/messages", { "x-api-key": P.key, "anthropic-version": "2023-06-01" }, {
+      model: P.model, max_tokens: 8000, system: SYSTEM, messages: [{ role: "user", content: prompt(city, rows) }],
+      tools: [{ type: "web_search_20250305", name: "web_search", max_uses: 8, user_location: { type: "approximate", country: "SA", timezone: "Asia/Riyadh" }, blocked_domains: BLOCK }] }, "Claude");
+    const hosts = new Set();
+    (out.content || []).forEach(b => { if (b.type === "web_search_tool_result" && Array.isArray(b.content)) b.content.forEach(r => { const h = host(r.url); if (h) hosts.add(h); }); });
+    const text = (out.content || []).filter(b => b.type === "text").map(b => b.text).join("\n");
+    return { data: keepReal(parse(text), hosts), searches: out.usage?.server_tool_use?.web_search_requests || 0 };
+  },
+  async openai(city, rows) {
+    const P = PROV.openai, out = await post("https://api.openai.com/v1/responses", { authorization: "Bearer " + P.key }, {
+      model: P.model, instructions: SYSTEM, input: prompt(city, rows), include: ["web_search_call.action.sources"],
+      tools: [{ type: "web_search", user_location: { type: "approximate", country: "SA", timezone: "Asia/Riyadh" }, filters: { blocked_domains: BLOCK } }] }, "ChatGPT");
+    const hosts = new Set(); let text = "", n = 0;
+    (out.output || []).forEach(it => {
+      if (it.type === "web_search_call") { n++; ((it.action || {}).sources || []).forEach(s => { const h = host(s.url); if (h) hosts.add(h); }); }
+      if (it.type === "message") (it.content || []).forEach(c => { if (c.type === "output_text") { text += c.text + "\n"; (c.annotations || []).forEach(a => { const h = host(a.url); if (h) hosts.add(h); }); } });
+    });
+    return { data: keepReal(parse(text), hosts), searches: n };
+  }
+};
+const RANKN = ["estimate", "report", "official"];
+/* يجمع نتائج النماذج: لكل حي ونوع ناخذ الوسيط، والدرجة والمصادر من النماذج اللي أرقامها قريبة منه (±20%) */
+function merge(results) {
+  const sources = [], groups = {};
+  results.forEach(({ who, data }) => {
+    const ids = {};
+    (data.sources || []).forEach(s => { if (!s.id || !s.title) return; const id = who + "-" + s.id; ids[s.id] = id; sources.push(Object.assign({}, s, { id })); });
+    (data.rows || []).forEach(r => { if (!r || !r.district || !TYPES[r.type] || !(Number(r.avg) > 0)) return;
+      const k = String(r.district).trim() + "|" + r.type; (groups[k] = groups[k] || []).push(Object.assign({}, r, { who, sources: (r.sources || []).map(x => ids[x]).filter(Boolean) })); });
   });
-  if (!res.ok) throw new Error("Gemini " + res.status + ": " + (await res.text()).slice(0, 300));
-  const out = await res.json(), cand = (out.candidates || [])[0] || {};
-  const text = ((cand.content || {}).parts || []).map(p => p.text || "").join("\n");
-  const gm = cand.groundingMetadata || {}, hosts = new Set();
-  (gm.groundingChunks || []).forEach(c => { const t = String((c.web || {}).title || "").toLowerCase().replace(/^www\./, ""); if (t) hosts.add(t); });
-  const data = parse(text);
-  data.sources = (data.sources || []).filter(s => { try { const h = new URL(s.url).hostname.toLowerCase().replace(/^www\./, ""); return [...hosts].some(x => h === x || h.endsWith("." + x) || x.endsWith("." + h)); } catch (e) { return false; } });
-  return { data, searches: (gm.webSearchQueries || []).length };
+  const rows = Object.values(groups).map(g => {
+    const avgs = g.map(r => Number(r.avg)).sort((a, b) => a - b), med = avgs[Math.floor((avgs.length - 1) / 2)];
+    const near = g.filter(r => Math.abs(Number(r.avg) / med - 1) <= 0.2), best = near.slice().sort((a, b) => (RANK[b.confidence] || 0) - (RANK[a.confidence] || 0))[0];
+    const conf = RANKN[Math.max.apply(null, near.map(r => (r.sources.length ? RANK[r.confidence] || 0 : 0)))];
+    const whos = [...new Set(near.map(r => PROV[r.who].name))];
+    let note = String(best.note || "");
+    if (results.length > 1) note = (whos.length > 1 ? "اتفق عليه " + whos.join(" و") : "من " + whos[0] + " فقط") + (g.length > near.length ? "، واستبعدنا رقم بعيد" : "") + (note ? ". " + note : "");
+    return { district: best.district, type: best.type, min: best.min, avg: med, max: best.max, period: best.period, confidence: conf, sources: [...new Set(near.flatMap(r => r.sources))], note, agree: whos.length };
+  });
+  return { sources, rows, summary: results.map(r => PROV[r.who].name + ": " + (r.data.summary || "تم")).join(" · ") };
 }
 async function ask(city, rows) {
-  if (GEMINI) return askGemini(city, rows);
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: { "content-type": "application/json", "x-api-key": KEY, "anthropic-version": "2023-06-01" },
-    body: JSON.stringify({
-      model: MODEL, max_tokens: 8000, system: SYSTEM,
-      tools: [{ type: "web_search_20250305", name: "web_search", max_uses: 8, user_location: { type: "approximate", country: "SA", timezone: "Asia/Riyadh" },
-        blocked_domains: ["sa.aqar.fm", "aqar.fm", "bayut.sa", "haraj.com.sa", "sa.opensooq.com"] }],
-      messages: [{ role: "user", content: prompt(city, rows) }]
-    })
-  });
-  if (!res.ok) throw new Error("API " + res.status + ": " + (await res.text()).slice(0, 300));
-  const out = await res.json();
-  const text = (out.content || []).filter(b => b.type === "text").map(b => b.text).join("\n");
-  return { data: parse(text), searches: out.usage?.server_tool_use?.web_search_requests || 0 };
+  const got = []; let searches = 0;
+  for (const who of ORDER) {
+    try { const r = await ASK[who](city, rows); searches += r.searches; got.push({ who, data: r.data }); if (MODE === "fallback") break; }
+    catch (e) { console.error(city + " / " + PROV[who].name + ": " + e.message); }
+  }
+  if (!got.length) throw new Error("كل النماذج فشلت");
+  return { data: merge(got), searches };
 }
 
 const cities = ONLY.length ? ONLY : [...new Set(doc.rows.map(r => r.city))];
@@ -93,7 +139,7 @@ for (const city of cities) {
     searches += n;
     const idMap = {};
     for (const s of data.sources || []) {
-      if (!s.id || !s.title || !/^https:\/\//.test(s.url || "")) continue;
+      if (!s.id || !s.title || !/^https:\/\//.test(s.url || "")) continue;   // id هنا مسبوق باسم النموذج من merge
       const id = (city + "-" + s.id).replace(/\s+/g, "-").slice(0, 60);
       idMap[s.id] = id;
       const i = doc.sources.findIndex(x => x.id === id);
@@ -105,6 +151,7 @@ for (const city of cities) {
       const row = { city, district: String(r.district).trim().slice(0, 80), type: r.type, min: r.min == null ? null : Number(r.min), avg: Number(r.avg), max: r.max == null ? null : Number(r.max),
         period: String(r.period || today.slice(0, 7)).slice(0, 10), confidence: RANK[r.confidence] != null ? r.confidence : "estimate",
         sources: (r.sources || []).map(id => idMap[id]).filter(Boolean), note: String(r.note || "").slice(0, 200) };
+      // رقم ما اتفق عليه أكثر من نموذج، وغيّر القيمة كثير: يعامل كأنه بدون مصدر رسمي (قاعدة 30% تحت)
       if (row.confidence !== "estimate" && !row.sources.length) row.confidence = "estimate";
       const [lo, hi] = RANGE[row.type];
       if (row.avg < lo || row.avg > hi || (row.min != null && row.min > row.avg) || (row.max != null && row.max < row.avg)) { log.push(`${city}/${row.district}/${row.type}: رقم غير منطقي ${row.avg}، تجاهلناه`); continue; }
