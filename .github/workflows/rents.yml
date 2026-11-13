@@ -23,7 +23,9 @@ jobs:
           node-version: 20
       - name: البحث وتحديث الأسعار
         env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          RENTS_MODEL: ${{ vars.RENTS_MODEL }}
           RENTS_CITIES: ${{ github.event.inputs.cities }}
         run: node scripts/update-rents.mjs
       - name: نشر التحديث

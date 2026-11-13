@@ -1,16 +1,16 @@
 // تحديث أسعار الإيجار بالذكاء الاصطناعي: يبحث في الويب عن آخر الأرقام المنشورة لكل مدينة، ويحدّث data/rents.json.
 // يشتغل من GitHub Actions (.github/workflows/rents.yml) ولاحقًا من خادم Hostinger بنفس المنطق.
-// يحتاج متغير البيئة ANTHROPIC_API_KEY (سر في إعدادات المستودع، ما ينكتب في الكود أبدًا).
+// يحتاج سر GEMINI_API_KEY (أو ANTHROPIC_API_KEY) في إعدادات المستودع، وما ينكتب في الكود أبدًا.
 import fs from "node:fs";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const FILE = path.join(ROOT, "data", "rents.json");
-const KEY = process.env.ANTHROPIC_API_KEY;
-const MODEL = process.env.RENTS_MODEL || "claude-sonnet-5-5";
+const GEMINI = process.env.GEMINI_API_KEY, KEY = GEMINI || process.env.ANTHROPIC_API_KEY;
+const MODEL = process.env.RENTS_MODEL || (GEMINI ? "gemini-3.5-flash" : "claude-sonnet-5-5");
 const ONLY = (process.env.RENTS_CITIES || "").split(",").map(s => s.trim()).filter(Boolean);
-if (!KEY) { console.error("ANTHROPIC_API_KEY مو موجود. أضفه في Settings > Secrets and variables > Actions."); process.exit(1); }
+if (!KEY) { console.error("GEMINI_API_KEY مو موجود. أضفه في Settings > Secrets and variables > Actions."); process.exit(1); }
 
 const TYPES = { shop: "محل تجاري (ريال/م²/سنة)", office: "مكتب (ريال/م²/سنة)", mall: "محل في مركز تسوق (ريال/م²/سنة)", warehouse: "مستودع (ريال/م²/سنة)", factory: "مصنع (ريال/م²/سنة)", farm: "مزرعة (ريال/م²/سنة)", apartment: "شقة سكنية (ريال/سنة للوحدة)", villa: "فيلا (ريال/سنة للوحدة)" };
 const RANGE = { shop: [50, 15000], office: [50, 10000], mall: [100, 20000], warehouse: [10, 1500], factory: [5, 1500], farm: [0.1, 200], apartment: [3000, 1000000], villa: [10000, 3000000] }; // نفس data/validate.js
@@ -44,7 +44,29 @@ ${JSON.stringify(rows.map(r => ({ district: r.district, type: r.type, min: r.min
 رجّع فقط الصفوف اللي عندك لها رقم أحدث أو أدق من الحالي، أو أحياء جديدة. لو ما لقيت جديد رجّع rows فاضية.`;
 }
 
+function parse(text) {
+  const m = text.match(/```json\s*([\s\S]*?)```/) || text.match(/(\{[\s\S]*\})/);
+  if (!m) throw new Error("ما رجع JSON");
+  return JSON.parse(m[1]);
+}
+/* Gemini مع البحث في قوقل. نقبل رابط المصدر فقط لو موقعه من النتائج اللي بحث فيها فعلًا، عشان ما ينخترع رابط. */
+async function askGemini(city, rows) {
+  const res = await fetch("https://generativelanguage.googleapis.com/v1beta/models/" + MODEL + ":generateContent", {
+    method: "POST",
+    headers: { "content-type": "application/json", "x-goog-api-key": KEY },
+    body: JSON.stringify({ systemInstruction: { parts: [{ text: SYSTEM }] }, contents: [{ role: "user", parts: [{ text: prompt(city, rows) }] }], tools: [{ google_search: {} }] })
+  });
+  if (!res.ok) throw new Error("Gemini " + res.status + ": " + (await res.text()).slice(0, 300));
+  const out = await res.json(), cand = (out.candidates || [])[0] || {};
+  const text = ((cand.content || {}).parts || []).map(p => p.text || "").join("\n");
+  const gm = cand.groundingMetadata || {}, hosts = new Set();
+  (gm.groundingChunks || []).forEach(c => { const t = String((c.web || {}).title || "").toLowerCase().replace(/^www\./, ""); if (t) hosts.add(t); });
+  const data = parse(text);
+  data.sources = (data.sources || []).filter(s => { try { const h = new URL(s.url).hostname.toLowerCase().replace(/^www\./, ""); return [...hosts].some(x => h === x || h.endsWith("." + x) || x.endsWith("." + h)); } catch (e) { return false; } });
+  return { data, searches: (gm.webSearchQueries || []).length };
+}
 async function ask(city, rows) {
+  if (GEMINI) return askGemini(city, rows);
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: { "content-type": "application/json", "x-api-key": KEY, "anthropic-version": "2023-06-01" },
@@ -58,9 +80,7 @@ async function ask(city, rows) {
   if (!res.ok) throw new Error("API " + res.status + ": " + (await res.text()).slice(0, 300));
   const out = await res.json();
   const text = (out.content || []).filter(b => b.type === "text").map(b => b.text).join("\n");
-  const m = text.match(/```json\s*([\s\S]*?)```/) || text.match(/(\{[\s\S]*\})/);
-  if (!m) throw new Error("ما رجع JSON");
-  return { data: JSON.parse(m[1]), searches: out.usage?.server_tool_use?.web_search_requests || 0 };
+  return { data: parse(text), searches: out.usage?.server_tool_use?.web_search_requests || 0 };
 }
 
 const cities = ONLY.length ? ONLY : [...new Set(doc.rows.map(r => r.city))];
