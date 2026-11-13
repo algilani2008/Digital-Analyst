@@ -1,0 +1,2042 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="description" content="المحلل الرقمي: تحليل بيانات ولوحات معلومات، تصميم أنظمة ومواقع، ودراسات جدوى للمنشآت في السعودية. جرّب الأدوات مجاناً على بياناتك."><meta property="og:title" content="المحلل الرقمي | The Digital Analyst"><meta property="og:description" content="نحوّل بياناتك إلى قرارات، وفكرتك إلى موقع يشتغل."><meta property="og:type" content="website"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Crect width=%2224%22 height=%2224%22 rx=%225%22 fill=%22%230B7A75%22/%3E%3Cpath d=%22M5 18v-6M10 18V6M15 18v-5M20 18H4%22 stroke=%22white%22 stroke-width=%222.2%22 stroke-linecap=%22round%22 fill=%22none%22/%3E%3C/svg%3E"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>المحلل الرقمي | The Digital Analyst</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Readex+Pro:wght@500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: right-aligned RTL column; hero pairs the pitch with a live KPI panel, sections stack below on a 1100px measure */
+:root{
+  --bg:#F4F6F6; --surface:#FFFFFF; --fg:#11222B; --muted:#55676F; --line:#DCE3E4;
+  --accent:#0B7A75; --accent-soft:#E1F1EF; --data:#C9822A; --data-soft:#F7EBDA; --on-accent:#FFFFFF;
+  --f-display:"Readex Pro","IBM Plex Sans Arabic",Tahoma,sans-serif;
+  --f-body:"IBM Plex Sans Arabic",Tahoma,"Segoe UI",sans-serif;
+  --f-data:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0D171C; --surface:#14222A; --fg:#E6EEF0; --muted:#9AAEB5; --line:#24363F;
+  --accent:#3FB8B0; --accent-soft:#16332F; --data:#E3A552; --data-soft:#3A2C18; --on-accent:#06201E; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0D171C; --surface:#14222A; --fg:#E6EEF0; --muted:#9AAEB5; --line:#24363F;
+  --accent:#3FB8B0; --accent-soft:#16332F; --data:#E3A552; --data-soft:#3A2C18; --on-accent:#06201E; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.75;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1100px;margin-inline:auto}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;line-height:1.3;margin:0}
+h1{font-size:clamp(2rem,5vw,3.1rem);font-weight:700}
+h2{font-size:clamp(1.5rem,3vw,2rem);font-weight:600}
+h3{font-size:1.15rem;font-weight:600}
+p{margin:0}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+.num{font-family:var(--f-data);font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+.eyebrow{font-size:.85rem;color:var(--accent);font-weight:600;letter-spacing:.02em}
+
+/* nav */
+nav.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:20px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:700;font-size:1.15rem;color:var(--fg);text-decoration:none}
+.mark{width:34px;height:34px;border-radius:9px;background:var(--accent);display:grid;place-items:center}
+.mark svg{width:20px;height:20px}
+nav.top ul{display:flex;gap:20px;list-style:none;margin:0;padding:0;flex-wrap:wrap}
+nav.top ul a{color:var(--muted);text-decoration:none;font-size:.95rem}
+nav.top ul a:hover{color:var(--fg)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;padding-block:32px 56px}
+.hero > *{min-width:0}
+.hero .lead{color:var(--muted);font-size:1.12rem;max-width:34em;margin-top:16px}
+.cta{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:10px;font-weight:600;font-family:var(--f-body);font-size:1rem;text-decoration:none;cursor:pointer;border:1px solid transparent;min-height:46px}
+.btn-primary{background:var(--accent);color:var(--on-accent)}
+.btn-primary:hover{filter:brightness(1.08)}
+.btn-ghost{border-color:var(--line);color:var(--fg);background:transparent}
+.btn-ghost:hover{border-color:var(--accent)}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 12px 32px -18px rgba(11,40,45,.35)}
+.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.tag{font-size:.75rem;color:var(--muted);border:1px dashed var(--line);border-radius:999px;padding:2px 10px}
+.tabs{display:flex;gap:4px;background:var(--bg);border-radius:10px;padding:4px}
+.tabs button{border:0;background:transparent;color:var(--muted);font-family:var(--f-body);font-size:.88rem;padding:6px 12px;border-radius:7px;cursor:pointer;min-height:34px}
+.tabs button[aria-pressed="true"]{background:var(--surface);color:var(--fg);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-block:18px 6px}
+.kpi .label{font-size:.8rem;color:var(--muted)}
+.kpi .value{font-size:1.45rem;font-weight:500;display:block;text-align:right}
+.delta{font-size:.78rem;font-weight:600;color:var(--accent);background:var(--accent-soft);border-radius:6px;padding:1px 7px;display:inline-block}
+.chart{width:100%;height:auto;display:block;margin-top:8px}
+.chart text{fill:var(--muted);font-family:var(--f-body);font-size:11px}
+
+/* sections */
+section.block{padding-block:56px;border-top:1px solid var(--line)}
+.sec-head{display:flex;flex-direction:column;gap:8px;margin-bottom:32px;max-width:40em}
+.sec-head p{color:var(--muted)}
+.services{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px}
+.service{display:flex;flex-direction:column;gap:12px;padding:24px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
+.service > *{min-width:0}
+.service.featured{border:2px solid var(--accent)}
+
+/* needs finder: questions on one side, the plan they produce on the other */
+.finder{display:grid;grid-template-columns:1fr 1.05fr;gap:28px;align-items:start}
+.finder > *{min-width:0}
+.qs{display:flex;flex-direction:column;gap:22px}
+.qs fieldset{border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;min-width:0}
+.qs legend{font-weight:600;padding:0;margin-bottom:10px;display:flex;gap:10px;align-items:baseline}
+.qs legend .n{font-family:var(--f-data);font-size:.8rem;color:var(--accent)}
+.qs legend small{font-weight:400;color:var(--muted);font-size:.82rem}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{position:relative}
+.opt input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.opt span{display:inline-flex;align-items:center;min-height:40px;padding:6px 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:.92rem;cursor:pointer}
+.opt input:checked + span{border-color:var(--accent);background:var(--accent-soft);color:var(--accent);font-weight:600}
+.opt input:focus-visible + span{outline:2px solid var(--accent);outline-offset:2px}
+.plan{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:16px;box-shadow:0 12px 32px -18px rgba(11,40,45,.35)}
+.plan-head{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+.need{display:flex;flex-direction:column;gap:8px;padding-top:14px;border-top:1px solid var(--line)}
+.need h4{margin:0;font-family:var(--f-display);font-size:1rem;font-weight:600}
+.need ul{margin:0;padding-inline-start:18px;font-size:.92rem;color:var(--muted);display:flex;flex-direction:column;gap:3px}
+.need ul li::marker{color:var(--data)}
+.need .chips .chip{font-size:.82rem;padding:3px 10px}
+.need .src{font-size:.85rem;color:var(--muted)}
+.plan-sum{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:.92rem;padding:14px;border-radius:12px;background:var(--bg)}
+.plan-sum dt{color:var(--muted)}
+.plan-sum dd{margin:0;font-weight:600}
+@media (max-width:900px){.finder{grid-template-columns:1fr}.plan{position:static}}
+
+/* systems demos */
+.sys{display:flex;flex-direction:column;gap:16px}
+.sys > *{min-width:0}
+.sform{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;align-items:end}
+.sform .field{gap:4px}
+.sform label{font-size:.82rem}
+.board-wrap{overflow-x:auto;padding-bottom:4px}
+.board{display:grid;grid-template-columns:repeat(5,minmax(170px,1fr));gap:10px;min-width:880px}
+.col{background:var(--bg);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.col-h{display:flex;justify-content:space-between;align-items:baseline;gap:6px;font-size:.85rem;font-weight:600}
+.col-h .num{font-size:.78rem;color:var(--muted);font-weight:500}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:6px;font-size:.88rem}
+.card .t{font-weight:600}
+.card .meta{font-size:.78rem;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap}
+.card .acts{display:flex;gap:4px;flex-wrap:wrap}
+.card .acts button{min-height:30px;padding:3px 9px;font-size:.78rem;border-radius:7px}
+.stock-low{color:var(--data);font-weight:600}
+.sys-note{font-size:.85rem;color:var(--muted)}
+.qty{width:70px;min-height:36px;padding:4px 8px;font-size:.88rem}
+
+/* feasibility */
+.parts{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.part{display:flex;flex-direction:column;gap:8px;padding:18px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
+.part > *{min-width:0}
+.part .k{font-family:var(--f-data);font-size:.78rem;color:var(--data)}
+.part p,.part li{color:var(--muted);font-size:.92rem}
+.part ul{margin:0;padding-inline-start:18px;display:flex;flex-direction:column;gap:3px}
+.sub-h{margin:36px 0 14px;font-size:1.2rem}
+.ftypes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.ftype{display:flex;flex-direction:column;gap:10px;padding:22px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
+.ftype > *{min-width:0}
+.ftype.featured{border:2px solid var(--accent)}
+.ftype .for{color:var(--muted);font-size:.93rem}
+.ftype ul{margin:0;padding-inline-start:18px;font-size:.92rem;display:flex;flex-direction:column;gap:4px;flex:1}
+.ftype .btn{justify-content:center}
+.deliver{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.deliver div{padding:14px 16px;border-radius:12px;background:var(--accent-soft);font-size:.92rem}
+.deliver b{display:block;margin-bottom:2px}
+.calc{display:grid;grid-template-columns:1fr 1.15fr;gap:24px;align-items:start}
+.calc > *{min-width:0}
+.cin{display:flex;flex-direction:column;gap:16px}
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cgrid .field{gap:4px}
+.cgrid label{font-size:.82rem}
+.cgrp{font-size:.82rem;font-weight:600;color:var(--accent);margin-bottom:-4px}
+.cout{display:flex;flex-direction:column;gap:16px}
+.verdict{padding:14px 16px;border-radius:12px;font-size:.95rem;border-inline-start:4px solid var(--accent);background:var(--accent-soft)}
+.verdict.bad{border-color:var(--data);background:var(--data-soft)}
+.scen td:first-child{font-weight:600}
+.cbox{border:1px solid var(--line);border-radius:12px;padding:0 14px;background:var(--surface)}
+.cbox summary{cursor:pointer;font-weight:600;color:var(--accent);padding-block:12px;min-height:44px;display:flex;align-items:center}
+.cbox[open] summary{margin-bottom:4px}
+.cbox .cgrid{padding-bottom:14px}
+.chk{display:flex;gap:8px;align-items:flex-start;font-size:.88rem;font-weight:500}
+.chk input{width:auto;min-height:0;margin-top:6px}
+.ex-tabs{display:flex;gap:8px;flex-wrap:wrap}
+.ex-tabs button{border:1px solid var(--line);background:var(--surface);color:var(--fg);font:inherit;font-size:.9rem;padding:7px 14px;border-radius:10px;cursor:pointer;min-height:40px}
+.ex-tabs button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent);font-weight:600}
+.ex-panel{display:flex;flex-direction:column;gap:18px}
+.ex-panel > *{min-width:0}
+.ex-head{display:flex;flex-direction:column;gap:8px}
+.ex-tags{display:flex;gap:8px;flex-wrap:wrap}
+.ex-tags span{font-size:.78rem;padding:2px 10px;border-radius:999px;background:var(--bg);color:var(--muted)}
+.ex-tags span.lesson{background:var(--data-soft);color:var(--fg);font-weight:600}
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.ba > div{min-width:0;padding:16px;border-radius:12px;border:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+.ba > div.after{border:2px solid var(--accent)}
+.ba h4{margin:0;font-family:var(--f-display);font-size:1rem}
+.ba dl{margin:0;display:grid;grid-template-columns:1fr auto;gap:6px 12px;font-size:.9rem}
+.ba dt{color:var(--muted)}
+.ba dd{margin:0;font-weight:600;text-align:left}
+.ba dd.neg{color:var(--data)}
+.ex-story{display:grid;gap:12px;margin:0}
+.ex-story div{padding:14px 16px;border-radius:12px;background:var(--bg)}
+.ex-story dt{font-weight:600;margin-bottom:4px}
+.ex-story dd{margin:0;color:var(--muted);font-size:.95rem}
+.ex-story div.tip{background:var(--accent-soft)}
+.ex-story div.tip dd{color:var(--fg)}
+@media (max-width:700px){.ba{grid-template-columns:1fr}}
+.growth{display:flex;flex-direction:column;gap:10px;padding-top:6px;border-top:1px solid var(--line)}
+.g-title{margin:6px 0 0;font-family:var(--f-display);font-size:1.05rem}
+.growth details{border:1px solid var(--line);border-radius:12px;padding:0 16px;background:var(--surface)}
+.growth summary{cursor:pointer;font-weight:600;padding-block:12px;min-height:44px;display:flex;align-items:center}
+.growth ul,.growth ol{margin:0 0 12px;padding-inline-start:20px;display:flex;flex-direction:column;gap:5px;font-size:.93rem;color:var(--muted)}
+.growth ol li::marker{color:var(--accent);font-family:var(--f-data)}
+.growth ul li::marker{color:var(--data)}
+.g-budget{font-size:.9rem;margin-bottom:12px;padding:8px 12px;border-radius:8px;background:var(--bg)}
+.g-two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g-two > div{min-width:0}
+.g-ok,.g-no{font-size:.82rem;font-weight:600;margin-bottom:4px}
+.g-ok{color:var(--accent)}
+.g-no{color:var(--data)}
+.growth details .btn{margin-bottom:12px}
+.g-mis{margin:0 0 12px;display:grid;gap:8px}
+.g-mis div{padding:10px 12px;border-radius:8px;background:var(--bg)}
+.g-mis dt{font-weight:600;font-size:.92rem}
+.g-mis dd{margin:2px 0 0;color:var(--muted);font-size:.9rem}
+@media (max-width:560px){.g-two{grid-template-columns:1fr}}
+.dsim-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:.92rem}
+.dsim-row input{width:90px}
+.cal{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.cal div{padding:14px 16px;border-radius:12px;background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;gap:4px}
+.cal b{font-family:var(--f-display)}
+.cal span{font-size:.88rem;color:var(--muted)}
+.cal .when{font-size:.8rem;color:var(--accent);font-weight:600}
+.disclaimer{font-size:.82rem;color:var(--muted);padding:12px 14px;border-radius:10px;border:1px dashed var(--line)}
+@media (max-width:900px){.ftypes,.calc{grid-template-columns:1fr}}
+@media (max-width:560px){.cgrid{grid-template-columns:1fr 1fr}}
+.svc-tag{align-self:flex-start;font-size:.75rem;font-weight:600;border-radius:999px;padding:2px 10px;background:var(--bg);color:var(--muted)}
+.svc-tag.main{background:var(--accent);color:var(--on-accent)}
+.service .ico{width:42px;height:42px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center;color:var(--accent)}
+.service .ico svg{width:22px;height:22px}
+.service p{color:var(--muted);font-size:.95rem}
+.service ul{margin:0;padding-inline-start:18px;font-size:.92rem;display:flex;flex-direction:column;gap:4px}
+.service li::marker{color:var(--data)}
+
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;list-style:none;padding:0;margin:0;counter-reset:s}
+.steps li{position:relative;padding:0 0 0 20px;display:flex;flex-direction:column;gap:8px;counter-increment:s}
+.steps li::before{content:counter(s);font-family:var(--f-data);font-size:.85rem;width:32px;height:32px;border-radius:50%;border:1.5px solid var(--accent);color:var(--accent);display:grid;place-items:center;background:var(--bg);position:relative;z-index:1}
+.steps li::after{content:"";position:absolute;top:16px;right:32px;left:0;height:1.5px;background:var(--line)}
+.steps li:last-child::after{display:none}
+.steps p{color:var(--muted);font-size:.93rem;padding-left:8px}
+
+.skills{display:grid;grid-template-columns:repeat(2,1fr);gap:28px 40px}
+.skills > div{min-width:0}
+.skills h3{margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.skills h3::before{content:"";width:10px;height:10px;border-radius:3px;background:var(--data)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:.88rem;padding:5px 12px;border-radius:8px;background:var(--surface);border:1px solid var(--line)}
+.chip b{font-weight:600}
+.note{margin-top:28px;padding:16px 18px;border-radius:12px;background:var(--data-soft);font-size:.93rem}
+
+/* work */
+.cases{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.case{display:flex;flex-direction:column;border-radius:14px;background:var(--surface);border:1px solid var(--line);overflow:hidden}
+.case > *{min-width:0}
+.case-vis{height:120px;background:var(--accent-soft);display:block;width:100%}
+.case-body{padding:20px;display:flex;flex-direction:column;gap:10px}
+.case-meta{font-size:.8rem;color:var(--accent);font-weight:600}
+.case dl{margin:0;display:grid;gap:8px;font-size:.92rem}
+.case dt{font-weight:600}
+.case dd{margin:0;color:var(--muted)}
+.result{margin-top:4px;padding:10px 12px;border-radius:8px;background:var(--data-soft);font-size:.9rem}
+
+/* packages */
+.packages{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch}
+.pkg{display:flex;flex-direction:column;gap:14px;padding:26px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
+.pkg > *{min-width:0}
+.pkg.featured{border:2px solid var(--accent)}
+.pkg .badge{align-self:flex-start;font-size:.75rem;font-weight:600;background:var(--accent);color:var(--on-accent);border-radius:999px;padding:2px 10px}
+.pkg .for{color:var(--muted);font-size:.93rem}
+.pkg ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:.93rem;flex:1}
+.pkg li{display:flex;gap:8px;align-items:flex-start}
+.pkg li::before{content:"";flex:none;width:16px;height:16px;margin-top:5px;border-radius:50%;background:var(--accent-soft);box-shadow:inset 0 0 0 4px var(--accent-soft),inset 0 0 0 8px var(--accent)}
+.pkg .dur{font-size:.85rem;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+.pkg .btn{justify-content:center}
+
+/* faq */
+.faq{display:flex;flex-direction:column;gap:10px;max-width:820px}
+.faq details{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:0 18px}
+.faq summary{cursor:pointer;padding-block:16px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:12px;min-height:44px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-family:var(--f-data);color:var(--accent);font-size:1.2rem;line-height:1}
+.faq details[open] summary::after{content:"−"}
+.faq details p{color:var(--muted);padding-bottom:16px;font-size:.95rem}
+
+/* free band */
+.free-band{display:grid;grid-template-columns:1.2fr 1fr;gap:24px;padding:26px;border-radius:14px;background:var(--accent-soft);border:1px solid var(--accent);margin-bottom:24px;align-items:center}
+.free-band > *{min-width:0}
+.free-band p{color:var(--muted);margin-top:8px}
+.limits{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:.93rem}
+.limits li{display:flex;justify-content:space-between;gap:12px;padding:8px 12px;background:var(--surface);border-radius:8px}
+.limits b{color:var(--accent)}
+
+/* tools */
+.tool-wrap{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:18px}
+.tool-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.tool{display:flex;flex-direction:column;gap:18px}
+.tool > *{min-width:0}
+.tool-intro{color:var(--muted);font-size:.95rem;max-width:46em}
+.meter{display:flex;align-items:center;gap:10px;font-size:.88rem;color:var(--muted)}
+.meter-bar{width:120px;height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.meter-bar i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.file-btn{position:relative;overflow:hidden}
+.file-btn input{position:absolute;inset:0;opacity:0;cursor:pointer;min-height:0}
+.fmt{font-size:.85rem;color:var(--muted)}
+.fmt code{font-family:var(--f-body);background:var(--bg);padding:1px 6px;border-radius:5px}
+.msg{font-size:.9rem;padding:10px 14px;border-radius:10px;background:var(--data-soft)}
+.locked{padding:18px;border-radius:12px;background:var(--data-soft);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.res-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.res-kpis .kpi{padding:12px;border-radius:10px;background:var(--bg)}
+.res-kpis .value{font-size:1.15rem;text-align:right}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid2 > *{min-width:0}
+.card-t{font-weight:600;font-size:.95rem;margin-bottom:10px}
+.hbars{display:flex;flex-direction:column;gap:8px}
+.hb{display:grid;grid-template-columns:minmax(80px,120px) 1fr auto;gap:10px;align-items:center;font-size:.88rem}
+.hb .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hb .track{height:12px;background:var(--bg);border-radius:4px;overflow:hidden}
+.hb .fill{height:100%;background:var(--accent);border-radius:4px}
+.hb .fill.warn{background:var(--data)}
+.tbl-wrap{overflow-x:auto}
+table.data{width:100%;border-collapse:collapse;font-size:.9rem}
+table.data th{text-align:right;font-weight:600;color:var(--muted);padding:8px;border-bottom:1px solid var(--line);white-space:nowrap}
+table.data td{padding:8px;border-bottom:1px solid var(--line)}
+.flag{font-size:.75rem;padding:1px 8px;border-radius:99px;background:var(--data-soft);white-space:nowrap}
+.flag.good{background:var(--accent-soft);color:var(--accent)}
+.insights{margin:0;padding:16px 18px 16px 18px;padding-inline-start:34px;background:var(--bg);border-radius:12px;display:flex;flex-direction:column;gap:6px;font-size:.93rem}
+.insights li::marker{color:var(--data)}
+.mini-chart{width:100%;height:auto;display:block}
+.mini-chart text{fill:var(--muted);font-family:var(--f-body);font-size:11px}
+.mform{display:grid;grid-template-columns:2fr 1.3fr 1fr 1.2fr auto;gap:10px;align-items:end}
+.mform .field{gap:4px}
+.mform label{font-size:.82rem}
+.counts{display:flex;gap:10px;flex-wrap:wrap}
+.counts span{font-size:.85rem;padding:4px 12px;border-radius:8px;background:var(--bg)}
+.reqs{display:flex;flex-direction:column;gap:10px}
+.req{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);border-inline-start:4px solid var(--line)}
+.req > *{min-width:0}
+.req.p-high{border-inline-start-color:var(--data)}
+.req.p-mid{border-inline-start-color:var(--accent)}
+.req.done{opacity:.6}
+.req .t{font-weight:600}
+.req .meta{font-size:.82rem;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap}
+.req-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.pill{font-size:.78rem;padding:2px 10px;border-radius:99px;white-space:nowrap}
+.s0{background:var(--data-soft);color:var(--fg)}
+.s1{background:var(--accent-soft);color:var(--accent)}
+.s2{background:var(--bg);color:var(--muted)}
+.late{background:var(--data);color:var(--on-accent)}
+.btn-sm{padding:6px 12px;min-height:36px;font-size:.85rem;border-radius:8px}
+.case .btn{align-self:flex-start;margin-top:4px}
+
+.mapper{padding:16px;border-radius:12px;border:1px dashed var(--accent);background:var(--bg);display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+.map-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.map-row label{font-size:.82rem}
+#out-sales,#out-traffic{display:flex;flex-direction:column;gap:18px}
+
+/* contact */
+.contact{display:grid;grid-template-columns:.85fr 1.15fr;gap:40px;align-items:start}
+.contact > *{min-width:0}
+form{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field.full{grid-column:1/-1}
+label{font-size:.9rem;font-weight:500}
+input,select,textarea{font:inherit;font-size:.97rem;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-height:46px;width:100%}
+textarea{min-height:110px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:0;border-color:var(--accent)}
+.err{color:#B4232A;font-size:.82rem;min-height:1.2em}
+:root[data-theme="dark"] .err{color:#FF8A8F}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .err{color:#FF8A8F}}
+#out{grid-column:1/-1;background:var(--surface);border:1px solid var(--accent);border-radius:12px;padding:16px}
+#out pre{white-space:pre-wrap;font-family:var(--f-body);margin:8px 0 12px;font-size:.93rem}
+.out-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.status{font-size:.88rem;color:var(--accent)}
+footer{padding-block:28px 40px;border-top:1px solid var(--line);color:var(--muted);font-size:.88rem;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+footer a{color:var(--muted)}
+
+/* trust + privacy */
+.safe{display:flex;gap:10px;align-items:flex-start;font-size:.88rem;color:var(--fg);background:var(--accent-soft);border-radius:10px;padding:10px 14px}
+.safe svg{flex:none;width:18px;height:18px;margin-top:4px;color:var(--accent)}
+.policy{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.policy > div{min-width:0;padding:20px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
+.policy h3{margin-bottom:8px}
+.policy p,.policy li{color:var(--muted);font-size:.93rem}
+.policy ul{margin:0;padding-inline-start:18px;display:flex;flex-direction:column;gap:4px}
+.upsell{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:16px 18px;border-radius:12px;border:1px solid var(--accent);background:var(--surface)}
+.upsell p{font-size:.93rem}
+.res-actions{display:flex;gap:8px;flex-wrap:wrap}
+.reach{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.inbox{grid-column:1/-1;margin-top:8px;padding:16px;border-radius:12px;border:1px dashed var(--accent);background:var(--bg);display:flex;flex-direction:column;gap:10px}
+.lead{padding:12px 14px;border-radius:10px;background:var(--surface);border:1px solid var(--line);font-size:.9rem}
+.lead pre{white-space:pre-wrap;font-family:var(--f-body);margin:6px 0 0;font-size:.9rem;color:var(--muted)}
+.lead .meta{font-size:.8rem;color:var(--muted)}
+.mode{font-size:.8rem;color:var(--muted)}
+@media (max-width:900px){
+  .hero,.contact{grid-template-columns:1fr}
+  .services,.cases,.packages,.free-band,.grid2{grid-template-columns:1fr}
+  .res-kpis{grid-template-columns:1fr 1fr}
+  .mform{grid-template-columns:1fr 1fr}
+  .mform .field:first-child{grid-column:1/-1}
+  .steps{grid-template-columns:1fr 1fr;gap:28px}
+  .steps li::after{display:none}
+}
+@media (max-width:560px){
+  nav.top ul{display:none}
+  .skills,form,.policy{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr}
+  .kpi .value{font-size:1.15rem}
+}
+@media (prefers-reduced-motion:no-preference){
+  .line-path{transition:d .5s ease}
+}
+</style>
+
+<div class="wrap" dir="rtl" lang="ar">
+  <nav class="top" aria-label="التنقل الرئيسي">
+    <a class="brand" href="#top">
+      <span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="var(--on-accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V11M10 19V5M16 19v-6M22 19H2"/></svg></span>
+      المحلل الرقمي
+    </a>
+    <ul>
+      <li><a href="#services">الخدمات</a></li>
+      <li><a href="#discover">وش أحتاج؟</a></li>
+      <li><a href="#feasibility">دراسات الجدوى</a></li>
+      <li><a href="#work">نماذج أعمال</a></li>
+      <li><a href="#packages">الباقات</a></li>
+      <li><a href="#faq">أسئلة شائعة</a></li>
+      <li><a href="#contact">اطلب مشروع</a></li>
+    </ul>
+  </nav>
+
+  <header class="hero" id="top">
+    <div>
+      <p class="eyebrow">تصميم مواقع وأنظمة · تحليل بيانات رقمية</p>
+      <h1 style="margin-top:10px">نحوّل بياناتك إلى قرارات، وفكرتك إلى موقع يشتغل</h1>
+      <p class="lead">أصمم مواقع وأنظمة عربية سهلة الاستخدام، وأبني لوحات معلومات تقرأ أرقام نشاطك وتقول لك وش اللي يحتاج انتباه. من أول مخطط إلى آخر تقرير.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="#contact">اطلب عرض سعر</a>
+        <a class="btn btn-ghost" href="#discover">مو متأكد وش تحتاج؟</a>
+      </div>
+    </div>
+
+    <div class="panel" aria-label="نموذج لوحة معلومات">
+      <div class="panel-head">
+        <div>
+          <h3>أداء متجر إلكتروني</h3>
+          <span class="tag">بيانات توضيحية</span>
+        </div>
+        <div class="tabs" role="group" aria-label="اختيار المؤشر">
+          <button type="button" id="tab-visits" aria-pressed="true" data-k="visits">الزيارات</button>
+          <button type="button" id="tab-conv" aria-pressed="false" data-k="conv">التحويل</button>
+        </div>
+      </div>
+      <div class="kpis">
+        <div class="kpi"><span class="label">الزيارات الشهرية</span><span class="value num" id="k1">9,300</span></div>
+        <div class="kpi"><span class="label">معدل التحويل</span><span class="value num" id="k2">3.3%</span></div>
+        <div class="kpi"><span class="label">مقارنة بأول السنة</span><span class="value"><span class="delta num" id="k3">+121%</span></span></div>
+      </div>
+      <svg class="chart" id="chart" viewBox="0 0 440 200" role="img" aria-label="رسم خطي لآخر ١٢ شهر"></svg>
+    </div>
+  </header>
+
+  <section class="block" id="services">
+    <div class="sec-head">
+      <p class="eyebrow">الخدمات</p>
+      <h2>تحليل البيانات أولاً، وخدمات تكمّله</h2>
+      <p>شغلنا الأساسي تحليل البيانات وذكاء الأعمال. ولو تبي تفتح مشروع جديد، أو تحتاج نظام يجمع بياناتك أو موقع يستقبل عملاءك، نقدمها كخدمات إضافية.</p>
+    </div>
+    <div class="services">
+      <article class="service featured">
+        <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-5 4 4 8-8"/><path d="M15 8h5v5"/></svg></span>
+        <span class="svc-tag main">الخدمة الأساسية</span>
+        <h3>تحليل البيانات وذكاء الأعمال</h3>
+        <p>أرقامك مرتبة في لوحة واحدة، مع توصيات واضحة.</p>
+        <ul>
+          <li>لوحات معلومات Power BI أو ويب تفاعلية</li>
+          <li>تحليلات الموقع عبر Google Analytics 4</li>
+          <li>تنظيف البيانات وتوحيدها من Excel وقواعد البيانات</li>
+          <li>تقارير شهرية بمؤشرات أداء (KPIs)</li>
+        </ul>
+      </article>
+      <article class="service">
+        <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><path d="M10 6.5h4a3 3 0 0 1 3 3V14"/></svg></span>
+        <span class="svc-tag">خدمة إضافية</span>
+        <h3>تحليل وتصميم الأنظمة</h3>
+        <p>أنظمة داخلية تنظم شغلك: إدارة العملاء والمبيعات، المخزون والمشتريات، الموارد البشرية، وطلبات الصيانة. <a href="#systems">جرّب النماذج</a></p>
+        <ul>
+          <li>كتابة المتطلبات (BRD / SRS)</li>
+          <li>مخططات سير العمل وقواعد البيانات</li>
+          <li>تصميم الصلاحيات وأدوار المستخدمين</li>
+          <li>نماذج أولية قابلة للتجربة</li>
+        </ul>
+      </article>
+      <article class="service">
+        <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v5"/></svg></span>
+        <span class="svc-tag">خدمة إضافية</span>
+        <h3>تصميم المواقع</h3>
+        <p>مواقع عربية متجاوبة، سريعة، ومبنية على رحلة العميل.</p>
+        <ul>
+          <li>تصميم واجهات وتجربة مستخدم (UI/UX)</li>
+          <li>نماذج تفاعلية في Figma قبل البرمجة</li>
+          <li>دعم كامل للعربية واتجاه RTL</li>
+          <li>أساسيات SEO وسرعة التحميل</li>
+        </ul>
+      </article>
+      <article class="service">
+        <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7"/><circle cx="19" cy="6" r="3"/><path d="M2 20h20"/></svg></span>
+        <span class="svc-tag">خدمة إضافية</span>
+        <h3>دراسات الجدوى</h3>
+        <p>لأي مشروع تبي تفتحه: هل يستاهل، وكم يكلف، ومتى ترجع فلوسك. <a href="#feasibility">جرّب الحاسبة</a></p>
+        <ul>
+          <li>دراسة السوق والمنافسين</li>
+          <li>نموذج مالي لخمس سنوات بثلاث سيناريوهات</li>
+          <li>نقطة التعادل وفترة الاسترداد والعائد</li>
+          <li>دراسات بصيغة جهات التمويل</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="block" id="discover">
+    <div class="sec-head">
+      <p class="eyebrow">مو متأكد وش تحتاج؟</p>
+      <h2>جاوب ٤ أسئلة، ونقولك وش نحلل لك</h2>
+      <p>ما تحتاج تعرف مصطلحات. اختر المشاكل اللي تواجهها في شغلك، ونحولها لأسئلة واضحة ومؤشرات تتابعها، ونقترح عليك من وين نبدأ.</p>
+    </div>
+    <div class="finder">
+      <form class="qs" id="finder" novalidate>
+        <fieldset>
+          <legend><span class="n">1</span>وش نوع نشاطك؟</legend>
+          <div class="opts" id="q-sector"></div>
+        </fieldset>
+        <fieldset>
+          <legend><span class="n">2</span>وش أكثر شي يشغل بالك؟ <small>اختر واحد أو أكثر</small></legend>
+          <div class="opts" id="q-pain"></div>
+        </fieldset>
+        <fieldset>
+          <legend><span class="n">3</span>وين بياناتك الحين؟ <small>اختر كل اللي ينطبق</small></legend>
+          <div class="opts" id="q-data"></div>
+        </fieldset>
+        <fieldset>
+          <legend><span class="n">4</span>كل كم تبي تشوف الأرقام؟</legend>
+          <div class="opts" id="q-freq"></div>
+        </fieldset>
+      </form>
+      <aside class="plan" id="plan" aria-live="polite"></aside>
+    </div>
+  </section>
+
+  <section class="block" id="work">
+    <div class="sec-head">
+      <p class="eyebrow">نماذج أعمال</p>
+      <h2>أمثلة على المشاريع اللي نشتغل عليها</h2>
+      <p>نماذج توضيحية لنوع المشكلة وطريقة الحل. نحدّثها بمشاريع فعلية مع الوقت.</p>
+    </div>
+    <div class="cases">
+      <article class="case">
+        <svg class="case-vis" viewBox="0 0 300 120" preserveAspectRatio="none" aria-hidden="true">
+          <rect x="24" y="70" width="34" height="34" rx="4" fill="var(--accent)" opacity=".45"/>
+          <rect x="70" y="50" width="34" height="54" rx="4" fill="var(--accent)" opacity=".65"/>
+          <rect x="116" y="34" width="34" height="70" rx="4" fill="var(--accent)"/>
+          <rect x="172" y="22" width="104" height="14" rx="4" fill="var(--surface)"/>
+          <rect x="172" y="44" width="78" height="10" rx="4" fill="var(--surface)" opacity=".8"/>
+          <rect x="172" y="62" width="92" height="10" rx="4" fill="var(--surface)" opacity=".8"/>
+          <circle cx="268" cy="94" r="10" fill="var(--data)"/>
+        </svg>
+        <div class="case-body">
+          <span class="case-meta">تحليل بيانات · Power BI</span>
+          <h3>لوحة مبيعات لسلسلة فروع</h3>
+          <dl>
+            <div><dt>المشكلة</dt><dd>مبيعات ٣ فروع في ملفات Excel منفصلة، والتقرير الشهري ياخذ يومين.</dd></div>
+            <div><dt>الحل</dt><dd>توحيد البيانات بـ Power Query، ولوحة تقارن الفروع والأصناف والأيام.</dd></div>
+          </dl>
+          <p class="result">التقرير صار يتحدث تلقائياً، وظهر أي الأصناف تبيع ببطء في كل فرع.</p>
+          <a class="btn btn-ghost btn-sm" href="#tools" data-tool="sales">جرّب الأداة مجاناً</a>
+        </div>
+      </article>
+      <article class="case">
+        <svg class="case-vis" viewBox="0 0 300 120" preserveAspectRatio="none" aria-hidden="true">
+          <rect x="22" y="44" width="62" height="32" rx="6" fill="var(--surface)"/>
+          <rect x="120" y="20" width="62" height="32" rx="6" fill="var(--surface)"/>
+          <rect x="120" y="70" width="62" height="32" rx="6" fill="var(--surface)"/>
+          <rect x="218" y="44" width="62" height="32" rx="6" fill="var(--accent)"/>
+          <path d="M84 60 H102 V36 H120 M102 60 V86 H120 M182 36 H200 V60 H218 M182 86 H200 V60" fill="none" stroke="var(--accent)" stroke-width="2"/>
+        </svg>
+        <div class="case-body">
+          <span class="case-meta">تحليل وتصميم نظام</span>
+          <h3>نظام طلبات الصيانة لمنشأة</h3>
+          <dl>
+            <div><dt>المشكلة</dt><dd>الطلبات تجي بالواتساب وتضيع، وما فيه متابعة لمن استلم الطلب.</dd></div>
+            <div><dt>الحل</dt><dd>مخطط سير عمل، قاعدة بيانات للطلبات، وصلاحيات للمشرف والفني ومقدم الطلب.</dd></div>
+          </dl>
+          <p class="result">كل طلب له رقم وحالة ومسؤول، والمشرف يشوف المتأخر من أول نظرة.</p>
+          <a class="btn btn-ghost btn-sm" href="#tools" data-tool="maint">جرّب الأداة مجاناً</a>
+        </div>
+      </article>
+      <article class="case">
+        <svg class="case-vis" viewBox="0 0 300 120" preserveAspectRatio="none" aria-hidden="true">
+          <rect x="40" y="14" width="220" height="92" rx="8" fill="var(--surface)"/>
+          <rect x="40" y="14" width="220" height="16" rx="8" fill="var(--accent)" opacity=".55"/>
+          <rect x="56" y="42" width="110" height="12" rx="4" fill="var(--accent)"/>
+          <rect x="56" y="62" width="80" height="8" rx="4" fill="var(--line)"/>
+          <rect x="56" y="80" width="54" height="16" rx="5" fill="var(--data)"/>
+          <rect x="184" y="42" width="60" height="54" rx="6" fill="var(--accent-soft)"/>
+        </svg>
+        <div class="case-body">
+          <span class="case-meta">تصميم موقع · GA4</span>
+          <h3>موقع لمتجر محلي مع تتبع الزوار</h3>
+          <dl>
+            <div><dt>المشكلة</dt><dd>المتجر يصرف على إعلانات وما يعرف أي إعلان يجيب عملاء فعلاً.</dd></div>
+            <div><dt>الحل</dt><dd>موقع عربي سريع على الجوال، وربط Google Analytics 4 بتتبع الطلبات والتواصل.</dd></div>
+          </dl>
+          <p class="result">صار واضح أي قناة تجيب طلبات، ووين يطلع الزائر قبل ما يكمل.</p>
+          <a class="btn btn-ghost btn-sm" href="#tools" data-tool="traffic">جرّب الأداة مجاناً</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="block" id="tools">
+    <div class="sec-head">
+      <p class="eyebrow">جرّب مجاناً</p>
+      <h2>الأدوات تشتغل الحين على بياناتك</h2>
+      <p>ارفع ملفك أو جرّب بالبيانات التجريبية. البيانات التجريبية ما تنحسب من رصيدك.</p>
+    </div>
+    <div class="tool-wrap">
+      <p class="safe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg><span>ملفاتك تنقرى وتتحلل داخل جهازك بالكامل، وما ننسخ ولا نحفظ محتواها في أي مكان. الحد الأقصى للملف <span class="num">5</span> ميقا، وصيغه المدعومة: ‎.xlsx و ‎.xls و ‎.csv. <a href="#privacy">سياسة الخصوصية</a></span></p>
+      <div class="tool-top">
+        <div class="tabs" role="group" aria-label="اختيار الأداة">
+          <button type="button" id="tt-sales" aria-pressed="true" data-t="sales">لوحة المبيعات</button>
+          <button type="button" id="tt-maint" aria-pressed="false" data-t="maint">طلبات الصيانة</button>
+          <button type="button" id="tt-traffic" aria-pressed="false" data-t="traffic">مصادر الزيارات</button>
+        </div>
+      </div>
+
+      <div class="tool" id="t-sales">
+        <div class="tool-top">
+          <p class="tool-intro">ارفع ملف مبيعاتك، وتطلع لك لوحة تقارن الفروع والأصناف والأشهر، مع الأصناف البطيئة.</p>
+          <div class="meter" id="m-sales"><span class="mt"></span><span class="meter-bar"><i></i></span></div>
+        </div>
+        <div class="toolbar">
+          <span class="btn btn-primary file-btn">ارفع ملف Excel أو CSV<input type="file" id="f-sales" accept=".xlsx,.xls,.csv" aria-label="رفع ملف المبيعات"></span>
+          <button type="button" class="btn btn-ghost" id="demo-sales">جرّب ببيانات تجريبية</button>
+        </div>
+        <p class="fmt">ارفع ملفك زي ما هو. نكتشف أعمدة المبلغ والفرع والصنف والتاريخ تلقائياً حتى لو أسماؤها مختلفة أو فوقها عنوان تقرير.</p>
+        <div class="locked" id="lock-sales" hidden><span>خلص رصيد التحليلات المجانية. اطلب باقة النمو عشان تكمل بدون حدود.</span><a class="btn btn-primary btn-sm" href="#contact" data-pkg="تحليل بيانات ولوحة معلومات">اطلب الباقة</a></div>
+        <div id="err-sales" class="msg" hidden></div>
+        <div id="out-sales"></div>
+      </div>
+
+      <div class="tool" id="t-maint" hidden>
+        <div class="tool-top">
+          <p class="tool-intro">سجّل طلبات الصيانة، وحدد المسؤول والأولوية، وتابع حالتها. الطلب المفتوح أكثر من ٤٨ ساعة ينعلّم متأخر. <span class="mode" id="m-mode"></span></p>
+          <div class="meter" id="m-maint"><span class="mt"></span><span class="meter-bar"><i></i></span></div>
+        </div>
+        <form class="mform" id="mform" novalidate>
+          <div class="field"><label for="m-title">وصف المشكلة</label><input id="m-title" placeholder="مثال: تسريب مكيف"></div>
+          <div class="field"><label for="m-loc">الموقع</label><input id="m-loc" placeholder="مثال: الدور الثاني"></div>
+          <div class="field"><label for="m-pr">الأولوية</label><select id="m-pr"><option value="high">عالية</option><option value="mid" selected>متوسطة</option><option value="low">منخفضة</option></select></div>
+          <div class="field"><label for="m-who">المسؤول</label><input id="m-who" placeholder="مثال: الفني خالد"></div>
+          <button class="btn btn-primary" type="submit">أضف الطلب</button>
+        </form>
+        <div id="err-maint" class="msg" hidden></div>
+        <div class="locked" id="lock-maint" hidden><span>وصلت لحد الطلبات المجانية. اطلب الباقة المتكاملة عشان يصير لك نظام كامل لمنشأتك.</span><a class="btn btn-primary btn-sm" href="#contact" data-pkg="تحليل وتصميم نظام">اطلب الباقة</a></div>
+        <div class="toolbar" style="justify-content:space-between"><div class="counts" id="m-counts"></div><button type="button" class="btn btn-ghost btn-sm" id="m-export">صدّر الطلبات Excel</button></div>
+        <div class="reqs" id="m-list"></div>
+        <div class="upsell"><p>تبي هذا النظام لمنشأتك بحسابات للفنيين والمشرفين وتنبيهات للطلبات المتأخرة؟</p><a class="btn btn-primary btn-sm" href="#contact" data-pkg="تحليل وتصميم نظام">ناقش احتياجك</a></div>
+      </div>
+
+      <div class="tool" id="t-traffic" hidden>
+        <div class="tool-top">
+          <p class="tool-intro">ارفع تقرير الزيارات من Google Analytics أو من إعلاناتك، ونقولك أي قناة تجيب طلبات وأي قناة تصرف عليها بدون نتيجة.</p>
+          <div class="meter" id="m-traffic"><span class="mt"></span><span class="meter-bar"><i></i></span></div>
+        </div>
+        <div class="toolbar">
+          <span class="btn btn-primary file-btn">ارفع ملف Excel أو CSV<input type="file" id="f-traffic" accept=".xlsx,.xls,.csv" aria-label="رفع ملف الزيارات"></span>
+          <button type="button" class="btn btn-ghost" id="demo-traffic">جرّب ببيانات تجريبية</button>
+        </div>
+        <p class="fmt">ارفع التقرير زي ما صدّرته من Google Analytics أو منصة الإعلانات. نكتشف أعمدة المصدر والزيارات والطلبات تلقائياً.</p>
+        <div class="locked" id="lock-traffic" hidden><span>خلص رصيد التحليلات المجانية. اطلب باقة النمو للتقارير الشهرية.</span><a class="btn btn-primary btn-sm" href="#contact" data-pkg="مشروع متكامل">اطلب الباقة</a></div>
+        <div id="err-traffic" class="msg" hidden></div>
+        <div id="out-traffic"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="systems">
+    <div class="sec-head">
+      <p class="eyebrow">نماذج الأنظمة</p>
+      <h2>جرّب أنظمة شغالة قبل ما نصمم نظامك</h2>
+      <p>نماذج مبسطة ببيانات تجريبية تحس فيها كيف يشتغل النظام. نظامك الفعلي ينبني على إجراءات منشأتك وصلاحيات موظفيك. وتلقى نظام طلبات الصيانة في <a href="#tools" data-tool="maint">الأدوات المجانية</a>.</p>
+    </div>
+    <div class="tool-wrap">
+      <div class="tool-top">
+        <div class="tabs" role="group" aria-label="اختيار النظام">
+          <button type="button" aria-pressed="true" data-s="crm">العملاء والمبيعات</button>
+          <button type="button" aria-pressed="false" data-s="inv">المخزون</button>
+          <button type="button" aria-pressed="false" data-s="hr">الموارد البشرية</button>
+        </div>
+        <p class="sys-note">البيانات تنحفظ في متصفحك فقط. <button type="button" class="btn btn-ghost btn-sm" id="sys-reset">ارجع للبيانات التجريبية</button></p>
+      </div>
+
+      <div class="sys" id="s-crm">
+        <p class="tool-intro">تابع كل عميل محتمل من أول استفسار لين يوقّع، ولا تضيع عليك متابعة.</p>
+        <form class="sform" id="crm-form" novalidate>
+          <div class="field"><label for="crm-name">العميل أو الجهة</label><input id="crm-name" maxlength="80" placeholder="مثال: مطعم الريف"></div>
+          <div class="field"><label for="crm-val">قيمة الفرصة (ر.س)</label><input id="crm-val" type="number" min="0" step="100" placeholder="12000"></div>
+          <div class="field"><label for="crm-next">المتابعة القادمة</label><input id="crm-next" type="date"></div>
+          <button class="btn btn-primary" type="submit">أضف فرصة</button>
+        </form>
+        <div id="crm-err" class="msg" hidden></div>
+        <div class="res-kpis" id="crm-kpis"></div>
+        <div class="board-wrap"><div class="board" id="crm-board"></div></div>
+        <div class="res-actions"><button type="button" class="btn btn-ghost btn-sm" data-sx="crm">صدّر Excel</button><span class="status" id="sx-crm" aria-live="polite"></span></div>
+      </div>
+
+      <div class="sys" id="s-inv" hidden>
+        <p class="tool-intro">سجّل الوارد والمنصرف، ويقولك النظام وش الأصناف اللي قربت تخلص قبل ما تخلص.</p>
+        <form class="sform" id="inv-form" novalidate>
+          <div class="field"><label for="inv-name">الصنف</label><input id="inv-name" maxlength="80" placeholder="مثال: أكواب ورق 12 أونص"></div>
+          <div class="field"><label for="inv-qty">الكمية الحالية</label><input id="inv-qty" type="number" min="0" placeholder="200"></div>
+          <div class="field"><label for="inv-min">حد إعادة الطلب</label><input id="inv-min" type="number" min="0" placeholder="50"></div>
+          <div class="field"><label for="inv-cost">تكلفة الوحدة (ر.س)</label><input id="inv-cost" type="number" min="0" step="0.01" placeholder="0.35"></div>
+          <button class="btn btn-primary" type="submit">أضف صنف</button>
+        </form>
+        <div id="inv-err" class="msg" hidden></div>
+        <div class="res-kpis" id="inv-kpis"></div>
+        <div class="tbl-wrap"><table class="data"><thead><tr><th>الصنف</th><th>الكمية</th><th>حد الطلب</th><th>القيمة</th><th>الحالة</th><th>حركة</th></tr></thead><tbody id="inv-body"></tbody></table></div>
+        <div><p class="card-t">آخر الحركات</p><ul class="insights" id="inv-log"></ul></div>
+        <div class="res-actions"><button type="button" class="btn btn-ghost btn-sm" data-sx="inv">صدّر Excel</button><span class="status" id="sx-inv" aria-live="polite"></span></div>
+      </div>
+
+      <div class="sys" id="s-hr" hidden>
+        <p class="tool-intro">ملفات الموظفين، طلبات الإجازة، والموافقة عليها مع خصم الرصيد تلقائياً.</p>
+        <form class="sform" id="hr-form" novalidate>
+          <div class="field"><label for="hr-emp">الموظف</label><select id="hr-emp"></select></div>
+          <div class="field"><label for="hr-from">من تاريخ</label><input id="hr-from" type="date"></div>
+          <div class="field"><label for="hr-days">عدد الأيام</label><input id="hr-days" type="number" min="1" max="60" placeholder="3"></div>
+          <button class="btn btn-primary" type="submit">قدّم طلب إجازة</button>
+        </form>
+        <div id="hr-err" class="msg" hidden></div>
+        <div class="res-kpis" id="hr-kpis"></div>
+        <div class="grid2">
+          <div><p class="card-t">طلبات الإجازة</p><div class="reqs" id="hr-reqs"></div></div>
+          <div><p class="card-t">الموظفين</p><div class="tbl-wrap"><table class="data"><thead><tr><th>الاسم</th><th>القسم</th><th>رصيد الإجازة</th></tr></thead><tbody id="hr-emps"></tbody></table></div>
+            <form class="sform" id="hr-add" novalidate style="margin-top:12px">
+              <div class="field"><label for="hr-nm">موظف جديد</label><input id="hr-nm" maxlength="60" placeholder="الاسم"></div>
+              <div class="field"><label for="hr-dp">القسم</label><input id="hr-dp" maxlength="40" placeholder="المبيعات"></div>
+              <button class="btn btn-ghost" type="submit">أضف</button>
+            </form>
+          </div>
+        </div>
+        <div class="res-actions"><button type="button" class="btn btn-ghost btn-sm" data-sx="hr">صدّر Excel</button><span class="status" id="sx-hr" aria-live="polite"></span></div>
+      </div>
+
+      <div class="upsell"><p>عجبك النموذج؟ نصمم لك نظام على مقاس إجراءاتك، بصلاحيات لكل دور وربط مع لوحة تحليل.</p><a class="btn btn-primary btn-sm" href="#contact" data-pkg="تحليل وتصميم نظام">ناقش نظامك</a></div>
+    </div>
+  </section>
+
+  <section class="block" id="feasibility">
+    <div class="sec-head">
+      <p class="eyebrow">دراسات الجدوى</p>
+      <h2>قبل ما تحط فلوسك، اعرف هل المشروع يستاهل</h2>
+      <p>نسوي لك دراسة جدوى لأي مشروع تبي تفتحه: نقيس السوق، ونحسب التكاليف والأرباح المتوقعة، ونقولك متى ترجع فلوسك ووش المخاطر. ونبدأها من أرقام واقعية مو من تفاؤل.</p>
+    </div>
+
+    <h3 class="sub-h">جرّب الحاسبة المبدئية على فكرة مشروعك</h3>
+    <div class="tool-wrap">
+      <div class="calc">
+        <form class="cin" id="calc" novalidate>
+          <div class="field"><label for="c-tpl">ابدأ من نموذج</label>
+            <select id="c-tpl"><option value="cafe">كافيه</option><option value="rest">مطعم</option><option value="online">متجر إلكتروني</option><option value="salon">صالون أو مركز خدمات</option><option value="blank">من الصفر</option><option value="custom" hidden>أرقام من الأمثلة</option></select>
+            <span class="fmt">أرقام النماذج افتراضية للتجربة، مو متوسطات سوق. غيّرها بأرقام مشروعك.</span></div>
+
+          <details class="cbox" open><summary>المبيعات</summary><div class="cgrid">
+            <div class="field"><label for="c-cust">عملاء أو طلبات في اليوم</label><input id="c-cust" type="number" min="0"></div>
+            <div class="field"><label for="c-ticket">متوسط الفاتورة (ر.س)</label><input id="c-ticket" type="number" min="0" step="0.5"></div>
+            <div class="field"><label for="c-days">أيام العمل في الشهر</label><input id="c-days" type="number" min="1" max="31"></div>
+            <div class="field"><label for="c-cogs">تكلفة البضاعة من المبيعات %</label><input id="c-cogs" type="number" min="0" max="100"></div>
+            <div class="field"><label for="c-vatinc">الأسعار</label><select id="c-vatinc"><option value="1">شاملة ضريبة القيمة المضافة</option><option value="0">بدون الضريبة</option></select></div>
+          </div></details>
+
+          <details class="cbox" open><summary>الموظفين</summary><div class="cgrid">
+            <div class="field"><label for="c-sa">عدد السعوديين</label><input id="c-sa" type="number" min="0"></div>
+            <div class="field"><label for="c-sasal">متوسط راتب السعودي (أساسي + سكن)</label><input id="c-sasal" type="number" min="0" step="100"></div>
+            <div class="field"><label for="c-ex">عدد غير السعوديين</label><input id="c-ex" type="number" min="0"></div>
+            <div class="field"><label for="c-exsal">متوسط راتب غير السعودي</label><input id="c-exsal" type="number" min="0" step="100"></div>
+            <div class="field"><label for="c-owner">راتب المالك لو بيشتغل فيه</label><input id="c-owner" type="number" min="0" step="500"><span class="fmt">لو ما حسبته، الربح يطلع أكبر من الحقيقة.</span></div>
+            <div class="field"><label for="c-med">التأمين الطبي سنوياً لكل موظف (تقديري)</label><input id="c-med" type="number" min="0" step="100"><span class="fmt">خذ عرض سعر من شركة تأمين.</span></div>
+            <div class="field" style="grid-column:1/-1"><label class="chk"><input type="checkbox" id="c-small"> منشأة صغيرة (٩ عمال أو أقل) ومالكها متفرغ ومسجل في التأمينات</label><span class="fmt" id="c-small-note"></span></div>
+          </div></details>
+
+          <details class="cbox" open><summary>المصاريف الشهرية والرسوم</summary><div class="cgrid">
+            <div class="field"><label for="c-rent">الإيجار الشهري</label><input id="c-rent" type="number" min="0" step="500"></div>
+            <div class="field"><label for="c-oth">كهرباء وماء وتسويق واشتراكات</label><input id="c-oth" type="number" min="0" step="500"></div>
+            <div class="field"><label for="c-pay">عمولة الدفع الإلكتروني % (حسب عقد البنك)</label><input id="c-pay" type="number" min="0" max="10" step="0.1"></div>
+            <div class="field"><label for="c-dshare">مبيعات تطبيقات التوصيل %</label><input id="c-dshare" type="number" min="0" max="100"></div>
+            <div class="field"><label for="c-dcomm">عمولة التطبيق % (حسب العقد)</label><input id="c-dcomm" type="number" min="0" max="60"></div>
+            <div class="field"><label for="c-ent">الكيان</label><select id="c-ent"><option value="est">مؤسسة فردية</option><option value="llc">شركة ذات مسؤولية محدودة</option></select></div>
+            <div class="field"><label for="c-balady">رخصة بلدي واللوحة سنوياً (تقديري)</label><input id="c-balady" type="number" min="0" step="100"></div>
+            <div class="field"><label for="c-hc">الشهادة الصحية لكل عامل سنوياً</label><input id="c-hc" type="number" min="0" step="10"><span class="fmt">للأنشطة الغذائية والصحية. خلّها صفر لو ما تنطبق.</span></div>
+            <div class="field"><label for="c-govoth">رسوم أخرى سنوية: سلامة، تصاريح</label><input id="c-govoth" type="number" min="0" step="100"></div>
+            <div class="field"><label for="c-own">الملكية</label><select id="c-own"><option value="sa">سعودي أو خليجي (زكاة)</option><option value="fx">أجنبي (ضريبة دخل)</option></select></div>
+          </div></details>
+
+          <details class="cbox" open><summary>التأسيس والسيولة</summary><div class="cgrid">
+            <div class="field" style="grid-column:1/-1"><label for="c-capex">تكاليف التأسيس: ديكور، معدات، أثاث، أنظمة (ر.س)</label><input id="c-capex" type="number" min="0" step="1000"></div>
+            <div class="field"><label for="c-pre">أشهر التجهيز قبل الافتتاح</label><input id="c-pre" type="number" min="0" max="24"><span class="fmt">تدفع فيها إيجار بدون مبيعات.</span></div>
+            <div class="field"><label for="c-wc">احتياطي السيولة (ر.س)</label><input id="c-wc" type="number" min="0" step="1000"><span class="fmt" id="c-wc-hint"></span></div>
+          </div></details>
+
+          <details class="cbox"><summary>افتراضات متقدمة</summary><div class="cgrid">
+            <div class="field"><label for="c-ramp">مبيعات أول شهر من الطاقة %</label><input id="c-ramp" type="number" min="10" max="100"><span class="fmt">وتوصل للطاقة الكاملة مع نهاية السنة الأولى.</span></div>
+            <div class="field"><label for="c-weak">أشهر ضعيفة في السنة</label><input id="c-weak" type="number" min="0" max="6"></div>
+            <div class="field"><label for="c-drop">انخفاض المبيعات فيها %</label><input id="c-drop" type="number" min="0" max="90"></div>
+            <div class="field"><label for="c-grow">نمو المبيعات سنوياً %</label><input id="c-grow" type="number" min="-50" max="100"></div>
+            <div class="field"><label for="c-inf">زيادة المصاريف سنوياً %</label><input id="c-inf" type="number" min="0" max="50"></div>
+            <div class="field"><label for="c-disc">معدل الخصم %</label><input id="c-disc" type="number" min="0" max="50"></div>
+          </div></details>
+        </form>
+
+        <div class="cout" aria-live="polite">
+          <div class="res-kpis" id="c-kpis"></div>
+          <p class="verdict" id="c-verdict"></p>
+          <p class="verdict bad" id="c-cash" hidden></p>
+          <div><p class="card-t">صافي الربح والرصيد التراكمي على ٥ سنوات</p><svg class="mini-chart" id="c-chart" viewBox="0 0 440 210" role="img" aria-label="صافي الربح السنوي والرصيد التراكمي"></svg>
+            <p class="fmt">الأعمدة: صافي ربح كل سنة. الخط: الرصيد التراكمي بعد خصم التأسيس، ولما يتعدى الصفر ترجع فلوسك.</p></div>
+          <div><p class="card-t">التكاليف الحكومية في السنة الأولى</p><div class="tbl-wrap"><table class="data" id="c-gov"></table></div>
+            <p class="fmt" id="c-gov-src"></p></div>
+          <div><p class="card-t">لو تغيّر شي واحد، وش يصير؟</p><div class="tbl-wrap"><table class="data scen" id="c-sens"></table></div>
+            <p class="fmt">مرتبة من الأكثر تأثيراً على صافي القيمة الحالية.</p></div>
+          <div id="c-dsim"><p class="card-t">محاكي الخصومات: هل العرض يستاهل؟</p>
+            <div class="dsim-row"><label for="c-dpct">لو سويت خصم</label><input id="c-dpct" type="number" min="1" max="90" value="10" inputmode="decimal"><span>%</span></div>
+            <p class="verdict" id="c-dres"></p>
+            <div class="tbl-wrap"><table class="data" id="c-dtab"></table></div>
+            <p class="fmt">الحساب يعتمد على هامش مشروعك بعد تكلفة البضاعة وعمولات الدفع والتوصيل، ويفترض إن تكلفة البضاعة للوحدة ما تتغير. وما يحسب تكلفة الإعلان عن العرض نفسه.</p></div>
+          <div><p class="card-t">قائمة الدخل التقديرية</p><div class="tbl-wrap"><table class="data" id="c-table"></table></div></div>
+          <div class="res-actions"><button type="button" class="btn btn-ghost btn-sm" id="c-xl">صدّر النموذج المالي Excel</button><span class="status" id="c-xl-st" aria-live="polite"></span><button type="button" class="btn btn-primary btn-sm" id="c-send">اطلب دراسة كاملة بهذي الأرقام</button></div>
+          <p class="disclaimer"><b>إخلاء مسؤولية:</b> الحاسبة أداة تخطيط مبدئية تحسب على الأرقام اللي تكتبها أنت، والرسوم الحكومية فيها تقديرية من مصادر منشورة وتتغير بالقرارات. النتائج ما تعتبر دراسة جدوى، ولا ضمان لأرباح أو لقبول تمويل. تحقق من الرسوم من المنصات الرسمية، واستشر محاسب في الزكاة والضريبة.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="sub-h">أمثلة دراسات: كيف تتصرف لو كنت مكانهم</h3>
+    <p class="fmt" style="max-width:46em;margin-bottom:14px">خمس حالات توضيحية بأرقام افتراضية، مو عملاء حقيقيين. كل حالة توريك وش كانت الخطة، ووش كشفت الدراسة، ووش القرار، ووش تتعلم منها لمشروعك. الأرقام تنحسب مباشرة من الحاسبة فوق بالرسوم الحكومية الحالية، وتقدر تفتح أي خطة فيها وتجرب.</p>
+    <div class="tool-wrap">
+      <div class="ex-tabs" role="group" aria-label="اختيار المثال" id="ex-tabs"></div>
+      <div class="ex-panel" id="ex-panel" aria-live="polite"></div>
+    </div>
+
+    <h3 class="sub-h">تقويم المواسم في السعودية: جهّز عروضك قبلها</h3>
+    <div class="cal">
+      <div><span class="when">يتغير كل سنة (هجري)</span><b>رمضان</b><span>يتغير وقت الذروة لليل، ويرتفع الطلب على الفطور والسحور والهدايا. جهّز قبله بشهر.</span></div>
+      <div><span class="when">يتغير كل سنة (هجري)</span><b>عيد الفطر وعيد الأضحى</b><span>هدايا، تجهيز للسفر، وتجمعات عائلية. أقوى موسم للعطور والحلويات وغسيل السيارات.</span></div>
+      <div><span class="when">٢٢ فبراير</span><b>يوم التأسيس</b><span>منتجات وتغليف بهوية المناسبة، بدون خصومات كبيرة.</span></div>
+      <div><span class="when">٢٣ سبتمبر</span><b>اليوم الوطني</b><span>إصدارات محدودة وعروض حزم. المنافسة فيه عالية، فتميّز بالفكرة مو بالسعر.</span></div>
+      <div><span class="when">٢٧ من كل شهر</span><b>نزول الرواتب الحكومية</b><span>الأيام اللي بعدها غالباً ترتفع فيها المشتريات. وقت مناسب للباقات والاشتراكات.</span></div>
+      <div><span class="when">نوفمبر</span><b>الجمعة البيضاء</b><span>للمتاجر الإلكترونية بالذات. خصّص العروض لمنتجات محددة بدل خصم على كل شي.</span></div>
+      <div><span class="when">يونيو إلى سبتمبر تقريباً</span><b>الصيف والإجازات</b><span>سفر وحر: تضعف الأنشطة المفتوحة، ويقوى التوصيل والأماكن المكيفة.</span></div>
+      <div><span class="when">أغسطس وسبتمبر</span><b>العودة للمدارس</b><span>قرطاسية وملابس وطلبات صباحية. للكافيهات القريبة من المدارس والمكاتب.</span></div>
+    </div>
+
+    <h3 class="sub-h">وش تشمل دراسة الجدوى الكاملة؟</h3>
+    <div class="parts">
+      <div class="part"><span class="k">السوق</span><h3>الدراسة السوقية</h3><ul><li>حجم الطلب والشريحة المستهدفة</li><li>المنافسين ونقاط قوتهم وضعفهم</li><li>الأسعار السائدة وموقعك منها</li><li>استبيان أو زيارات ميدانية حسب المشروع</li></ul></div>
+      <div class="part"><span class="k">التشغيل</span><h3>الدراسة الفنية والتشغيلية</h3><ul><li>الموقع والمساحة المناسبة</li><li>المعدات والتجهيزات بعروض أسعار من ٣ موردين لكل بند رئيسي</li><li>الموردين والمواد الخام</li><li>الهيكل الوظيفي وعدد الموظفين</li></ul></div>
+      <div class="part"><span class="k">المال</span><h3>الدراسة المالية</h3><ul><li>تكاليف التأسيس ورأس المال العامل وأقصى احتياج للسيولة</li><li>التدفق النقدي الشهري، مو السنوي بس</li><li>قائمة الدخل والتدفقات النقدية لخمس سنوات</li><li>نقطة التعادل وفترة الاسترداد</li><li>صافي القيمة الحالية (NPV) ومعدل العائد الداخلي (IRR)</li></ul></div>
+      <div class="part"><span class="k">التسويق</span><h3>الخطة التسويقية</h3><ul><li>استراتيجية التسعير</li><li>قنوات الوصول للعملاء وميزانيتها</li><li>خطة الافتتاح وأول ٦ أشهر</li></ul></div>
+      <div class="part"><span class="k">النظام</span><h3>الجوانب النظامية</h3><ul><li>التحقق المبكر من اشتراطات بلدي والدفاع المدني للموقع المقترح، قبل توقيع الإيجار</li><li>الترخيص والاشتراطات المطلوبة للنشاط</li><li>الشكل القانوني المناسب للمنشأة</li><li>متطلبات التوظيف والسعودة للنشاط حسب نطاقات</li><li>التكاليف الحكومية: التأمينات، المقابل المالي، الإقامات، السجل، الرخص، الزكاة والضريبة</li></ul></div>
+      <div class="part"><span class="k">المخاطر</span><h3>المخاطر والسيناريوهات</h3><ul><li>تحليل الحساسية: المبيعات، الأسعار، الإيجار، الرواتب، تأخر الافتتاح</li><li>الموسمية: رمضان والصيف والأعياد حسب النشاط</li><li>تحليل نقاط القوة والضعف والفرص والتهديدات (SWOT)</li><li>خطة للتعامل مع أهم المخاطر</li></ul></div>
+      <div class="part"><span class="k">القرار</span><h3>التوصية النهائية</h3><p>خلاصة واضحة: يستاهل المشروع ولا لا، وبأي شروط، ووش اللي لازم يتغير عشان ينجح.</p></div>
+    </div>
+
+    <h3 class="sub-h">اختر نوع الدراسة</h3>
+    <div class="ftypes">
+      <article class="ftype"><h3>دراسة مبدئية</h3><p class="for">عندك فكرة وتبي تعرف بسرعة هل تستاهل تكمل فيها.</p>
+        <ul><li>تقدير التكاليف والإيرادات</li><li>نقطة التعادل وفترة الاسترداد</li><li>نظرة سريعة على المنافسين</li><li>توصية: نكمل ولا نوقف</li></ul>
+        <a class="btn btn-ghost" href="#contact" data-pkg="دراسة جدوى مبدئية">اطلب دراسة مبدئية</a></article>
+      <article class="ftype featured"><span class="badge" style="align-self:flex-start;font-size:.75rem;font-weight:600;background:var(--accent);color:var(--on-accent);border-radius:999px;padding:2px 10px">الأشمل</span><h3>دراسة تفصيلية</h3><p class="for">قررت تستثمر وتبي خطة كاملة قبل ما تصرف.</p>
+        <ul><li>كل مكونات الدراسة السبعة</li><li>نموذج مالي لخمس سنوات بثلاث سيناريوهات</li><li>دراسة سوق ميدانية</li><li>عرض مختصر للشركاء أو المستثمرين</li></ul>
+        <a class="btn btn-primary" href="#contact" data-pkg="دراسة جدوى تفصيلية">اطلب دراسة تفصيلية</a></article>
+      <article class="ftype"><h3>دراسة للتمويل</h3><p class="for">بتقدّم على تمويل من بنك، أو جهة دعم مثل بنك التنمية الاجتماعية أو برنامج كفالة.</p>
+        <ul><li>الدراسة التفصيلية بصيغة جهة التمويل</li><li>تجهيز النموذج المالي حسب متطلباتها</li><li>مراجعة الملف قبل التقديم</li></ul>
+        <a class="btn btn-ghost" href="#contact" data-pkg="دراسة جدوى للتمويل">اطلب دراسة للتمويل</a></article>
+    </div>
+    <p class="fmt" style="margin-top:10px">نجهز الدراسة حسب متطلبات الجهة اللي تقدم لها، وقرار التمويل يرجع لها.</p>
+
+    <h3 class="sub-h">القطاعات اللي نغطيها</h3>
+    <div class="parts">
+      <div class="part"><span class="k">نغطيها</span><h3>مشاريع صغيرة ومتوسطة</h3><ul><li>المطاعم والكافيهات والأغذية</li><li>المتاجر والتجزئة والمتاجر الإلكترونية</li><li>الصالونات والخدمات الشخصية</li><li>المشاريع الخدمية والمكتبية الصغيرة</li></ul></div>
+      <div class="part"><span class="k">مع متخصص</span><h3>مشاريع تحتاج خبرة فنية</h3><p>المصانع، والمنشآت الطبية، والمشاريع الزراعية والعقارية الكبيرة نقبلها بس مع متخصص في القطاع يشاركنا، لأن الجانب الفني فيها يحتاج خبرة ما تغطيها الدراسة المالية لحالها.</p></div>
+    </div>
+
+    <h3 class="sub-h">من وين نجيب الأرقام</h3>
+    <p class="fmt" style="max-width:46em;margin-bottom:12px">كل دراسة فيها صفحة اسمها "الافتراضات ومصادر البيانات" توضح لكل رقم مصدره، عشان تعرف وش الثابت ووش التقديري:</p>
+    <div class="deliver">
+      <div><b>عرض سعر فعلي</b>من مورد أو مؤجر، مؤرخ وله صلاحية.</div>
+      <div><b>مصدر رسمي</b>الهيئة العامة للإحصاء، منشآت، المنصات الحكومية.</div>
+      <div><b>بحث ميداني</b>زيارات للمنافسين، عدّ الزبائن، استبيان.</div>
+      <div><b>تقدير تحليلي</b>من معايير القطاع، ونوضح كيف حسبناه.</div>
+      <div><b>رقم من العميل</b>نعلّمه بوضوح ونختبره في تحليل الحساسية.</div>
+    </div>
+
+    <h3 class="sub-h">التزاماتنا وحدودنا</h3>
+    <div class="policy">
+      <div><h3>نلتزم بـ</h3><ul><li>نطاق مكتوب يوضح وش تشمل الدراسة ووش ما تشمل</li><li>جولتين تعديل على المسودة</li><li>نموذج Excel بمعادلات مكشوفة تقدر تراجعها</li><li>سرية معلوماتك المالية والتجارية، واتفاقية سرية لو طلبتها</li><li>توثيق مصدر كل رقم وتاريخ عروض الأسعار</li></ul></div>
+      <div><h3>ما نضمن</h3><ul><li>نجاح المشروع أو تحقيق الأرباح المتوقعة، لأن الدراسة مبنية على افتراضات وظروف السوق وقت إعدادها</li><li>قبول التمويل، لأن القرار لجهة التمويل</li><li>صحة البيانات اللي يقدمها العميل نفسه</li><li>ثبات الأسعار والرسوم الحكومية بعد تاريخ الدراسة</li></ul></div>
+    </div>
+
+    <h3 class="sub-h">كيف نشتغل عليها</h3>
+    <ol class="steps">
+      <li><h3>جلسة الفكرة</h3><p>نفهم المشروع والمكان والميزانية المتاحة وأهدافك.</p></li>
+      <li><h3>جمع البيانات</h3><p>عروض أسعار من ٣ موردين، زيارات للمنافسين، استبيان للعملاء، والتحقق من اشتراطات الموقع.</p></li>
+      <li><h3>التحليل والنموذج المالي</h3><p>نبني الأرقام ونختبرها على أكثر من سيناريو.</p></li>
+      <li><h3>التسليم والنقاش</h3><p>نعرض النتائج ونجاوب على أسئلتك، ونعدّل حسب ملاحظاتك.</p></li>
+    </ol>
+
+    <h3 class="sub-h">وش تستلم</h3>
+    <div class="deliver">
+      <div><b>تقرير الدراسة PDF</b>كل الأقسام مع التوصية النهائية.</div>
+      <div><b>النموذج المالي Excel</b>قابل للتعديل، تغيّر أي رقم وتشوف أثره.</div>
+      <div><b>عرض مختصر</b>شرائح للشريك أو المستثمر أو جهة التمويل.</div>
+      <div><b>بعد الافتتاح</b>لوحة تقارن أرقامك الفعلية بالدراسة شهرياً (خدمة اختيارية).</div>
+    </div>
+  </section>
+
+  <section class="block" id="process">
+    <div class="sec-head">
+      <p class="eyebrow">طريقة العمل</p>
+      <h2>أربع مراحل، وكل مرحلة لها تسليم تشوفه</h2>
+    </div>
+    <ol class="steps">
+      <li><h3>فهم الاحتياج</h3><p>جلسة نحدد فيها الهدف، الجمهور، ووش القرار اللي تبيه من البيانات.</p></li>
+      <li><h3>المخطط والنموذج</h3><p>هيكل الصفحات أو مخطط النظام، ونموذج أولي تجربه بنفسك.</p></li>
+      <li><h3>البناء والتحليل</h3><p>تنفيذ التصميم، ربط البيانات، وبناء اللوحة بأرقام حقيقية.</p></li>
+      <li><h3>التسليم والمتابعة</h3><p>مراجعة على الجوال والكمبيوتر، تسليم كامل، ودعم بعد الإطلاق.</p></li>
+    </ol>
+  </section>
+
+  <section class="block" id="skills">
+    <div class="sec-head">
+      <p class="eyebrow">المهارات</p>
+      <h2>تحليل البيانات وذكاء الأعمال</h2>
+      <p>من تجميع البيانات وتنظيفها، إلى لوحة تقرأها الإدارة وتطلع منها بقرار.</p>
+    </div>
+    <div class="skills">
+      <div><h3>ذكاء الأعمال واللوحات</h3><div class="chips"><span class="chip"><b>Power BI</b></span><span class="chip">DAX</span><span class="chip">Tableau</span><span class="chip">تصميم لوحات المؤشرات (KPIs)</span><span class="chip">تقارير تتحدث تلقائياً</span></div></div>
+      <div><h3>تجهيز البيانات ونمذجتها</h3><div class="chips"><span class="chip"><b>SQL</b></span><span class="chip">Power Query</span><span class="chip">تنظيف البيانات وتوحيدها</span><span class="chip">نمذجة البيانات</span><span class="chip">ربط أكثر من مصدر</span></div></div>
+      <div><h3>التحليل</h3><div class="chips"><span class="chip"><b>Python · Pandas</b></span><span class="chip"><b>Excel متقدم</b></span><span class="chip">تحليل الاتجاهات والمواسم</span><span class="chip">تحليل المبيعات والفروع</span><span class="chip">اختبارات A/B</span></div></div>
+      <div><h3>التحليلات الرقمية</h3><div class="chips"><span class="chip"><b>GA4</b></span><span class="chip">Tag Manager</span><span class="chip">تتبع التحويلات</span><span class="chip">تحليل مصادر الزيارات</span><span class="chip">عائد الإعلانات</span></div></div>
+      <div><h3>دراسات الجدوى والتخطيط المالي</h3><div class="chips"><span class="chip"><b>النمذجة المالية</b></span><span class="chip">التدفقات النقدية</span><span class="chip">NPV · IRR</span><span class="chip">تحليل الحساسية</span><span class="chip">دراسة السوق</span></div></div>
+    </div>
+    <p class="note">نلتزم بـ<b>نظام حماية البيانات الشخصية السعودي (PDPL)</b>: نجمع أقل قدر من البيانات، ونخفي البيانات الحساسة في التقارير واللوحات.</p>
+  </section>
+
+  <section class="block" id="packages">
+    <div class="sec-head">
+      <p class="eyebrow">الباقات</p>
+      <h2>اختر نقطة البداية المناسبة لك</h2>
+      <p>السعر يتحدد حسب حجم المشروع بعد جلسة فهم الاحتياج، وتستلم عرض سعر مكتوب قبل البدء.</p>
+    </div>
+    <div class="free-band">
+      <div>
+        <span class="badge" style="background:var(--accent);color:var(--on-accent);border-radius:999px;padding:2px 10px;font-size:.75rem;font-weight:600">مجانية</span>
+        <h3 style="margin-top:10px;font-size:1.35rem">باقة التجربة المجانية</h3>
+        <p>جرّب الأدوات على بياناتك الفعلية بدون دفع، واحجز استشارة أولى نراجع فيها احتياجك. لما يخلص الرصيد، تختار الباقة اللي تناسبك.</p>
+        <div class="cta" style="margin-top:16px">
+          <a class="btn btn-primary" href="#tools" data-tool="sales">ابدأ التجربة</a>
+          <a class="btn btn-ghost" href="#contact" data-pkg="الباقة المجانية: استشارة أولى">احجز الاستشارة</a>
+        </div>
+      </div>
+      <ul class="limits">
+        <li><span>لوحة المبيعات</span><b>ملف واحد</b></li>
+        <li><span>نظام طلبات الصيانة</span><b><span class="num">3</span> طلبات</b></li>
+        <li><span>محلل مصادر الزيارات</span><b>ملف واحد</b></li>
+        <li><span>استشارة أولى</span><b>جلسة وحدة</b></li>
+      </ul>
+    </div>
+    <div class="packages">
+      <article class="pkg">
+        <h3>الانطلاقة</h3>
+        <p class="for">لنشاط جديد يبي حضور رقمي مرتب.</p>
+        <ul>
+          <li>موقع تعريفي من صفحة إلى ٥ صفحات</li>
+          <li>تصميم متجاوب للجوال والكمبيوتر</li>
+          <li>نموذج تواصل وربط واتساب</li>
+          <li>إعداد Google Analytics 4</li>
+        </ul>
+        <p class="dur">المدة المعتادة: <span class="num">2–3</span> أسابيع</p>
+        <a class="btn btn-ghost" href="#contact" data-pkg="تصميم موقع">اطلب هذي الباقة</a>
+      </article>
+      <article class="pkg featured">
+        <span class="badge">الأكثر طلباً</span>
+        <h3>النمو</h3>
+        <p class="for">لنشاط قائم يبي يفهم أرقامه ويزيد مبيعاته.</p>
+        <ul>
+          <li>كل ما في باقة الانطلاقة</li>
+          <li>لوحة معلومات بأهم مؤشرات الأداء</li>
+          <li>تتبع مصادر العملاء والإعلانات</li>
+          <li>تقرير شهري بالتوصيات لمدة ٣ أشهر</li>
+        </ul>
+        <p class="dur">المدة المعتادة: <span class="num">4–6</span> أسابيع</p>
+        <a class="btn btn-primary" href="#contact" data-pkg="مشروع متكامل">اطلب هذي الباقة</a>
+      </article>
+      <article class="pkg">
+        <h3>المتكامل</h3>
+        <p class="for">لمنشأة تبي نظام داخلي يرتب شغلها.</p>
+        <ul>
+          <li>تحليل المتطلبات وكتابة وثيقة النظام</li>
+          <li>مخططات سير العمل وقاعدة البيانات</li>
+          <li>تصميم واجهات النظام والصلاحيات</li>
+          <li>لوحة إدارية لمتابعة الأداء</li>
+        </ul>
+        <p class="dur">المدة: حسب نطاق النظام</p>
+        <a class="btn btn-ghost" href="#contact" data-pkg="تحليل وتصميم نظام">اطلب هذي الباقة</a>
+      </article>
+    </div>
+  </section>
+
+  <section class="block" id="faq">
+    <div class="sec-head">
+      <p class="eyebrow">أسئلة شائعة</p>
+      <h2>قبل ما تبدأ</h2>
+    </div>
+    <div class="faq">
+      <details><summary>وش أحتاج أجهز قبل ما نبدأ؟</summary><p>فكرة واضحة عن نشاطك وجمهورك، والشعار والصور إن وجدت. لتحليل البيانات: ملفات Excel أو صلاحية قراءة على النظام اللي تستخدمه. إذا ما عندك شي جاهز نساعدك نرتبه.</p></details>
+      <details><summary>من يملك الموقع والملفات بعد التسليم؟</summary><p>أنت. تستلم كل الملفات والحسابات باسمك، بما فيها الدومين والاستضافة وحساب Google Analytics.</p></details>
+      <details><summary>كم تعديل يحق لي؟</summary><p>كل مرحلة فيها جولتين تعديل مشمولة. التعديلات بعدها أو الإضافات الجديدة نتفق عليها بشكل منفصل.</p></details>
+      <details><summary>هل بياناتي في أمان؟</summary><p>نشتغل وفق نظام حماية البيانات الشخصية (PDPL): ما نطلب إلا البيانات اللازمة، ونخفي أي بيانات شخصية في اللوحات والتقارير، ونرجع لك أو نحذف كل الملفات بعد انتهاء المشروع.</p></details>
+      <details><summary>هل تقدم دعم بعد الإطلاق؟</summary><p>إيه. فيه فترة دعم مجانية بعد التسليم لإصلاح أي خلل، وبعدها تقدر تختار اشتراك شهري للتحديثات والتقارير.</p></details>
+      <details><summary>وش حدود الباقة المجانية؟</summary><p>ملف مبيعات واحد، وملف زيارات واحد، و٣ طلبات صيانة، واستشارة أولى. بعدها تختار الباقة المناسبة لك.</p></details>
+      <details><summary>أقدر أطلب تحليل بيانات بدون موقع؟</summary><p>أكيد. كل خدمة تنطلب لحالها، سواء لوحة معلومات من ملفاتك أو تقرير تحليلي لمرة وحدة.</p></details>
+      <details><summary>ما أعرف وش أحتاج من تحليل البيانات، أبدأ منين؟</summary><p>هذا طبيعي، وأغلب عملائنا يبدون كذا. جاوب أسئلة <a href="#discover">وش أحتاج؟</a> وتطلع لك خطة مبدئية، أو احجز الاستشارة المجانية ونحدد سوا أهم سؤالين تبي جوابهم من أرقامك. نبدأ صغير بمشكلة وحدة، ولما تشوف النتيجة نكبر.</p></details>
+      <details><summary>كم تاخذ دراسة الجدوى؟</summary><p>تعتمد على نوع الدراسة وحجم المشروع. الدراسة المبدئية أسرع بكثير من التفصيلية اللي فيها دراسة سوق ميدانية. نحدد لك المدة بالضبط في عرض السعر بعد جلسة الفكرة.</p></details>
+      <details><summary>وش أجهز قبل دراسة الجدوى؟</summary><p>فكرة المشروع، والمدينة أو الحي المقترح، والميزانية المتاحة تقريباً. وإذا عندك عروض أسعار لمعدات أو موقع، تختصر علينا وقت. وإذا ما عندك شي، نبدأ معك من الفكرة.</p></details>
+      <details><summary>هل الدراسة تنقبل عند البنك أو جهة التمويل؟</summary><p>نجهزها حسب متطلبات الجهة اللي بتقدّم لها ونراجع الملف معك قبل التقديم، لكن قرار القبول والتمويل يرجع للجهة نفسها.</p></details>
+      <details><summary>هل الحاسبة المبدئية تغني عن الدراسة؟</summary><p>لا. الحاسبة تحسب على الأرقام اللي تكتبها أنت. الدراسة تتحقق من هالأرقام في السوق: كم عميل فعلاً بيجيك، وبكم يشتري، وكم تكلف المعدات والموقع. وأغلب المشاريع اللي تتعثر سببها أرقام متفائلة ما انختبرت.</p></details>
+      <details><summary>هل أحتاج خبرة تقنية عشان أستخدم اللوحة؟</summary><p>لا. اللوحة تنبنى على أسئلتك أنت، وتستلم معها جلسة شرح قصيرة توضح وين تشوف كل رقم ومتى تتحدث البيانات.</p></details>
+      <details><summary>وين تروح الملفات اللي أرفعها في الأدوات المجانية؟</summary><p>ما تروح لأي مكان. الملف ينقرى ويتحلل داخل متصفحك، والنتيجة تنعرض لك بس. تفاصيل أكثر في <a href="#privacy">سياسة الخصوصية</a>.</p></details>
+    </div>
+  </section>
+
+  <section class="block" id="privacy">
+    <div class="sec-head">
+      <p class="eyebrow">الخصوصية والاستخدام</p>
+      <h2>وش نجمع، ووش ما نجمع</h2>
+      <p>نلتزم بنظام حماية البيانات الشخصية في المملكة (PDPL)، ونجمع أقل قدر ممكن من البيانات.</p>
+    </div>
+    <div class="policy">
+      <div>
+        <h3>ملفات الأدوات المجانية</h3>
+        <ul>
+          <li>تنقرى وتتحلل داخل متصفحك فقط، وما تنرسل لأي خادم.</li>
+          <li>ما نحفظ محتوى الملف ولا نتائجه. تختفي أول ما تقفل الصفحة.</li>
+          <li>اللي ينحفظ هو عدد مرات الاستخدام فقط، عشان رصيد التجربة المجانية.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>طلب الخدمة</h3>
+        <ul>
+          <li>نحفظ اللي تكتبه في النموذج (الاسم، الجهة، وسيلة التواصل، التفاصيل) عشان نرد عليك.</li>
+          <li>ما نشارك بياناتك مع أي طرف ثالث ولا نستخدمها للتسويق بدون إذنك.</li>
+          <li>تقدر تطلب حذف طلبك في أي وقت عبر نفس وسيلة التواصل.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>بيانات المشاريع المدفوعة</h3>
+        <p>نطلب صلاحية قراءة فقط على مصادر بياناتك، ونخفي البيانات الشخصية في اللوحات والتقارير، ونرجع لك أو نحذف كل الملفات بعد انتهاء المشروع، ونوقّع اتفاقية سرية إذا طلبتها.</p>
+      </div>
+      <div>
+        <h3>بياناتك على هذا الجهاز</h3>
+        <p>الموقع يحفظ في متصفحك رصيد التجربة، وطلبات الصيانة، وبيانات نماذج الأنظمة. تقدر تمسحها الحين:</p>
+        <div class="cta" style="margin-top:12px"><button type="button" class="btn btn-ghost btn-sm" id="wipe">امسح بياناتي من هذا الجهاز</button><span class="status" id="wipe-status" aria-live="polite"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="contact">
+    <div class="contact">
+      <div class="sec-head" style="margin-bottom:0">
+        <p class="eyebrow">اطلب مشروع</p>
+        <h2>عبّي الطلب، ويوصلنا مباشرة</h2>
+        <p>اكتب تفاصيل مشروعك ووسيلة تواصلك، ونرجع لك بعرض سعر مكتوب.</p>
+        <div class="reach" id="reach"></div>
+      </div>
+      <form id="req" novalidate>
+        <div class="field"><label for="f-name">الاسم</label><input id="f-name" autocomplete="name" placeholder="مثال: محمد"><span class="err" id="e-name"></span></div>
+        <div class="field"><label for="f-contact">جوال أو إيميل للتواصل</label><input id="f-contact" autocomplete="tel" inputmode="email" maxlength="80" placeholder="مثال: 05xxxxxxxx" dir="ltr" style="text-align:right"><span class="err" id="e-contact"></span></div>
+        <div class="field"><label for="f-org">الجهة أو النشاط</label><input id="f-org" maxlength="120" placeholder="مثال: متجر عطور في جدة"></div>
+        <div class="field"><label for="f-type">نوع الخدمة</label>
+          <select id="f-type"><option>الباقة المجانية: استشارة أولى</option><option>تصميم موقع</option><option>تحليل وتصميم نظام</option><option>تحليل بيانات ولوحة معلومات</option><option>مشروع متكامل</option><option>دراسة جدوى مبدئية</option><option>دراسة جدوى تفصيلية</option><option>دراسة جدوى للتمويل</option></select></div>
+        <div class="field"><label for="f-time">الموعد المتوقع</label>
+          <select id="f-time"><option>خلال أسبوعين</option><option>خلال شهر</option><option>خلال ٣ أشهر</option><option>مرن</option></select></div>
+        <div class="field full"><label for="f-msg">وش تبي بالضبط؟</label><textarea id="f-msg" maxlength="2000" placeholder="مثال: أبي لوحة تعرض مبيعات فروعي الثلاثة شهرياً من ملفات Excel"></textarea><span class="err" id="e-msg"></span></div>
+        <div class="field full"><button class="btn btn-primary" type="submit" id="send" style="justify-self:start">أرسل الطلب</button></div>
+        <div id="out" hidden>
+          <strong id="out-title">طلبك جاهز</strong>
+          <p class="fmt" id="out-note"></p>
+          <pre id="out-text"></pre>
+          <div class="out-actions"><button class="btn btn-ghost" type="button" id="copy">انسخ الطلب</button><span id="out-reach" class="out-actions"></span><span class="status" id="copy-status" aria-live="polite"></span></div>
+        </div>
+        <div class="inbox" id="inbox" hidden>
+          <p class="card-t" style="margin:0">الطلبات الواردة <span class="fmt">(تظهر لك أنت بس كصاحب الموقع)</span></p>
+          <div id="inbox-list" style="display:flex;flex-direction:column;gap:8px"></div>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <span>المحلل الرقمي · The Digital Analyst</span>
+    <span id="foot-reach"></span>
+    <span><a href="#privacy">الخصوصية</a> · المملكة العربية السعودية</span>
+  </footer>
+</div>
+
+<!-- SheetJS 0.20.3 (fixes CVE-2023-30533 and CVE-2024-22363), served from this site, not a third-party CDN -->
+<script src="xlsx-0.20.3.full.min.js"></script>
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  function $(id){return document.getElementById(id)}
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+  function pad(n){n=String(n);return n.length<2?"0"+n:n}
+  function fmt(n){return Math.round(n).toLocaleString("en-US")}
+  function clean(v){return String(v).replace(/[٠-٩]/g,function(d){return "٠١٢٣٤٥٦٧٨٩".indexOf(d)}).replace(/[۰-۹]/g,function(d){return "۰۱۲۳۴۵۶۷۸۹".indexOf(d)}).replace(/٫/g,".").replace(/[,٬\s ]/g,"").replace(/ر\.?س\.?|ريال|sar|sr|\$|﷼/gi,"")}
+  function num0(v){if(typeof v==="number")return v;if(v instanceof Date||v==null||v==="")return NaN;var s=clean(v),neg=/^\(.*\)$/.test(s);s=s.replace(/[()]/g,"");return /^-?\d+(\.\d+)?%?$/.test(s)?(neg?-1:1)*parseFloat(s):NaN}
+  function num(v){var x=num0(v);return isNaN(x)?0:x}
+  function findCol(row,re){return Object.keys(row).find(function(k){return re.test(String(k).trim())})}
+  var monthNames=["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
+  function monthKey(v){
+    if(v instanceof Date&&!isNaN(v))return v.getFullYear()+"-"+pad(v.getMonth()+1);
+    if(typeof v==="number"&&v>20000){var d=new Date(Math.round((v-25569)*864e5));return d.getUTCFullYear()+"-"+pad(d.getUTCMonth()+1)}
+    var s=String(v),m=s.match(/(\d{4})[-\/.](\d{1,2})/);if(m)return m[1]+"-"+pad(m[2]);
+    m=s.match(/(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{4})/);if(m)return m[3]+"-"+pad(m[2]);
+    return null;
+  }
+  function monthLabel(k){var p=k.split("-");return monthNames[+p[1]-1]+" "+p[0].slice(2)}
+
+  /* ---------- free quota: kept on the account when signed in, else in this browser ---------- */
+  var Q={sales:1,traffic:1,maint:3},mem={},DB=null,UID=null,shared=false;
+  function int(v){v=Math.floor(Number(v));return isFinite(v)&&v>=0?Math.min(v,1e6):0}
+  var PR={high:1,mid:1,low:1};
+  function cleanReq(r){if(!r||typeof r!=="object")return null;
+    var t=String(r.title||"").slice(0,200).trim();if(!t)return null;
+    return {id:String(r.id||"").slice(0,40),title:t,loc:String(r.loc||"").slice(0,120),who:String(r.who||"").slice(0,80),
+      pr:PR[r.pr]?r.pr:"mid",st:Math.min(2,int(r.st)),at:int(r.at)||Date.now(),ex:!!r.ex}}
+  function load(){var raw;try{raw=JSON.parse(localStorage.getItem("da_free")||"{}")}catch(e){raw={}}
+    if(!raw||typeof raw!=="object"||Array.isArray(raw))raw={};
+    var u=raw.used&&typeof raw.used==="object"?raw.used:{};
+    mem={used:{sales:int(u.sales),traffic:int(u.traffic)},made:int(raw.made),seeded:!!raw.seeded,
+      reqs:(Array.isArray(raw.reqs)?raw.reqs:[]).slice(0,200).map(cleanReq).filter(Boolean)};
+    if(!mem.seeded){mem.seeded=true;var now=Date.now();
+      mem.reqs=[{id:"ص-مثال1",title:"تسريب مكيف في غرفة الاجتماعات",loc:"الدور الثاني",pr:"high",who:"الفني خالد",st:1,at:now-3*864e5,ex:true},
+                {id:"ص-مثال2",title:"لمبة معطلة في الممر",loc:"المدخل الرئيسي",pr:"low",who:"الفني سامي",st:0,at:now-5*36e5,ex:true}]}}
+  var usageBusy=Promise.resolve(),usageSent="";
+  function save(){try{localStorage.setItem("da_free",JSON.stringify(mem))}catch(e){}
+    if(!DB||!UID)return;var key=[mem.used.sales,mem.used.traffic,mem.made].join();if(key===usageSent)return;usageSent=key;
+    var body={sales:mem.used.sales,traffic:mem.used.traffic,maint:mem.made,at:Date.now()};
+    usageBusy=usageBusy.then(function(){return DB.doc("usage/"+UID).set(body)}).catch(function(){})}
+  function used(k){return k==="maint"?mem.made:mem.used[k]}
+  function left(k){return Math.max(0,Q[k]-used(k))}
+  function meter(k){var r=left(k),el=$("m-"+k);
+    el.querySelector(".mt").textContent="متبقي "+r+" من "+Q[k]+(k==="maint"?" طلبات":" ملف");
+    el.querySelector("i").style.width=(r/Q[k]*100)+"%";$("lock-"+k).hidden=r>0}
+  load();
+
+  /* ---------- tabs ---------- */
+  function showTool(t){
+    document.querySelectorAll("[data-t]").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.t===t))});
+    ["sales","maint","traffic"].forEach(function(k){$("t-"+k).hidden=k!==t});
+  }
+  document.querySelectorAll("[data-t]").forEach(function(b){b.addEventListener("click",function(){showTool(b.dataset.t)})});
+  document.querySelectorAll("[data-tool]").forEach(function(a){a.addEventListener("click",function(){showTool(a.dataset.tool)})});
+
+  /* ---------- file reading ---------- */
+  function filled(c){return !(c===""||c==null||(typeof c==="string"&&!c.trim()))}
+  function isText(c){return typeof c==="string"&&c.trim()!==""&&isNaN(num0(c))&&!monthKey(c)}
+  /* find the real header row (skips report titles above it), drop empty & total rows */
+  function toObjects(aoa){
+    var bi=0,best=-1e9;
+    for(var i=0;i<Math.min(20,aoa.length);i++){var row=aoa[i]||[],t=0,n=0;
+      row.forEach(function(c){if(isText(c))t++;else if(filled(c))n++});
+      var next=aoa.slice(i+1,i+4).some(function(r){return (r||[]).some(filled)});
+      var sc=t*2-n*3;if(t>=2&&next&&sc>best){best=sc;bi=i}}
+    var hdr=(aoa[bi]||[]).map(function(h,j){h=filled(h)?String(h).trim():"";return h||("عمود "+(j+1))}),seen={};
+    hdr=hdr.map(function(h){if(seen[h]){seen[h]++;return h+" ("+seen[h]+")"}seen[h]=1;return h});
+    var out=[];
+    aoa.slice(bi+1).forEach(function(r){r=r||[];if(!r.some(filled))return;
+      if(r.some(function(c){return typeof c==="string"&&/^(ال)?(إجمالي|اجمالي|مجموع|المجموع)(\s|$)|^(grand\s*)?total(s)?$/i.test(c.trim())}))return;
+      var o={};hdr.forEach(function(h,j){o[h]=r[j]==null?"":r[j]});out.push(o)});
+    return out;
+  }
+  function profile(rows){
+    var P={};Object.keys(rows[0]||{}).forEach(function(c){var ne=0,nn=0,d=0,t=0,sum=0,u={},small=0;
+      rows.forEach(function(r){var v=r[c];if(!filled(v))return;ne++;
+        if(v instanceof Date){d++;return}
+        if(typeof v==="string"&&monthKey(v)&&isNaN(num0(v))){d++;return}
+        var x=num0(v);if(!isNaN(x)){nn++;sum+=x;if(Math.abs(x)<=1)small++;return}
+        t++;u[String(v).trim()]=1});
+      P[c]={ne:ne,numR:ne?nn/ne:0,dateR:ne?d/ne:0,textR:ne?t/ne:0,sum:sum,uniq:Object.keys(u).length,rate:nn&&small/nn>.9}});
+    return P;
+  }
+  var MAX_BYTES=5*1024*1024,MAX_ROWS=20000,MAX_COLS=60,MAX_SHEETS=10;
+  /* CSV saved from Arabic Excel is often Windows-1256, not UTF-8 */
+  function decodeCsv(buf){var u=new Uint8Array(buf);
+    if(u[0]===0xFF&&u[1]===0xFE)return new TextDecoder("utf-16le").decode(u);
+    try{return new TextDecoder("utf-8",{fatal:true}).decode(u).replace(/^﻿/,"")}
+    catch(e){try{return new TextDecoder("windows-1256").decode(u)}catch(e2){return new TextDecoder("utf-8").decode(u)}}}
+  function readFile(file,ok,bad){
+    if(typeof XLSX==="undefined"){bad("ما قدرنا نحمّل قارئ الملفات. حدّث الصفحة وجرّب مرة ثانية.");return}
+    var ext=(String(file.name).match(/\.([a-z0-9]+)$/i)||[])[1];ext=ext?ext.toLowerCase():"";
+    if(["xlsx","xls","csv"].indexOf(ext)<0){bad("الصيغة هذي ما ندعمها. ارفع ملف ‎.xlsx أو ‎.xls أو ‎.csv.");return false}
+    if(!file.size){bad("الملف فاضي.");return false}
+    if(file.size>MAX_BYTES){bad("حجم الملف "+(file.size/1048576).toFixed(1)+" ميقا، والحد الأقصى 5 ميقا. احذف الأعمدة اللي ما تحتاجها أو قسّم الملف وجرّب.");return false}
+    var fr=new FileReader();
+    fr.onload=function(){try{
+      var opts={cellDates:true,cellHTML:false,cellFormula:false,cellStyles:false,sheetRows:MAX_ROWS+25},
+          wb=ext==="csv"?XLSX.read(decodeCsv(fr.result),Object.assign({type:"string",raw:false},opts)):XLSX.read(new Uint8Array(fr.result),Object.assign({type:"array"},opts)),pick=null,ps=-1;
+      wb.SheetNames.slice(0,MAX_SHEETS).forEach(function(nm){var aoa=XLSX.utils.sheet_to_json(wb.Sheets[nm],{header:1,defval:"",raw:true}).map(function(r){return (r||[]).slice(0,MAX_COLS)}),rows=toObjects(aoa);
+        if(!rows.length)return;var P=profile(rows),numCols=Object.keys(P).filter(function(c){return P[c].numR>=.6}).length,sc=rows.length*(numCols+1);
+        if(sc>ps){ps=sc;pick=rows}});
+      if(!pick){bad("الملف ما فيه بيانات نقدر نقرأها. تأكد إنه مو فاضي.");return}ok(pick.slice(0,MAX_ROWS))}
+      catch(e){bad("الملف ما انقرى. ارفع ملف Excel (‎.xlsx) أو CSV.")}};
+    fr.onerror=function(){bad("ما قدرنا نقرأ الملف. جرّب ترفعه مرة ثانية.")};
+    fr.readAsArrayBuffer(file);
+  }
+  /* column pickers: by name first, then by what the column actually contains */
+  function pickNum(P,re,excl,used,maxSum){var cols=Object.keys(P);
+    var n=cols.find(function(c){return !used[c]&&re.test(c)&&P[c].numR>=.6&&!P[c].rate});if(n)return n;
+    return cols.filter(function(c){return !used[c]&&P[c].numR>=.6&&P[c].dateR<.5&&!P[c].rate&&!(excl&&excl.test(c))&&(maxSum==null||P[c].sum<maxSum)})
+      .sort(function(a,b){return P[b].sum-P[a].sum})[0]||null}
+  function pickDate(P,re,used){var cols=Object.keys(P);
+    return cols.find(function(c){return !used[c]&&re.test(c)&&P[c].dateR>=.5})||cols.filter(function(c){return !used[c]&&P[c].dateR>=.6}).sort(function(a,b){return P[b].dateR-P[a].dateR})[0]||null}
+  function textCols(P,used){return Object.keys(P).filter(function(c){var p=P[c];return !used[c]&&p.textR>=.6&&!(p.ne>20&&p.uniq>p.ne*.9)})}
+  function autoSales(rows){var P=profile(rows),u={},m={};
+    m.date=pickDate(P,/تاريخ|date|شهر|month|يوم|day/i,u);if(m.date)u[m.date]=1;
+    m.amount=pickNum(P,/مبلغ|مبيعات|قيمة|إجمالي|اجمالي|صافي|الدخل|amount|sales|total|revenue|net|value/i,/كمية|عدد|qty|quantity|رقم|^id$|كود|code|سعر الوحدة|unit|هاتف|phone|جوال|سنة|year/i,u);if(m.amount)u[m.amount]=1;
+    var tc=textCols(P,u);
+    m.branch=tc.find(function(c){return /فرع|branch|store|location|موقع|محل|مدينة|city/i.test(c)})||null;if(m.branch)u[m.branch]=1;
+    m.item=textCols(P,u).find(function(c){return /صنف|منتج|item|product|sku|بند|خدمة|service|category|فئة/i.test(c)})||null;if(m.item)u[m.item]=1;
+    tc=textCols(P,u).sort(function(a,b){return P[a].uniq-P[b].uniq});
+    if(!m.branch&&!m.item){if(tc.length>=2){m.branch=tc[0];m.item=tc[tc.length-1]}else if(tc.length===1){if(P[tc[0]].uniq<=15)m.branch=tc[0];else m.item=tc[0]}}
+    else if(!m.branch&&tc.length&&P[tc[0]].uniq<=30)m.branch=tc[0];
+    else if(!m.item&&tc.length)m.item=tc[tc.length-1];
+    return m}
+  function autoTraffic(rows){var P=profile(rows),u={},m={};
+    var tc=textCols(P,u);
+    m.source=tc.find(function(c){return /مصدر|قناة|source|channel|medium|منصة|platform|campaign|حملة/i.test(c)})||tc.sort(function(a,b){return P[b].uniq-P[a].uniq})[0]||null;if(m.source)u[m.source]=1;
+    m.visits=pickNum(P,/زيارات|جلسات|sessions|visits|users|مستخدم|زوار|نقرات|clicks/i,/تحويل|طلبات|conversion|orders|purchase|إيراد|revenue|معدل|rate|نسبة|تكلفة|cost/i,u);if(m.visits)u[m.visits]=1;
+    m.orders=pickNum(P,/طلبات|تحويل|مبيعات|conversions|orders|purchases|transactions|leads|key events|أحداث رئيسية|عملاء/i,/إيراد|revenue|تكلفة|cost|مبلغ/i,u,m.visits?P[m.visits].sum:null);
+    return m}
+  function mapperHtml(tool,rows,map,fields,note){var cols=Object.keys(rows[0]||{});
+    return '<div class="mapper"><p class="card-t" style="margin:0">الأعمدة اللي اعتمدنا عليها</p><p class="fmt">'+(note||'اكتشفناها تلقائياً من محتوى ملفك. لو تبي تغيّر شي اختر من القائمة وتتحدث النتيجة فوراً، بدون ما ينخصم من رصيدك.')+'</p><div class="map-row">'+
+      fields.map(function(f){return '<div class="field"><label for="mp-'+tool+'-'+f[0]+'">'+f[1]+'</label><select id="mp-'+tool+'-'+f[0]+'" data-map="'+tool+'" data-f="'+f[0]+'"><option value="">بدون</option>'+
+        cols.map(function(c){return '<option value="'+esc(c)+'"'+(map[f[0]]===c?' selected':'')+'>'+esc(c)+'</option>'}).join("")+'</select></div>'}).join("")+'</div></div>'}
+  var last={};
+  function readMap(tool){var m={};document.querySelectorAll('[data-map="'+tool+'"]').forEach(function(s){m[s.dataset.f]=s.value||null});return m}
+  ["sales","traffic"].forEach(function(t){$("out-"+t).addEventListener("change",function(e){if(!e.target.matches("[data-map]")||!last[t])return;
+    (t==="sales"?runSales:runTraffic)(last[t].rows,last[t].label,readMap(t),true)})});
+  function err(k,t){var e=$("err-"+k);e.textContent=t||"";e.hidden=!t}
+  /* results export: one workbook per tool, offered through the viewer's save prompt */
+  var exportData={};
+  function resActions(tool,pitch,pkg){
+    return '<div class="res-actions"><button type="button" class="btn btn-ghost btn-sm" data-xl="'+tool+'">احفظ النتائج Excel</button><span class="status" id="xl-'+tool+'" aria-live="polite"></span></div>'+
+      '<div class="upsell"><p>'+esc(pitch)+'</p><a class="btn btn-primary btn-sm" href="#contact" data-pkg="'+esc(pkg)+'">اطلب عرض سعر</a></div>'}
+  window.__daSaveXlsx=function(a,b,c,d){return saveXlsx(a,b,c,d)};
+  async function saveXlsx(sheets,name,statusEl,errFn){
+    var wb=XLSX.utils.book_new();wb.Workbook={Views:[{RTL:true}]};
+    sheets.forEach(function(s){var ws=XLSX.utils.json_to_sheet(s.rows);ws["!cols"]=Object.keys(s.rows[0]||{}).map(function(){return {wch:20}});XLSX.utils.book_append_sheet(wb,ws,s.name.slice(0,31))});
+    var buf=XLSX.write(wb,{bookType:"xlsx",type:"array"}),dl=null;
+    try{dl=window.claude&&claude.use?await claude.use("downloads"):null}catch(x){}
+    if(!dl){try{XLSX.writeFile(wb,name);if(statusEl)statusEl.textContent="انحفظ الملف."}catch(x){errFn("ما قدرنا نحفظ الملف. جرّب مرة ثانية.")}return}
+    try{await dl.save({filename:name,data:new Blob([buf])});if(statusEl)statusEl.textContent="انحفظ الملف."}
+    catch(x){if(x&&x.code!=="declined")errFn("ما قدرنا نحفظ الملف. جرّب مرة ثانية.")}}
+  document.addEventListener("click",function(e){
+    var p=e.target.closest("[data-xl]");if(p){var t=p.dataset.xl,d=exportData[t];if(d)saveXlsx(d,t==="sales"?"تحليل-المبيعات.xlsx":"تحليل-الزيارات.xlsx",$("xl-"+t),function(m){err(t,m)});return}
+    var k=e.target.closest("[data-pkg]");if(k&&$("f-type")){$("f-type").value=k.dataset.pkg}});
+  function bars(list,max,fmtFn,warnFn){
+    return '<div class="hbars">'+list.map(function(r){var w=max?Math.max(2,r[1]/max*100):0;
+      return '<div class="hb"><span class="nm" title="'+esc(r[0])+'">'+esc(r[0])+'</span><span class="track"><span class="fill'+(warnFn&&warnFn(r)?" warn":"")+'" style="width:'+w+'%;display:block"></span></span><span class="num">'+fmtFn(r[1])+'</span></div>'}).join("")+'</div>';
+  }
+  function lineSvg(labels,vals){
+    var W=440,H=170,pl=44,pr=14,pt=16,pb=26,n=vals.length,mx=Math.max.apply(null,vals)*1.15||1;
+    var step=Math.pow(10,Math.floor(Math.log10(mx/3)));var nice=[1,2,5,10].map(function(m){return m*step}).find(function(s){return mx/s<=5})||step*10;
+    var top=Math.ceil(mx/nice)*nice,iw=W-pl-pr,ih=H-pt-pb;
+    function x(i){return n<2?W/2:W-pr-(i/(n-1))*iw}function y(v){return pt+ih-v/top*ih}
+    var s='<svg class="mini-chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="المبيعات حسب الشهر">';
+    for(var g=0;g<=top+1e-9;g+=nice)s+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+y(g)+'" y2="'+y(g)+'" stroke="var(--line)"/><text x="'+(pl-6)+'" y="'+(y(g)+4)+'" text-anchor="end">'+(g>=1000?(g/1000)+"k":g)+'</text>';
+    var pts=vals.map(function(v,i){return x(i)+","+y(v)}).join(" ");
+    s+='<polygon points="'+pts+" "+x(n-1)+","+y(0)+" "+x(0)+","+y(0)+'" fill="var(--accent)" opacity=".12"/>';
+    s+='<polyline points="'+pts+'" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>';
+    var every=Math.ceil(n/6);labels.forEach(function(l,i){if(i%every===0||i===n-1)s+='<text x="'+x(i)+'" y="'+(H-6)+'" text-anchor="middle">'+esc(l)+'</text>'});
+    s+='<circle cx="'+x(n-1)+'" cy="'+y(vals[n-1])+'" r="5" fill="var(--data)" stroke="var(--surface)" stroke-width="2"/></svg>';
+    return s;
+  }
+
+  /* ---------- sales dashboard ---------- */
+  function sampleSales(){var rows=[],br=["الفرع الرئيسي","فرع الشمال","فرع الكورنيش"],it=["عود","مسك","عنبر","بخور","زيوت عطرية"];
+    for(var m=1;m<=6;m++)br.forEach(function(b,bi){it.forEach(function(x,ii){
+      var v=(1400+bi*420+(ii%2?260:-180)*ii/2+m*(90+bi*35))*(x==="زيوت عطرية"?0.3:1)*(x==="عنبر"&&bi===2?0.5:1);
+      rows.push({"التاريخ":"2026-"+pad(m)+"-15","الفرع":b,"الصنف":x,"المبلغ":Math.round(v)})})});return rows}
+  var SF=[["amount","المبلغ"],["branch","الفرع"],["item","الصنف"],["date","التاريخ"]];
+  function runSales(rows,label,map,showMap){
+    map=map||autoSales(rows);last.sales={rows:rows,label:label};
+    var cA=map.amount,cB=map.branch,cI=map.item,cD=map.date,mp=showMap?mapperHtml("sales",rows,map,SF):"";
+    err("sales");
+    if(!cA){$("out-sales").innerHTML=mapperHtml("sales",rows,map,SF,"ما لقينا عمود فيه أرقام مبيعات. اختر عمود المبلغ من القائمة وتطلع النتيجة.");return true}
+    var tot=0,byB={},byI={},byM={};
+    rows.forEach(function(r){var a=num(r[cA]);if(!a)return;tot+=a;
+      var b=cB?String(r[cB]).trim()||"غير محدد":"كل المبيعات",i=cI?String(r[cI]).trim()||"غير محدد":null,m=cD?monthKey(r[cD]):null;
+      byB[b]=(byB[b]||0)+a;if(i)byI[i]=(byI[i]||0)+a;if(m)byM[m]=(byM[m]||0)+a});
+    if(!tot){$("out-sales").innerHTML=mapperHtml("sales",rows,map,SF,"العمود المختار ما فيه أرقام. اختر عمود ثاني للمبلغ.");return true}
+    var B=Object.entries(byB).sort(function(a,b){return b[1]-a[1]}),I=Object.entries(byI).sort(function(a,b){return b[1]-a[1]}),
+        Mk=Object.keys(byM).sort(),nm=Mk.length;
+    var avgItem=I.length?tot/I.length:0,slow=I.filter(function(x){return x[1]<avgItem*0.5});
+    var h='<p class="fmt">'+esc(label)+' · '+fmt(rows.length)+' صف</p><div class="res-kpis">'+
+      '<div class="kpi"><span class="label">إجمالي المبيعات</span><span class="value num">'+fmt(tot)+' ر.س</span></div>'+
+      '<div class="kpi"><span class="label">أفضل فرع</span><span class="value">'+esc(B[0][0])+'</span></div>'+
+      '<div class="kpi"><span class="label">متوسط الشهر</span><span class="value num">'+(nm?fmt(tot/nm)+' ر.س':'—')+'</span></div>'+
+      '<div class="kpi"><span class="label">أصناف بطيئة</span><span class="value num">'+slow.length+'</span></div></div>';
+    h+='<div class="grid2"><div><p class="card-t">المبيعات حسب الفرع</p>'+bars(B,B[0][1],fmt)+'</div>';
+    h+='<div><p class="card-t">المبيعات حسب الشهر</p>'+(nm>=2?lineSvg(Mk.map(monthLabel),Mk.map(function(k){return byM[k]})):'<p class="fmt">أضف عمود «التاريخ» عشان يطلع اتجاه الأشهر.</p>')+'</div></div>';
+    if(I.length){h+='<div><p class="card-t">ترتيب الأصناف</p><div class="tbl-wrap"><table class="data"><thead><tr><th>الصنف</th><th>المبيعات</th><th>النسبة</th><th>الحالة</th></tr></thead><tbody>'+
+      I.map(function(x,i){var st=i<3?'<span class="flag good">الأعلى مبيعاً</span>':(x[1]<avgItem*0.5?'<span class="flag">بطيء</span>':'');
+        return '<tr><td>'+esc(x[0])+'</td><td class="num">'+fmt(x[1])+'</td><td class="num">'+(x[1]/tot*100).toFixed(1)+'%</td><td>'+st+'</td></tr>'}).join("")+'</tbody></table></div></div>'}
+    var ins=['<li>'+esc(B[0][0])+' يحقق '+(B[0][1]/tot*100).toFixed(0)+'% من المبيعات'+(B.length>1?'، وأضعف فرع '+esc(B[B.length-1][0])+' بنسبة '+(B[B.length-1][1]/tot*100).toFixed(0)+'%.':'.')+'</li>'];
+    if(nm>=2){var a=byM[Mk[0]],z=byM[Mk[nm-1]],ch=(z-a)/a*100;ins.push('<li>المبيعات '+(ch>=0?'ارتفعت':'انخفضت')+' '+Math.abs(ch).toFixed(0)+'% من '+monthLabel(Mk[0])+' إلى '+monthLabel(Mk[nm-1])+'.</li>')}
+    if(slow.length)ins.push('<li>'+slow.length+' صنف مبيعاته أقل من نصف المتوسط، راجع تسعيرها أو عرضها: '+slow.slice(0,3).map(function(x){return esc(x[0])}).join("، ")+'.</li>');
+    h+='<div><p class="card-t">وش تقول الأرقام</p><ul class="insights">'+ins.join("")+'</ul></div>';
+    exportData.sales=[{name:"حسب الفرع",rows:B.map(function(x){return {"الفرع":x[0],"المبيعات (ر.س)":Math.round(x[1]),"النسبة %":+(x[1]/tot*100).toFixed(1)}})}];
+    if(I.length)exportData.sales.push({name:"حسب الصنف",rows:I.map(function(x){return {"الصنف":x[0],"المبيعات (ر.س)":Math.round(x[1]),"النسبة %":+(x[1]/tot*100).toFixed(1),"بطيء":x[1]<avgItem*0.5?"نعم":""}})});
+    if(nm)exportData.sales.push({name:"حسب الشهر",rows:Mk.map(function(k){return {"الشهر":k,"المبيعات (ر.س)":Math.round(byM[k])}})});
+    h+=resActions("sales","تبي هذي اللوحة تتحدث لك كل شهر من ملفاتك أو نظام نقاط البيع؟","تحليل بيانات ولوحة معلومات");
+    $("out-sales").innerHTML=mp+h;return true;
+  }
+  $("demo-sales").addEventListener("click",function(){runSales(sampleSales(),"بيانات تجريبية: متجر عطور بثلاثة فروع")});
+  $("f-sales").addEventListener("change",function(e){var f=e.target.files[0];e.target.value="";if(!f)return;
+    if(!left("sales")){meter("sales");return}
+    readFile(f,function(rows){mem.used.sales++;save();meter("sales");runSales(rows,f.name,null,true)},function(m){err("sales",m)})});
+
+  /* ---------- traffic analyzer ---------- */
+  function sampleTraffic(){return [["بحث قوقل",4200,126],["انستقرام",3100,40],["سناب شات",2600,21],["مباشر",1500,52],["إعلانات قوقل",1800,45],["واتساب",600,38]].map(function(r){return {"المصدر":r[0],"الزيارات":r[1],"الطلبات":r[2]}})}
+  var TF=[["source","المصدر"],["visits","الزيارات"],["orders","الطلبات"]];
+  function runTraffic(rows,label,map,showMap){
+    map=map||autoTraffic(rows);last.traffic={rows:rows,label:label};
+    var cS=map.source,cV=map.visits,cC=map.orders,mp=showMap?mapperHtml("traffic",rows,map,TF):"";
+    err("traffic");
+    if(!cV){$("out-traffic").innerHTML=mapperHtml("traffic",rows,map,TF,"ما لقينا عمود فيه أعداد الزيارات. اختره من القائمة وتطلع النتيجة.");return true}
+    var agg={},tv=0,tc=0;rows.forEach(function(r){var s=cS?(String(r[cS]).trim()||"غير محدد"):"كل الزيارات",v=num(r[cV]),c=cC?num(r[cC]):0;if(!agg[s])agg[s]={v:0,c:0};agg[s].v+=v;agg[s].c+=c;tv+=v;tc+=c});
+    if(!tv){$("out-traffic").innerHTML=mapperHtml("traffic",rows,map,TF,"العمود المختار للزيارات ما فيه أرقام. اختر عمود ثاني.");return true}
+    var L=Object.entries(agg).map(function(e){return {s:e[0],v:e[1].v,c:e[1].c,r:e[1].v?e[1].c/e[1].v*100:0}}).sort(function(a,b){return b.v-a.v});
+    var overall=tc/tv*100,best=L.slice().filter(function(x){return x.v>=tv*0.03}).sort(function(a,b){return b.r-a.r})[0]||L[0];
+    var weak=L.filter(function(x){return x.v>=tv*0.1&&x.r<overall*0.6});
+    var h='<p class="fmt">'+esc(label)+'</p><div class="res-kpis">'+
+      '<div class="kpi"><span class="label">إجمالي الزيارات</span><span class="value num">'+fmt(tv)+'</span></div>'+
+      '<div class="kpi"><span class="label">إجمالي الطلبات</span><span class="value num">'+(cC?fmt(tc):'—')+'</span></div>'+
+      '<div class="kpi"><span class="label">معدل التحويل</span><span class="value num">'+(cC?overall.toFixed(2)+'%':'—')+'</span></div>'+
+      '<div class="kpi"><span class="label">أفضل قناة</span><span class="value">'+(cC?esc(best.s):'—')+'</span></div></div>';
+    h+='<div class="grid2"><div><p class="card-t">الزيارات حسب المصدر</p>'+bars(L.map(function(x){return [x.s,x.v,x]}),L[0].v,fmt,function(r){return cC&&r[2].r<overall*0.6})+'<p class="fmt" style="margin-top:8px">البرتقالي: قناة تحويلها أقل بكثير من المتوسط.</p></div>';
+    if(cC){var R=L.slice().sort(function(a,b){return b.r-a.r});h+='<div><p class="card-t">معدل التحويل حسب المصدر</p>'+bars(R.map(function(x){return [x.s,x.r,x]}),R[0].r,function(n){return n.toFixed(1)+"%"},function(r){return r[2].r<overall*0.6})+'</div>'}
+    h+='</div>';
+    var ins=[];
+    if(cC){ins.push('<li>'+esc(best.s)+' أعلى قناة في التحويل ('+best.r.toFixed(1)+'%)، ركّز عليها في الميزانية والمحتوى.</li>');
+      weak.forEach(function(w){ins.push('<li>'+esc(w.s)+' تجيب '+(w.v/tv*100).toFixed(0)+'% من الزيارات لكن تحويلها '+w.r.toFixed(1)+'% فقط. راجع الإعلان أو صفحة الهبوط اللي توديها.</li>')});
+      if(!weak.length)ins.push('<li>ما فيه قناة كبيرة تحويلها ضعيف بشكل واضح. توزيعك متوازن.</li>')}
+    else ins.push('<li>أضف عمود «الطلبات» عشان نحسب أي قناة تجيب عملاء فعلاً، مو بس زيارات.</li>');
+    ins.push('<li>'+esc(L[0].s)+' أكبر مصدر زيارات بنسبة '+(L[0].v/tv*100).toFixed(0)+'%.</li>');
+    h+='<div><p class="card-t">وش تقول الأرقام</p><ul class="insights">'+ins.join("")+'</ul></div>';
+    exportData.traffic=[{name:"حسب المصدر",rows:L.map(function(x){var o={"المصدر":x.s,"الزيارات":x.v};if(cC){o["الطلبات"]=x.c;o["معدل التحويل %"]=+x.r.toFixed(2)}return o})}];
+    h+=resActions("traffic","تبي تقرير شهري يقول لك وين تصرف ميزانية الإعلانات؟","مشروع متكامل");
+    $("out-traffic").innerHTML=mp+h;return true;
+  }
+  $("demo-traffic").addEventListener("click",function(){runTraffic(sampleTraffic(),"بيانات تجريبية: متجر إلكتروني لشهر واحد")});
+  $("f-traffic").addEventListener("change",function(e){var f=e.target.files[0];e.target.value="";if(!f)return;
+    if(!left("traffic")){meter("traffic");return}
+    readFile(f,function(rows){mem.used.traffic++;save();meter("traffic");runTraffic(rows,f.name,null,true)},function(m){err("traffic",m)})});
+
+  /* ---------- maintenance requests ---------- */
+  var stN=["جديد","قيد التنفيذ","مكتمل"],prN={high:"عالية",mid:"متوسطة",low:"منخفضة"},prO={high:0,mid:1,low:2};
+  function age(t){var h=Math.floor((Date.now()-t)/36e5);return h<1?"الحين":h<24?"قبل "+h+" ساعة":"قبل "+Math.floor(h/24)+" يوم"}
+  var sharedReqs=null,canWrite=true;
+  function reqList(){return shared&&sharedReqs?sharedReqs:mem.reqs}
+  function renderReqs(){
+    var all=reqList();
+    $("m-mode").textContent=shared?"الطلبات هنا مشتركة: أي أحد من فريقك يفتح الصفحة يشوفها ويحدّثها.":"الطلبات محفوظة في هذا المتصفح فقط، وما توصل لأي فريق صيانة.";
+    var L=all.slice().sort(function(a,b){return (a.st===2)-(b.st===2)||prO[a.pr]-prO[b.pr]||a.at-b.at});
+    var c=[0,0,0],late=0;all.forEach(function(r){c[r.st]++;if(r.st<2&&Date.now()-r.at>48*36e5)late++});
+    $("m-counts").innerHTML='<span>جديد: <b class="num">'+c[0]+'</b></span><span>قيد التنفيذ: <b class="num">'+c[1]+'</b></span><span>مكتمل: <b class="num">'+c[2]+'</b></span>'+(late?'<span class="pill late">متأخر: '+late+'</span>':'');
+    $("m-list").innerHTML=L.length?L.map(function(r){var isLate=r.st<2&&Date.now()-r.at>48*36e5;
+      return '<div class="req p-'+r.pr+(r.st===2?' done':'')+'"><div><div class="t">'+esc(r.title)+(r.ex?' <span class="flag">مثال</span>':'')+'</div>'+
+        '<div class="meta"><span class="num">#'+esc(r.id)+'</span><span>'+esc(r.loc||"—")+'</span><span>'+esc(r.who||"بدون مسؤول")+'</span><span>أولوية '+prN[r.pr]+'</span><span>'+age(r.at)+'</span></div></div>'+
+        '<div class="req-actions">'+(isLate?'<span class="pill late">متأخر</span>':'')+'<span class="pill s'+r.st+'">'+stN[r.st]+'</span>'+
+        (canWrite&&r.st<2?'<button type="button" class="btn btn-ghost btn-sm" data-adv="'+esc(r.key||r.id)+'">'+(r.st===0?'ابدأ التنفيذ':'أنهِ الطلب')+'</button>':'')+
+        (canWrite?'<button type="button" class="btn btn-ghost btn-sm" data-del="'+esc(r.key||r.id)+'" aria-label="حذف الطلب">حذف</button>':'')+'</div></div>'}).join(""):'<p class="fmt">ما فيه طلبات. أضف أول طلب من النموذج فوق.</p>';
+  }
+  function dbFail(){err("maint","ما قدرنا نحفظ التغيير. تأكد من الاتصال وجرّب مرة ثانية.")}
+  $("m-list").addEventListener("click",function(e){var a=e.target.closest("[data-adv]"),d=e.target.closest("[data-del]");
+    if(shared&&sharedReqs){
+      if(a){var r=sharedReqs.find(function(x){return x.key===a.dataset.adv});if(r&&r.st<2)DB.doc("maint/"+r.key).update({st:r.st+1,upd:Date.now()}).catch(dbFail)}
+      if(d&&armed(d,"تأكيد الحذف للكل"))DB.doc("maint/"+d.dataset.del).delete().catch(dbFail);
+      return}
+    if(a){mem.reqs.forEach(function(r){if(r.id===a.dataset.adv&&r.st<2)r.st++});save();renderReqs()}
+    if(d){mem.reqs=mem.reqs.filter(function(r){return r.id!==d.dataset.del});save();renderReqs()}});
+  $("mform").addEventListener("submit",function(e){e.preventDefault();
+    var t=$("m-title").value.trim().slice(0,200);
+    if(!t){err("maint","اكتب وصف المشكلة عشان ينضاف الطلب.");return}
+    if(!left("maint")){err("maint");meter("maint");return}
+    err("maint");mem.made++;
+    var r={id:"ص-"+("00"+mem.made).slice(-3),title:t,loc:$("m-loc").value.trim().slice(0,120),pr:PR[$("m-pr").value]?$("m-pr").value:"mid",who:$("m-who").value.trim().slice(0,80),st:0,at:Date.now()};
+    if(shared&&sharedReqs){r.id="ص-"+Date.now().toString(36).slice(-4).toUpperCase();r.by=UID;
+      DB.collection("maint").add(r).catch(function(){mem.made--;save();meter("maint");dbFail()})}
+    else mem.reqs.push(r);
+    save();$("m-title").value="";$("m-loc").value="";$("m-who").value="";meter("maint");renderReqs()});
+  /* export maintenance requests as a spreadsheet */
+  $("m-export").addEventListener("click",async function(){
+    var rows=reqList().map(function(r){return {"رقم الطلب":r.id,"المشكلة":r.title,"الموقع":r.loc,"المسؤول":r.who,"الأولوية":prN[r.pr],"الحالة":stN[r.st],"تاريخ الإنشاء":new Date(r.at).toLocaleString("en-GB")}});
+    if(!rows.length){err("maint","ما فيه طلبات تصدّرها.");return}
+    err("maint");saveXlsx([{name:"طلبات الصيانة",rows:rows}],"طلبات-الصيانة.xlsx",null,function(m){err("maint",m)})});
+  /* two-step confirm inside the page (the frame has no confirm dialog) */
+  function armed(btn,label){if(btn.dataset.armed==="1")return true;
+    var old=btn.textContent;btn.dataset.armed="1";btn.textContent=label;
+    setTimeout(function(){if(btn.isConnected){btn.dataset.armed="";btn.textContent=old}},4000);return false}
+  /* wipe this device's data */
+  $("wipe").addEventListener("click",function(){
+    if(!armed(this,"اضغط مرة ثانية للتأكيد"))return;this.dataset.armed="";this.textContent="امسح بياناتي من هذا الجهاز";
+    try{localStorage.removeItem("da_free")}catch(x){}
+    if(window.__daSysWipe)window.__daSysWipe();
+    var keep=mem.used,made=mem.made;load();
+    if(DB&&UID){mem.used=keep;mem.made=made} /* the account's usage still counts */
+    save();["sales","maint","traffic"].forEach(meter);renderReqs();$("wipe-status").textContent="انمسحت."});
+
+  /* ---------- account-backed storage, when this view offers it ---------- */
+  (async function(){
+    var user=null,db=null;
+    try{if(window.claude&&claude.use){user=await claude.use("user");db=await claude.use("db")}}catch(x){}
+    if(!db||!user)return;
+    var id=null;try{id=await user.id()}catch(x){}
+    if(!id)return;
+    var w=null;try{w=user.can?await user.can("data.write"):null}catch(x){}
+    if(w===false)return;
+    DB=db;UID=id;
+    /* usage: the higher of this browser and the account, so clearing the browser does not reset it */
+    try{var s=await db.doc("usage/"+id).get();if(s.exists){var u=s.data();
+      mem.used.sales=Math.max(mem.used.sales,int(u.sales));mem.used.traffic=Math.max(mem.used.traffic,int(u.traffic));mem.made=Math.max(mem.made,int(u.maint))}}catch(x){}
+    save();["sales","maint","traffic"].forEach(meter);
+    /* shared maintenance board */
+    var timer=setTimeout(function(){if(!sharedReqs){shared=false;renderReqs()}},10000);
+    db.collection("maint").orderBy("at","asc").limit(300).onSnapshot(function(snap){
+      clearTimeout(timer);shared=true;
+      sharedReqs=snap.docs.map(function(d){var r=cleanReq(d.data());if(r)r.key=d.id;return r}).filter(Boolean);
+      renderReqs()},function(){clearTimeout(timer);shared=false;sharedReqs=null;renderReqs()});
+    /* service requests inbox for the owner */
+    var own=false;try{own=!!(user.isOwner&&await user.isOwner())}catch(x){}
+    if(own){$("inbox").hidden=false;
+      db.collection("leads").onSnapshot(function(snap){
+        var items=[];snap.docs.forEach(function(d){var b=d.data()||{};(Array.isArray(b.items)?b.items:[]).forEach(function(it){items.push(it)})});
+        items.sort(function(a,b){return (b.at||0)-(a.at||0)});
+        $("inbox-list").innerHTML=items.length?items.map(function(it){return '<div class="lead"><div class="meta">'+esc(new Date(int(it.at)).toLocaleString("en-GB"))+'</div><pre>'+esc(String(it.text||"").slice(0,2500))+'</pre></div>'}).join(""):'<p class="fmt">ما وصلت طلبات للحين.</p>'},
+        function(){$("inbox-list").innerHTML='<p class="fmt">ما قدرنا نجيب الطلبات الحين.</p>'})}
+    window.__daLeads=function(text){var ref=db.doc("leads/"+id);
+      return ref.get().then(function(s){var items=s.exists&&Array.isArray(s.data().items)?s.data().items.slice(-19):[];
+        items.push({text:text,at:Date.now()});return ref.set({items:items,at:Date.now()})})};
+  })();
+
+  ["sales","maint","traffic"].forEach(meter);
+  renderReqs();
+  runSales(sampleSales(),"بيانات تجريبية: متجر عطور بثلاثة فروع");
+  runTraffic(sampleTraffic(),"بيانات تجريبية: متجر إلكتروني لشهر واحد");
+})();
+</script>
+<script>
+(function(){
+  var months=["ديس","نوف","أكت","سبت","أغس","يول","يون","ماي","أبر","مار","فبر","ينا"].reverse();
+  var data={
+    visits:{v:[4200,4800,5100,4900,5600,6200,6900,7400,7100,8000,8600,9300],fmt:function(n){return n.toLocaleString("en-US")},step:2000,max:10000},
+    conv:{v:[1.8,2.0,2.1,1.9,2.3,2.4,2.6,2.8,2.7,3.0,3.1,3.3],fmt:function(n){return n.toFixed(1)+"%"},step:1,max:4}
+  };
+  var svg=document.getElementById("chart"),W=440,H=200,pl=40,pr=12,pt=14,pb=28,ns="http://www.w3.org/2000/svg";
+  function el(t,a){var e=document.createElementNS(ns,t);for(var k in a)e.setAttribute(k,a[k]);return e}
+  function draw(key){
+    var d=data[key],n=d.v.length,iw=W-pl-pr,ih=H-pt-pb;
+    // RTL time axis: first month on the right
+    function x(i){return W-pr-(i/(n-1))*iw}
+    function y(v){return pt+ih-(v/d.max)*ih}
+    svg.innerHTML="";
+    for(var g=0;g<=d.max+1e-9;g+=d.step){
+      svg.appendChild(el("line",{x1:pl,x2:W-pr,y1:y(g),y2:y(g),stroke:"var(--line)","stroke-width":1}));
+      var t=el("text",{x:pl-6,y:y(g)+4,"text-anchor":"end"});t.textContent=key==="conv"?g+"%":(g/1000)+"k";svg.appendChild(t);
+    }
+    [0,3,6,9,11].forEach(function(i){var t=el("text",{x:x(i),y:H-8,"text-anchor":"middle"});t.textContent=months[i];svg.appendChild(t)});
+    var pts=d.v.map(function(v,i){return x(i)+","+y(v)});
+    var grad=el("linearGradient",{id:"ga",x1:0,y1:0,x2:0,y2:1});
+    grad.appendChild(el("stop",{offset:"0","stop-color":"var(--accent)","stop-opacity":".22"}));
+    grad.appendChild(el("stop",{offset:"1","stop-color":"var(--accent)","stop-opacity":"0"}));
+    var defs=el("defs",{});defs.appendChild(grad);svg.appendChild(defs);
+    svg.appendChild(el("polygon",{points:pts.join(" ")+" "+x(n-1)+","+y(0)+" "+x(0)+","+y(0),fill:"url(#ga)"}));
+    svg.appendChild(el("polyline",{class:"line-path",points:pts.join(" "),fill:"none",stroke:"var(--accent)","stroke-width":2.5,"stroke-linejoin":"round","stroke-linecap":"round"}));
+    var lx=x(n-1),ly=y(d.v[n-1]);
+    svg.appendChild(el("circle",{cx:lx,cy:ly,r:5,fill:"var(--data)",stroke:"var(--surface)","stroke-width":2}));
+    var lab=el("text",{x:lx+8,y:ly-8,"text-anchor":"start",style:"fill:var(--fg);font-weight:600"});lab.textContent=d.fmt(d.v[n-1]);svg.appendChild(lab);
+    var first=d.v[0],last=d.v[n-1];
+    document.getElementById("k3").textContent="+"+Math.round((last-first)/first*100)+"%";
+  }
+  document.querySelectorAll(".tabs button[data-k]").forEach(function(b){
+    b.addEventListener("click",function(){
+      document.querySelectorAll(".tabs button[data-k]").forEach(function(o){o.setAttribute("aria-pressed",String(o===b))});
+      draw(b.dataset.k);
+    });
+  });
+  draw("visits");
+
+  /* ---------- contact details: fill these in and they appear across the page ---------- */
+  var CONTACT={whatsapp:"",email:""}; /* whatsapp: international digits only, e.g. 9665XXXXXXXX */
+  function $id(i){return document.getElementById(i)}
+  function waLink(text){return CONTACT.whatsapp?"https://wa.me/"+CONTACT.whatsapp.replace(/\D/g,"")+(text?"?text="+encodeURIComponent(text):""):""}
+  function mailLink(text){return CONTACT.email?"mailto:"+CONTACT.email+"?subject="+encodeURIComponent("طلب خدمة: المحلل الرقمي")+(text?"&body="+encodeURIComponent(text):""):""}
+  function reachLinks(text,small){var c=small?" btn-sm":"",out=[];
+    var w=waLink(text),m=mailLink(text);
+    if(w){var a=document.createElement("a");a.className="btn btn-primary"+c;a.href=w;a.target="_blank";a.rel="noopener noreferrer";a.textContent="واتساب";out.push(a)}
+    if(m){var b=document.createElement("span");b.className="chip";b.style.userSelect="all";b.dir="ltr";b.textContent=CONTACT.email;out.push(b)}
+    return out}
+  function fillReach(el,text,small){el.textContent="";reachLinks(text,small).forEach(function(a){el.appendChild(a)})}
+  fillReach($id("reach"),"السلام عليكم، اطلعت على خدمات المحلل الرقمي وأبي أناقش احتياج منشأتي.");
+  (function(){var f=$id("foot-reach"),parts=[];if(CONTACT.whatsapp)parts.push("واتساب: "+CONTACT.whatsapp);if(CONTACT.email)parts.push(CONTACT.email);f.textContent=parts.join(" · ")})();
+
+  var form=$id("req"),sending=false;
+  function looksLikeContact(s){return /^[+\d][\d\s-]{7,16}$/.test(s)||/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s)}
+  form.addEventListener("submit",async function(e){
+    e.preventDefault();if(sending)return;
+    var name=$id("f-name").value.trim().slice(0,80),msg=$id("f-msg").value.trim().slice(0,2000),ct=$id("f-contact").value.trim().slice(0,80);
+    $id("e-name").textContent=name?"":"اكتب اسمك عشان نعرف نخاطبك.";
+    $id("e-contact").textContent=!ct?"اكتب جوالك أو إيميلك عشان نرد عليك.":(looksLikeContact(ct)?"":"اكتب رقم جوال أو إيميل صحيح.");
+    $id("e-msg").textContent=msg?"":"اكتب وصف مختصر للي تحتاجه.";
+    if(!name||!msg||!ct||!looksLikeContact(ct))return;
+    var txt="السلام عليكم،\nالاسم: "+name+
+      "\nالتواصل: "+ct+
+      "\nالجهة: "+($id("f-org").value.trim().slice(0,120)||"—")+
+      "\nنوع الخدمة: "+$id("f-type").value+
+      "\nالموعد المتوقع: "+$id("f-time").value+
+      "\nالتفاصيل: "+msg;
+    $id("out-text").textContent=txt;$id("copy-status").textContent="";
+    var sent=false;
+    if(window.__daLeads){sending=true;$id("send").disabled=true;$id("send").textContent="جاري الإرسال…";
+      try{await window.__daLeads(txt);sent=true}catch(x){}
+      sending=false;$id("send").disabled=false;$id("send").textContent="أرسل الطلب"}
+    $id("out-title").textContent=sent?"وصلنا طلبك، شكراً لك":"طلبك جاهز";
+    $id("out-note").textContent=sent?"نرد عليك على "+ct+" في أقرب وقت. هذي نسخة من طلبك:":
+      (CONTACT.whatsapp||CONTACT.email?"أرسله لنا بضغطة من الأزرار تحت:":"انسخ الطلب وأرسله لنا:");
+    fillReach($id("out-reach"),sent?"":txt,true);
+    $id("copy").hidden=sent;
+    $id("out").hidden=false;
+    if(sent){$id("f-msg").value=""}
+  });
+  $id("copy").addEventListener("click",function(){
+    var pre=document.getElementById("out-text"),s=document.getElementById("copy-status");
+    function fallback(){var r=document.createRange();r.selectNodeContents(pre);var sel=getSelection();sel.removeAllRanges();sel.addRange(r);s.textContent="حدّدنا النص، انسخه يدوياً."}
+    try{navigator.clipboard.writeText(pre.textContent).then(function(){s.textContent="انتسخ الطلب."},fallback)}catch(err){fallback()}
+  });
+})();
+</script>
+<script>
+/* ---------- needs finder: turns plain-language problems into an analysis plan ---------- */
+(function(){
+  function $(i){return document.getElementById(i)}
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+  var SECTORS=[
+    ["food","مطعم أو كافيه",["أكثر الأطباق مبيعاً وربحية","ساعات وأيام الذروة","نسبة الهدر في المواد"]],
+    ["retail","متجر أو فروع تجزئة",["المبيعات لكل متر أو فرع","أداء العروض والخصومات"]],
+    ["online","متجر إلكتروني",["السلات المتروكة","نسبة الإرجاع","تكلفة الشحن من الطلب"]],
+    ["service","عيادة أو خدمات",["نسبة الحضور للمواعيد","الإيراد لكل مقدم خدمة","الطاقة المستغلة من المواعيد"]],
+    ["project","مقاولات أو صيانة",["الإنجاز الفعلي مقابل الخطة","التكلفة الفعلية مقابل المقدّرة"]],
+    ["other","منشأة أخرى",[]]
+  ];
+  var PAINS={
+    newproj:{label:"أبي أفتح مشروع جديد وما أدري يستاهل",title:"دراسة جدوى للمشروع",
+      q:["هل فيه طلب كافي على المشروع في المكان اللي تبيه؟","كم يكلف التأسيس والتشغيل الشهري؟","متى تتعادل ومتى ترجع فلوسك؟"],
+      kpi:["تكاليف التأسيس","نقطة التعادل","فترة الاسترداد","صافي القيمة الحالية والعائد"],
+      data:"فكرة المشروع، والموقع المقترح، والميزانية المتاحة تقريباً",link:"#feasibility",linkText:"جرّب حاسبة الجدوى"},
+    sales:{label:"المبيعات: ما أعرف وش يبيع ووش واقف",title:"تحليل المبيعات",
+      q:["أي الفروع والمنتجات تجيب أغلب الدخل؟","وش الأصناف البطيئة اللي حاجزة فلوسك؟","متى مواسمك وأيام الذروة؟"],
+      kpi:["نمو المبيعات","متوسط قيمة الفاتورة","المبيعات حسب الفرع والصنف","الأصناف البطيئة"],
+      data:"تقرير مبيعات أو فواتير من نظام نقاط البيع أو Excel",tool:"sales"},
+    marketing:{label:"الإعلانات: أصرف وما أعرف وش يجيب نتيجة",title:"تحليل التسويق والإعلانات",
+      q:["أي قناة تجيب عملاء يشترون فعلاً؟","كم يكلفك العميل الواحد من كل قناة؟","وين يطلع الزائر قبل ما يشتري؟"],
+      kpi:["معدل التحويل حسب القناة","تكلفة اكتساب العميل","العائد على الإعلان","مصادر الزيارات"],
+      data:"تقارير منصات الإعلانات وGoogle Analytics",tool:"traffic"},
+    finance:{label:"الربح: الدخل زين بس الربح ما يبان",title:"التحليل المالي",
+      q:["وين تروح المصاريف وأي بند يكبر؟","أي فرع أو خدمة تربح فعلاً بعد التكاليف؟","هل الصرف ماشي حسب الميزانية؟"],
+      kpi:["صافي الربح وهامشه","المصاريف حسب البند","الربحية حسب الفرع أو المنتج","الفعلي مقابل الميزانية"],
+      data:"كشف المصاريف أو تقارير النظام المحاسبي"},
+    ops:{label:"التشغيل: الطلبات والشغل يتأخر",title:"تحليل التشغيل",
+      q:["كم ياخذ الطلب من استلامه لإنجازه؟","وين يتأخر الشغل وعند مين؟","كم طلب متأخر الحين؟"],
+      kpi:["متوسط زمن الإنجاز","نسبة الطلبات المتأخرة","الطلبات حسب المسؤول","الطلبات المفتوحة"],
+      data:"سجل الطلبات أو المهام بتاريخ الفتح والإغلاق",tool:"maint"},
+    stock:{label:"المخزون: أصناف راكدة وأصناف تخلص",title:"تحليل المخزون والمشتريات",
+      q:["وش الأصناف الراكدة وكم قيمتها؟","متى تطلب كمية جديدة قبل ما يخلص الصنف؟","أي مورد يتأخر أو يرفع السعر؟"],
+      kpi:["دوران المخزون","قيمة المخزون الراكد","أيام التغطية لكل صنف","أداء الموردين"],
+      data:"جرد المخزون وحركة الصرف والمشتريات"},
+    hr:{label:"الموظفين: غياب أو ترك أو إنتاجية",title:"تحليل الموارد البشرية",
+      q:["كم نسبة ترك الموظفين ووين تتركز؟","وش نمط الغياب والتأخير؟","كم تكلفة الرواتب مقابل إنتاجية كل قسم؟"],
+      kpi:["معدل دوران الموظفين","نسبة الغياب","تكلفة الرواتب حسب القسم","الإنتاجية لكل موظف"],
+      data:"سجل الحضور وبيانات الموظفين والرواتب"},
+    customers:{label:"العملاء: يجون مرة وما يرجعون",title:"تحليل العملاء",
+      q:["كم عميل يرجع يشتري مرة ثانية؟","مين أكثر عملائك قيمة؟","وش أسباب الشكاوى المتكررة؟"],
+      kpi:["نسبة العملاء العائدين","تكرار الشراء","قيمة العميل على المدى الطويل","أسباب الشكاوى"],
+      data:"فواتير مربوطة برقم العميل أو جواله، وسجل الشكاوى"}
+  };
+  var DATA=[
+    ["excel","ملفات Excel","نبدأ مباشرة من ملفاتك."],
+    ["system","نظام نقاط بيع أو محاسبي","نسحب منه التقارير، أو نربطه مباشرة لو يسمح."],
+    ["web","متجر إلكتروني أو Google Analytics","نربط التحليلات ومنصات الإعلانات."],
+    ["paper","ورق أو واتساب","أول خطوة نرتب تسجيل البيانات بنموذج أو نظام بسيط، وبعدها يبدأ التحليل."],
+    ["unsure","ما أدري","نحددها سوا في الاستشارة المجانية."]
+  ];
+  var FREQ=[
+    ["once","مرة وحدة أفهم وضعي","تقرير تحليلي بالنتائج والتوصيات","تحليل بيانات ولوحة معلومات","تقرير لمرة وحدة"],
+    ["monthly","كل شهر","لوحة معلومات وتقرير شهري بالتوصيات","مشروع متكامل","باقة النمو"],
+    ["live","يومياً أو أسبوعياً","لوحة مربوطة بمصادرك تتحدث تلقائياً","مشروع متكامل","باقة النمو مع ربط مباشر"]
+  ];
+  function opts(el,name,list,type,checked){
+    $(el).innerHTML=list.map(function(o){return '<label class="opt"><input type="'+type+'" name="'+name+'" value="'+o[0]+'"'+(checked.indexOf(o[0])>=0?" checked":"")+'><span>'+esc(o[1])+'</span></label>'}).join("")}
+  opts("q-sector","sector",SECTORS,"radio",["retail"]);
+  opts("q-pain","pain",Object.keys(PAINS).map(function(k){return [k,PAINS[k].label]}),"checkbox",["sales"]);
+  opts("q-data","data",DATA,"checkbox",["excel"]);
+  opts("q-freq","freq",FREQ,"radio",["monthly"]);
+
+  function vals(name){return Array.prototype.map.call(document.querySelectorAll('#finder input[name="'+name+'"]:checked'),function(i){return i.value})}
+  function find(list,k){return list.filter(function(x){return x[0]===k})[0]}
+  var touched=false,summary="",pkg="";
+  function render(){
+    var sector=find(SECTORS,vals("sector")[0]||"other"),pains=vals("pain"),data=vals("data"),freq=find(FREQ,vals("freq")[0]||"monthly");
+    var h='<div class="plan-head"><h3>خطة التحليل المقترحة</h3>'+(touched?'':'<span class="tag">مثال، غيّر الاختيارات</span>')+'</div>';
+    if(!pains.length){$("plan").innerHTML=h+'<p class="fmt">اختر من السؤال الثاني ولو مشكلة وحدة، وتطلع لك الخطة هنا.</p>';summary="";return}
+    var focus=pains.slice(0,2);
+    h+='<dl class="plan-sum"><dt>نبدأ بـ</dt><dd>'+focus.map(function(k){return esc(PAINS[k].title)}).join(" + ")+'</dd>'+
+       '<dt>التسليم</dt><dd>'+(pains[0]==="newproj"?'دراسة جدوى ونموذج مالي لخمس سنوات':esc(freq[2]))+'</dd>'+
+       '<dt>الأنسب لك</dt><dd>'+(pains[0]==="newproj"?'دراسة جدوى'+(pains.length>1?' + '+esc(freq[4])+' بعد الافتتاح':''):esc(freq[4])+(focus.indexOf("newproj")>=0?' + دراسة جدوى':'')+(data.indexOf("paper")>=0?' + تنظيم تسجيل البيانات':''))+'</dd></dl>';
+    if(pains.length>2)h+='<p class="fmt">اخترت '+pains.length+' مشاكل. ننصح تبدأ بأول اثنتين، ولما تشوف النتيجة نضيف الباقي. البداية الصغيرة تجيب نتيجة أسرع.</p>';
+    pains.forEach(function(k,i){var p=PAINS[k];
+      h+='<div class="need"'+(i>=2?' style="opacity:.7"':'')+'><h4>'+esc(p.title)+(i>=2?' <span class="fmt">(مرحلة لاحقة)</span>':'')+'</h4>'+
+        '<ul>'+p.q.map(function(q){return '<li>'+esc(q)+'</li>'}).join("")+'</ul>'+
+        '<div class="chips">'+p.kpi.map(function(x){return '<span class="chip">'+esc(x)+'</span>'}).join("")+'</div>'+
+        '<p class="src">البيانات المطلوبة: '+esc(p.data)+'</p>'+
+        (p.tool?'<a class="btn btn-ghost btn-sm" href="#tools" data-tool="'+p.tool+'" style="align-self:flex-start">جرّب أداة '+esc(p.title)+' مجاناً</a>':p.link?'<a class="btn btn-ghost btn-sm" href="'+p.link+'" style="align-self:flex-start">'+esc(p.linkText)+'</a>':'')+'</div>'});
+    if(sector[2].length)h+='<div class="need"><h4>مؤشرات خاصة بـ'+esc(sector[1])+'</h4><div class="chips">'+sector[2].map(function(x){return '<span class="chip">'+esc(x)+'</span>'}).join("")+'</div></div>';
+    if(data.length)h+='<div class="need"><h4>من وين نبدأ بالبيانات</h4><ul>'+data.map(function(d){return '<li>'+esc(find(DATA,d)[2])+'</li>'}).join("")+'</ul></div>';
+    pkg=pains[0]==="newproj"?"دراسة جدوى تفصيلية":data.indexOf("paper")>=0&&data.length===1?"تحليل وتصميم نظام":freq[3];
+    summary="خطتي من أداة «وش أحتاج؟»:\nالنشاط: "+sector[1]+"\nأبي أفهم: "+pains.map(function(k){return PAINS[k].title}).join("، ")+
+      "\nبياناتي: "+(data.length?data.map(function(d){return find(DATA,d)[1]}).join("، "):"ما حددت")+"\nكل كم: "+freq[1];
+    h+='<div class="cta" style="margin-top:4px"><button type="button" class="btn btn-primary" id="plan-send">أرسل الخطة مع طلبك</button><a class="btn btn-ghost" href="#contact" data-pkg="الباقة المجانية: استشارة أولى">أبي استشارة مجانية أول</a></div>';
+    $("plan").innerHTML=h;
+  }
+  $("finder").addEventListener("change",function(){touched=true;render()});
+  $("plan").addEventListener("click",function(e){
+    var b=e.target.closest("#plan-send");if(!b||!summary)return;
+    var t=$("f-type"),m=$("f-msg");if(t)t.value=pkg;
+    if(m){m.value=(summary+(m.value.trim()?"\n\n"+m.value.trim():"")).slice(0,2000)}
+    var c=$("contact");if(c)c.scrollIntoView({behavior:"smooth",block:"start"});
+    setTimeout(function(){var n=$("f-name");if(n)n.focus({preventScroll:true})},500)});
+  /* tool links inside the plan switch the tools tab (the main script binds only links present at load) */
+  $("plan").addEventListener("click",function(e){var a=e.target.closest("[data-tool]");if(a){var tb=document.querySelector('[data-t="'+a.dataset.tool+'"]');if(tb)tb.click()}});
+  render();
+})();
+</script>
+<script>
+/* ---------- systems demos: CRM, inventory, HR (stored in this browser) ---------- */
+(function(){
+  function $(i){return document.getElementById(i)}
+  function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+  function n(v){v=Number(v);return isFinite(v)&&v>=0?v:0}
+  function fmt(v){return Math.round(v).toLocaleString("en-US")}
+  function day(off){var d=new Date();d.setDate(d.getDate()+(off||0));return d.toISOString().slice(0,10)}
+  function today(){return day(0)}
+  function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+  function err(k,t){var e=$(k+"-err");e.textContent=t||"";e.hidden=!t}
+  function armed(btn,label){if(btn.dataset.armed==="1")return true;var old=btn.textContent;btn.dataset.armed="1";btn.textContent=label;
+    setTimeout(function(){if(btn.isConnected){btn.dataset.armed="";btn.textContent=old}},4000);return false}
+  var KEY="da_sys_v1";
+  function seed(){return {
+    crm:[{id:uid(),name:"مطعم الريف",val:18000,st:2,next:day(1)},{id:uid(),name:"صيدلية الشفاء",val:9500,st:1,next:day(-2)},
+         {id:uid(),name:"متجر أناقة",val:24000,st:0,next:day(0)},{id:uid(),name:"مؤسسة البناء الحديث",val:41000,st:3,next:""},
+         {id:uid(),name:"كافيه سحاب",val:7000,st:4,next:""}],
+    inv:[{id:uid(),name:"أكواب ورق 12 أونص",qty:180,min:200,cost:.35},{id:uid(),name:"حبوب قهوة (كيلو)",qty:42,min:20,cost:85},
+         {id:uid(),name:"حليب (كرتون)",qty:0,min:30,cost:62},{id:uid(),name:"أغطية أكواب",qty:640,min:200,cost:.12}],
+    log:[],
+    emps:[{id:"e1",name:"سارة العتيبي",dept:"المبيعات",bal:21},{id:"e2",name:"خالد الحربي",dept:"العمليات",bal:9},{id:"e3",name:"نورة القحطاني",dept:"المالية",bal:15}],
+    leaves:[{id:uid(),emp:"e2",from:day(2),days:3,st:0},{id:uid(),emp:"e1",from:day(-1),days:2,st:1}],
+    ex:true}}
+  var S;
+  function load(){try{S=JSON.parse(localStorage.getItem(KEY)||"null")}catch(e){S=null}
+    if(!S||typeof S!=="object"||!Array.isArray(S.crm)||!Array.isArray(S.inv)||!Array.isArray(S.emps)||!Array.isArray(S.leaves))S=seed();
+    if(!Array.isArray(S.log))S.log=[];
+    S.crm=S.crm.slice(0,300);S.inv=S.inv.slice(0,300);S.emps=S.emps.slice(0,200);S.leaves=S.leaves.slice(-300);S.log=S.log.slice(-50)}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+  load();
+
+  /* tabs */
+  document.querySelectorAll("[data-s]").forEach(function(b){b.addEventListener("click",function(){
+    document.querySelectorAll("[data-s]").forEach(function(o){o.setAttribute("aria-pressed",String(o===b))});
+    ["crm","inv","hr"].forEach(function(k){$("s-"+k).hidden=k!==b.dataset.s})})});
+
+  /* ---- CRM ---- */
+  var STG=["جديد","تواصلنا","عرض سعر","تم البيع","خسرناه"];
+  function renderCrm(){
+    var open=S.crm.filter(function(d){return d.st<3}),won=S.crm.filter(function(d){return d.st===3}),lost=S.crm.filter(function(d){return d.st===4});
+    var due=open.filter(function(d){return d.next&&d.next<=today()}).length,closed=won.length+lost.length;
+    $("crm-kpis").innerHTML=
+      '<div class="kpi"><span class="label">قيمة الفرص المفتوحة</span><span class="value num">'+fmt(open.reduce(function(a,d){return a+n(d.val)},0))+' ر.س</span></div>'+
+      '<div class="kpi"><span class="label">المبيعات المغلقة</span><span class="value num">'+fmt(won.reduce(function(a,d){return a+n(d.val)},0))+' ر.س</span></div>'+
+      '<div class="kpi"><span class="label">نسبة الإغلاق</span><span class="value num">'+(closed?Math.round(won.length/closed*100)+'%':'—')+'</span></div>'+
+      '<div class="kpi"><span class="label">متابعات اليوم أو متأخرة</span><span class="value num'+(due?' stock-low':'')+'">'+due+'</span></div>';
+    $("crm-board").innerHTML=STG.map(function(s,i){var L=S.crm.filter(function(d){return d.st===i});
+      return '<div class="col"><div class="col-h"><span>'+s+'</span><span class="num">'+L.length+' · '+fmt(L.reduce(function(a,d){return a+n(d.val)},0))+'</span></div>'+
+        (L.length?L.map(function(d){var late=i<3&&d.next&&d.next<today(),now=i<3&&d.next===today();
+          return '<div class="card"><span class="t">'+esc(d.name)+'</span><div class="meta"><span class="num">'+fmt(n(d.val))+' ر.س</span>'+
+            (i<3&&d.next?'<span'+(late?' class="stock-low"':'')+'>'+(late?'متابعة متأخرة ':now?'تابع اليوم ':'متابعة ')+'<span class="num">'+esc(d.next)+'</span></span>':'')+'</div>'+
+            '<div class="acts">'+(i<3?'<button type="button" class="btn btn-ghost" data-crm="next" data-id="'+esc(d.id)+'">'+(i===2?'تم البيع':'المرحلة التالية')+'</button><button type="button" class="btn btn-ghost" data-crm="lost" data-id="'+esc(d.id)+'">خسرناه</button>':'')+
+            '<button type="button" class="btn btn-ghost" data-crm="del" data-id="'+esc(d.id)+'">حذف</button></div></div>'}).join(""):'<p class="sys-note">ما فيه</p>')+'</div>'}).join("");
+  }
+  $("crm-board").addEventListener("click",function(e){var b=e.target.closest("[data-crm]");if(!b)return;
+    var d=S.crm.find(function(x){return x.id===b.dataset.id});if(!d)return;
+    if(b.dataset.crm==="next")d.st=Math.min(3,d.st+1);
+    else if(b.dataset.crm==="lost")d.st=4;
+    else if(b.dataset.crm==="del"){if(!armed(b,"تأكيد"))return;S.crm=S.crm.filter(function(x){return x!==d})}
+    save();renderCrm()});
+  $("crm-form").addEventListener("submit",function(e){e.preventDefault();
+    var nm=$("crm-name").value.trim().slice(0,80);if(!nm){err("crm","اكتب اسم العميل أو الجهة.");return}
+    err("crm");S.crm.push({id:uid(),name:nm,val:n($("crm-val").value),st:0,next:$("crm-next").value||day(1)});
+    $("crm-name").value="";$("crm-val").value="";$("crm-next").value="";save();renderCrm()});
+
+  /* ---- Inventory ---- */
+  function status(it){return it.qty<=0?["نفد","late"]:it.qty<=it.min?["اطلب الحين","s0"]:["متوفر","s1"]}
+  function renderInv(){
+    var low=S.inv.filter(function(i){return i.qty>0&&i.qty<=i.min}).length,out=S.inv.filter(function(i){return i.qty<=0}).length;
+    $("inv-kpis").innerHTML=
+      '<div class="kpi"><span class="label">قيمة المخزون</span><span class="value num">'+fmt(S.inv.reduce(function(a,i){return a+n(i.qty)*n(i.cost)},0))+' ر.س</span></div>'+
+      '<div class="kpi"><span class="label">عدد الأصناف</span><span class="value num">'+S.inv.length+'</span></div>'+
+      '<div class="kpi"><span class="label">تحت حد الطلب</span><span class="value num'+(low?' stock-low':'')+'">'+low+'</span></div>'+
+      '<div class="kpi"><span class="label">نفدت</span><span class="value num'+(out?' stock-low':'')+'">'+out+'</span></div>';
+    var L=S.inv.slice().sort(function(a,b){return (a.qty/(a.min||1))-(b.qty/(b.min||1))});
+    $("inv-body").innerHTML=L.length?L.map(function(i){var s=status(i);
+      return '<tr><td>'+esc(i.name)+'</td><td class="num">'+fmt(i.qty)+'</td><td class="num">'+fmt(i.min)+'</td><td class="num">'+fmt(i.qty*i.cost)+'</td><td><span class="pill '+s[1]+'">'+s[0]+'</span></td>'+
+        '<td><span style="display:flex;gap:4px;align-items:center;flex-wrap:wrap"><input class="qty" type="number" min="1" aria-label="الكمية لـ'+esc(i.name)+'" id="q-'+esc(i.id)+'"><button type="button" class="btn btn-ghost btn-sm" data-inv="in" data-id="'+esc(i.id)+'">وارد</button><button type="button" class="btn btn-ghost btn-sm" data-inv="out" data-id="'+esc(i.id)+'">صرف</button><button type="button" class="btn btn-ghost btn-sm" data-inv="del" data-id="'+esc(i.id)+'">حذف</button></span></td></tr>'}).join(""):
+      '<tr><td colspan="6" class="sys-note">ما فيه أصناف. أضف أول صنف من النموذج فوق.</td></tr>';
+    $("inv-log").innerHTML=S.log.length?S.log.slice(-8).reverse().map(function(l){return '<li>'+(l.t==="in"?"وارد":"صرف")+' <span class="num">'+fmt(l.q)+'</span> من '+esc(l.name)+' · <span class="num">'+esc(l.d)+'</span></li>'}).join(""):'<li>ما فيه حركات للحين. اكتب كمية واضغط وارد أو صرف.</li>';
+  }
+  $("inv-body").addEventListener("click",function(e){var b=e.target.closest("[data-inv]");if(!b)return;
+    var it=S.inv.find(function(x){return x.id===b.dataset.id});if(!it)return;
+    if(b.dataset.inv==="del"){if(!armed(b,"تأكيد"))return;S.inv=S.inv.filter(function(x){return x!==it});save();renderInv();return}
+    var q=Math.floor(n(($("q-"+it.id)||{}).value));if(!q){err("inv","اكتب الكمية في الخانة جنب الصنف.");return}
+    if(b.dataset.inv==="out"&&q>it.qty){err("inv","الكمية المطلوبة ("+q+") أكثر من المتوفر ("+it.qty+") في "+it.name+".");return}
+    err("inv");it.qty+=b.dataset.inv==="in"?q:-q;S.log.push({t:b.dataset.inv,q:q,name:it.name,d:today()});S.log=S.log.slice(-50);save();renderInv()});
+  $("inv-form").addEventListener("submit",function(e){e.preventDefault();
+    var nm=$("inv-name").value.trim().slice(0,80);if(!nm){err("inv","اكتب اسم الصنف.");return}
+    err("inv");S.inv.push({id:uid(),name:nm,qty:Math.floor(n($("inv-qty").value)),min:Math.floor(n($("inv-min").value)),cost:n($("inv-cost").value)});
+    ["inv-name","inv-qty","inv-min","inv-cost"].forEach(function(i){$(i).value=""});save();renderInv()});
+
+  /* ---- HR ---- */
+  var LST=["بانتظار الموافقة","معتمدة","مرفوضة"];
+  function emp(id){return S.emps.find(function(x){return x.id===id})}
+  function endOf(l){var d=new Date(l.from);d.setDate(d.getDate()+l.days-1);return d.toISOString().slice(0,10)}
+  function renderHr(){
+    var t=today(),pend=S.leaves.filter(function(l){return l.st===0}).length,
+        off=S.leaves.filter(function(l){return l.st===1&&l.from<=t&&endOf(l)>=t}).length;
+    $("hr-kpis").innerHTML=
+      '<div class="kpi"><span class="label">الموظفين</span><span class="value num">'+S.emps.length+'</span></div>'+
+      '<div class="kpi"><span class="label">طلبات بانتظار الموافقة</span><span class="value num'+(pend?' stock-low':'')+'">'+pend+'</span></div>'+
+      '<div class="kpi"><span class="label">في إجازة اليوم</span><span class="value num">'+off+'</span></div>'+
+      '<div class="kpi"><span class="label">متوسط رصيد الإجازة</span><span class="value num">'+(S.emps.length?Math.round(S.emps.reduce(function(a,e){return a+n(e.bal)},0)/S.emps.length):0)+' يوم</span></div>';
+    $("hr-emp").innerHTML=S.emps.map(function(e){return '<option value="'+esc(e.id)+'">'+esc(e.name)+'</option>'}).join("");
+    $("hr-emps").innerHTML=S.emps.length?S.emps.map(function(e){return '<tr><td>'+esc(e.name)+'</td><td>'+esc(e.dept||"—")+'</td><td class="num">'+n(e.bal)+' يوم</td></tr>'}).join(""):'<tr><td colspan="3" class="sys-note">أضف أول موظف.</td></tr>';
+    var L=S.leaves.slice().sort(function(a,b){return a.st-b.st||(a.from<b.from?-1:1)});
+    $("hr-reqs").innerHTML=L.length?L.map(function(l){var e=emp(l.emp)||{name:"موظف محذوف",bal:0};
+      return '<div class="req'+(l.st===0?' p-high':l.st===1?' p-mid':' done')+'"><div><div class="t">'+esc(e.name)+' · <span class="num">'+l.days+'</span> أيام</div>'+
+        '<div class="meta"><span>من <span class="num">'+esc(l.from)+'</span> إلى <span class="num">'+esc(endOf(l))+'</span></span><span>الرصيد الحالي <span class="num">'+n(e.bal)+'</span></span></div></div>'+
+        '<div class="req-actions"><span class="pill s'+(l.st===0?0:l.st===1?1:2)+'">'+LST[l.st]+'</span>'+
+        (l.st===0?'<button type="button" class="btn btn-ghost btn-sm" data-hr="ok" data-id="'+esc(l.id)+'">اعتمد</button><button type="button" class="btn btn-ghost btn-sm" data-hr="no" data-id="'+esc(l.id)+'">ارفض</button>':'')+'</div></div>'}).join(""):'<p class="sys-note">ما فيه طلبات إجازة.</p>';
+  }
+  $("hr-reqs").addEventListener("click",function(e){var b=e.target.closest("[data-hr]");if(!b)return;
+    var l=S.leaves.find(function(x){return x.id===b.dataset.id});if(!l||l.st!==0)return;var em=emp(l.emp);
+    if(b.dataset.hr==="ok"){if(!em||em.bal<l.days){err("hr","رصيد "+(em?em.name:"الموظف")+" ما يكفي ("+(em?em.bal:0)+" يوم). ارفض الطلب أو عدّل عدد الأيام.");return}em.bal-=l.days;l.st=1}
+    else l.st=2;
+    err("hr");save();renderHr()});
+  $("hr-form").addEventListener("submit",function(e){e.preventDefault();
+    var id=$("hr-emp").value,from=$("hr-from").value,d=Math.floor(n($("hr-days").value));
+    if(!id){err("hr","أضف موظف أول.");return}if(!from){err("hr","اختر تاريخ بداية الإجازة.");return}if(!d||d>60){err("hr","عدد الأيام لازم يكون بين 1 و 60.");return}
+    err("hr");S.leaves.push({id:uid(),emp:id,from:from,days:d,st:0});$("hr-from").value="";$("hr-days").value="";save();renderHr()});
+  $("hr-add").addEventListener("submit",function(e){e.preventDefault();
+    var nm=$("hr-nm").value.trim().slice(0,60);if(!nm){err("hr","اكتب اسم الموظف.");return}
+    err("hr");S.emps.push({id:uid(),name:nm,dept:$("hr-dp").value.trim().slice(0,40),bal:21});$("hr-nm").value="";$("hr-dp").value="";save();renderHr()});
+
+  /* export + reset */
+  document.addEventListener("click",function(e){var b=e.target.closest("[data-sx]");if(!b)return;var k=b.dataset.sx,sheets;
+    if(!window.__daSaveXlsx){err(k,"التصدير ما تحمّل. حدّث الصفحة.");return}
+    if(k==="crm")sheets=[{name:"الفرص",rows:S.crm.map(function(d){return {"العميل":d.name,"القيمة (ر.س)":n(d.val),"المرحلة":STG[d.st],"المتابعة القادمة":d.next||""}})}];
+    else if(k==="inv")sheets=[{name:"المخزون",rows:S.inv.map(function(i){return {"الصنف":i.name,"الكمية":i.qty,"حد الطلب":i.min,"تكلفة الوحدة":i.cost,"القيمة":+(i.qty*i.cost).toFixed(2),"الحالة":status(i)[0]}})}].concat(S.log.length?[{name:"الحركات",rows:S.log.map(function(l){return {"التاريخ":l.d,"النوع":l.t==="in"?"وارد":"صرف","الصنف":l.name,"الكمية":l.q}})}]:[]);
+    else sheets=[{name:"الموظفين",rows:S.emps.map(function(x){return {"الاسم":x.name,"القسم":x.dept,"رصيد الإجازة":x.bal}})}].concat(S.leaves.length?[{name:"الإجازات",rows:S.leaves.map(function(l){var em=emp(l.emp);return {"الموظف":em?em.name:"—","من":l.from,"إلى":endOf(l),"الأيام":l.days,"الحالة":LST[l.st]}})}]:[]);
+    if(!sheets[0].rows.length){err(k,"ما فيه بيانات تصدّرها.");return}
+    window.__daSaveXlsx(sheets,{crm:"العملاء-والمبيعات.xlsx",inv:"المخزون.xlsx",hr:"الموارد-البشرية.xlsx"}[k],$("sx-"+k),function(m){err(k,m)})});
+  $("sys-reset").addEventListener("click",function(){if(!armed(this,"اضغط مرة ثانية للتأكيد"))return;this.dataset.armed="";this.textContent="ارجع للبيانات التجريبية";
+    S=seed();save();renderCrm();renderInv();renderHr()});
+
+  window.__daSysWipe=function(){try{localStorage.removeItem(KEY)}catch(e){}S=seed();renderCrm();renderInv();renderHr()};
+  renderCrm();renderInv();renderHr();
+})();
+</script>
+<script>
+/* ---------- feasibility calculator ---------- */
+(function(){
+  function $(i){return document.getElementById(i)}
+  function n(v){v=Number(v);return isFinite(v)?v:0}
+  function fmt(v){return Math.round(v).toLocaleString("en-US")}
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+
+  /* ===== GOVERNMENT RATES: the only place these numbers live. Update here when decisions change. ===== */
+  var GOV={
+    updated:"2026-11-10",
+    gosiSaudiEmployer:0.1175,   /* pensions 9% + occupational hazards 2% + SANED 0.75% */
+    gosiExpatEmployer:0.02,     /* occupational hazards only */
+    gosiCap:45000,              /* monthly contributory wage cap */
+    levyHigh:800,               /* per expat per month when expats exceed Saudis */
+    levyLow:700,                /* per expat per month when expats do not exceed Saudis */
+    smallExempt:2,              /* expats exempt in a 9-or-fewer establishment with full-time owner in GOSI */
+    smallExemptMax:9,
+    smallExemptEnds:"2027-01-21",
+    workPermit:100,             /* per expat per year */
+    iqama:650,                  /* per expat per year */
+    crConfirm:{est:500,llc:1200}, /* commercial register annual confirmation, due from year 2 */
+    chamberFreeYears:3,
+    chamberAfter:{est:500,llc:200}, /* reduced subscription after the exemption years (conditions apply) */
+    vatRate:0.15,
+    vatThreshold:375000,        /* mandatory registration: taxable supplies over this in 12 months */
+    zakatRate:0.025,
+    incomeTax:0.20,
+    sources:[["التأمينات الاجتماعية","https://www.gosi.gov.sa"],["قوى","https://www.qiwa.sa"],["بلدي","https://balady.gov.sa"],["وزارة التجارة","https://mc.gov.sa"],["هيئة الزكاة والضريبة والجمارك","https://zatca.gov.sa"]]
+  };
+  window.__daGov=GOV;
+
+  var TPL={ /* illustrative inputs only, not market averages */
+    cafe:{cust:120,ticket:22,days:30,cogs:35,vatinc:1,sa:2,sasal:5000,ex:4,exsal:3000,owner:0,med:2500,small:false,rent:15000,oth:6000,pay:1.5,dshare:20,dcomm:20,ent:"est",balady:3000,hc:150,govoth:1000,own:"sa",capex:350000,pre:3,ramp:50,weak:2,drop:25,grow:6,inf:3,disc:10},
+    rest:{cust:140,ticket:45,days:30,cogs:38,vatinc:1,sa:3,sasal:5500,ex:8,exsal:3200,owner:0,med:2500,small:false,rent:25000,oth:12000,pay:1.5,dshare:30,dcomm:20,ent:"est",balady:4000,hc:150,govoth:1500,own:"sa",capex:600000,pre:4,ramp:50,weak:2,drop:25,grow:5,inf:3,disc:10},
+    online:{cust:15,ticket:180,days:30,cogs:55,vatinc:1,sa:2,sasal:6000,ex:0,exsal:0,owner:0,med:2500,small:false,rent:3000,oth:12000,pay:2,dshare:0,dcomm:0,ent:"est",balady:1000,hc:0,govoth:0,own:"sa",capex:120000,pre:2,ramp:40,weak:2,drop:20,grow:12,inf:3,disc:12},
+    salon:{cust:20,ticket:120,days:28,cogs:15,vatinc:1,sa:1,sasal:5000,ex:4,exsal:3500,owner:0,med:2500,small:true,rent:12000,oth:5000,pay:1.5,dshare:0,dcomm:0,ent:"est",balady:2000,hc:150,govoth:1000,own:"sa",capex:250000,pre:3,ramp:50,weak:2,drop:20,grow:6,inf:3,disc:10},
+    blank:{cust:0,ticket:0,days:30,cogs:30,vatinc:1,sa:0,sasal:5000,ex:0,exsal:3000,owner:0,med:2500,small:false,rent:0,oth:0,pay:1.5,dshare:0,dcomm:0,ent:"est",balady:1000,hc:0,govoth:0,own:"sa",capex:0,pre:2,ramp:50,weak:0,drop:0,grow:5,inf:3,disc:10}};
+  var NUM=["cust","ticket","days","cogs","sa","sasal","ex","exsal","owner","med","rent","oth","pay","dshare","dcomm","balady","hc","govoth","capex","pre","wc","ramp","weak","drop","grow","inf","disc"];
+  var SEL=["vatinc","ent","own"];
+  var wcTouched=false;
+  function fill(k){var t=TPL[k];NUM.forEach(function(f){if(f in t)$("c-"+f).value=t[f]});SEL.forEach(function(f){$("c-"+f).value=String(t[f])});$("c-small").checked=!!t.small;wcTouched=false}
+  function clamp(v,a,b){return Math.min(b,Math.max(a,v))}
+  function read(){var o={};NUM.forEach(function(f){o[f]=Math.max(0,n($("c-"+f).value))});
+    o.grow=n($("c-grow").value);o.vatinc=$("c-vatinc").value==="1";o.ent=$("c-ent").value==="llc"?"llc":"est";o.own=$("c-own").value==="fx"?"fx":"sa";o.small=$("c-small").checked;
+    o.days=clamp(o.days||30,1,31);o.cogs=clamp(o.cogs,0,100);o.ramp=clamp(o.ramp||100,10,100);o.weak=Math.floor(clamp(o.weak,0,6));o.drop=clamp(o.drop,0,90);
+    o.pay=clamp(o.pay,0,10);o.dshare=clamp(o.dshare,0,100);o.dcomm=clamp(o.dcomm,0,60);o.pre=Math.floor(clamp(o.pre,0,24));o.sa=Math.floor(o.sa);o.ex=Math.floor(o.ex);
+    return o}
+
+  /* government cost lines for one year, before inflation */
+  function govLines(o,year){
+    var G=GOV,lines=[],staff=o.sa+o.ex;
+    var gosiSa=o.sa*Math.min(o.sasal,G.gosiCap)*G.gosiSaudiEmployer*12,gosiEx=o.ex*Math.min(o.exsal,G.gosiCap)*G.gosiExpatEmployer*12;
+    if(gosiSa)lines.push(["التأمينات للسعوديين (حصة المنشأة 11.75%)",gosiSa]);
+    if(gosiEx)lines.push(["التأمينات لغير السعوديين (أخطار مهنية 2%)",gosiEx]);
+    var exempt=o.small&&staff<=G.smallExemptMax?Math.min(o.ex,G.smallExempt):0,rate=o.ex>o.sa?G.levyHigh:G.levyLow,levy=(o.ex-exempt)*rate*12;
+    if(o.ex)lines.push(["المقابل المالي ("+rate+" ر.س شهرياً"+(exempt?"، معفى "+exempt:"")+")",levy]);
+    if(o.ex)lines.push(["رخص العمل والإقامات",o.ex*(G.workPermit+G.iqama)]);
+    if(staff&&o.med)lines.push(["التأمين الطبي (تقديري)",staff*o.med]);
+    if(staff&&o.hc)lines.push(["الشهادات الصحية",staff*o.hc]);
+    if(o.balady)lines.push(["رخصة بلدي واللوحة (تقديري)",o.balady]);
+    if(year>=2)lines.push(["التأكيد السنوي للسجل التجاري",G.crConfirm[o.ent]]);
+    if(year>G.chamberFreeYears)lines.push(["اشتراك الغرفة التجارية",G.chamberAfter[o.ent]]);
+    if(o.govoth)lines.push(["رسوم أخرى (سلامة، تصاريح)",o.govoth]);
+    return lines}
+  function sum(lines){return lines.reduce(function(a,l){return a+l[1]},0)}
+
+  /* monthly model over 60 months after opening */
+  function model(o,adj){
+    adj=adj||{};var sf=adj.sales==null?1:adj.sales,tf=adj.ticket==null?1:adj.ticket,rf=adj.rent==null?1:adj.rent,salf=adj.sal==null?1:adj.sal,cogs=(o.cogs+(adj.cogsPts||0))/100,delay=adj.delay||0;
+    var G=GOV,pre=o.pre+delay,cap=o.capex,initial=-(cap+pre*o.rent*rf);
+    var weakSet={};if(o.weak){for(var w=0;w<o.weak;w++)weakSet[Math.round((w+0.5)*12/o.weak)%12]=1}
+    var years=[],cum=initial,minCum=initial,payM=null,cfY=[initial],m;
+    for(var y=1;y<=5;y++){
+      var infl=Math.pow(1+o.inf/100,y-1),gro=Math.pow(1+o.grow/100,y-1),gross=0;
+      var mg=[];for(m=1;m<=12;m++){var abs=(y-1)*12+m,ramp=abs<=12?o.ramp/100+(1-o.ramp/100)*(abs-1)/11:1,season=weakSet[m-1]?1-o.drop/100:1;
+        var g=o.cust*o.ticket*tf*o.days*sf*ramp*season*gro;mg.push(g);gross+=g}
+      var vatOn=gross>G.vatThreshold,vdiv=vatOn&&o.vatinc?1+G.vatRate:1,rev=gross/vdiv;
+      var cg=rev*cogs,comm=gross*(o.pay/100+o.dshare/100*o.dcomm/100);
+      var salaries=(o.sa*o.sasal+o.ex*o.exsal)*salf*12*infl,owner=o.owner*12*infl;
+      var gl=govLines(o,y),gov=sum(gl)*infl;
+      var rent=o.rent*rf*12*infl,oth=o.oth*12*infl;
+      var pretax=rev-cg-comm-salaries-owner-gov-rent-oth;
+      var zak=Math.max(0,pretax)*(o.own==="fx"?G.incomeTax:G.zakatRate);
+      var net=pretax-zak;
+      var fixedM=(salaries+owner+gov+rent+oth)/12;
+      for(m=0;m<12;m++){var gm=mg[m],rm=gm/vdiv,flow=rm-rm*cogs-gm*(o.pay/100+o.dshare/100*o.dcomm/100)-fixedM-(m===11?zak:0);
+        var prev=cum;cum+=flow;if(cum<minCum)minCum=cum;if(payM===null&&prev<0&&cum>=0)payM=(y-1)*12+m+1}
+      cfY.push(net);
+      years.push({y:y,gross:gross,rev:rev,vatOn:vatOn,cogs:cg,comm:comm,sal:salaries+owner,gov:gov,govLines:gl,rent:rent+oth,pretax:pretax,zak:zak,net:net,cum:cum})}
+    function npv(r){return cfY.reduce(function(a,cf,i){return a+cf/Math.pow(1+r,i)},0)}
+    var irr=null;if(npv(0)>0&&initial<0){var lo=-0.99,hi=10;for(var i=0;i<200;i++){var mid=(lo+hi)/2;if(npv(mid)>0)lo=mid;else hi=mid}irr=lo}
+    var y1=years[0],y2=years[1],vd=y2.vatOn&&o.vatinc?1+G.vatRate:1,contrib=1-cogs-vd*(o.pay/100+o.dshare/100*o.dcomm/100),fixedY2=(y2.sal+y2.gov+y2.rent)/12;
+    var be=contrib>0?fixedY2/contrib:Infinity;
+    return {years:years,initial:-initial,npv:npv(o.disc/100),irr:irr,payM:payM,maxNeed:-minCum,be:be,beCust:o.ticket*o.days>0?be*vd/(o.ticket*o.days):Infinity,
+            monthNetY2:y2.net/12,govY1:y1.gov}}
+  window.__daFeasModel=model;
+
+  /* chart */
+  function chart(years,init){
+    var W=440,H=210,pl=50,pr=12,pt=14,pb=26,vals=[-init,0].concat(years.map(function(r){return r.net}),years.map(function(r){return r.cum}));
+    var mn=Math.min.apply(null,vals),mx=Math.max.apply(null,vals);if(mx===mn)mx+=1;
+    var span=mx-mn,step=Math.pow(10,Math.floor(Math.log10(span/4)));var nice=[1,2,5,10].map(function(m){return m*step}).find(function(s){return span/s<=5})||step*10;
+    mn=Math.floor(mn/nice)*nice;mx=Math.ceil(mx/nice)*nice;
+    var iw=W-pl-pr,ih=H-pt-pb,slot=iw/6;
+    function x(i){return W-pr-slot*(i+.5)}
+    function y(v){return pt+(mx-v)/(mx-mn)*ih}
+    function k(v){var a=Math.abs(v);return (v<0?"-":"")+(a>=1e6?(a/1e6).toFixed(a>=1e7?0:1)+"M":a>=1e3?Math.round(a/1e3)+"k":Math.round(a))}
+    var s="";
+    for(var g=mn;g<=mx+1e-9;g+=nice)s+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+y(g)+'" y2="'+y(g)+'" stroke="var(--line)"'+(Math.abs(g)<1e-9?' stroke-width="1.5"':'')+'/><text x="'+(pl-6)+'" y="'+(y(g)+4)+'" text-anchor="end">'+k(g)+'</text>';
+    years.forEach(function(r,i){var bx=x(i+1)-slot*.28,top=y(Math.max(0,r.net)),h=Math.abs(y(r.net)-y(0));
+      s+='<rect x="'+bx+'" y="'+top+'" width="'+(slot*.56)+'" height="'+Math.max(1,h)+'" rx="3" fill="'+(r.net>=0?"var(--accent)":"var(--data)")+'" opacity=".85"/>'});
+    var pts=[[x(0),y(-init)]].concat(years.map(function(r,i){return [x(i+1),y(r.cum)]}));
+    s+='<polyline points="'+pts.map(function(p){return p.join(",")}).join(" ")+'" fill="none" stroke="var(--fg)" stroke-width="2" stroke-linejoin="round"/>';
+    pts.forEach(function(p,i){s+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="3.5" fill="'+(i&&years[i-1].cum>=0?"var(--accent)":"var(--data)")+'" stroke="var(--surface)" stroke-width="1.5"/>'});
+    ["البداية","س1","س2","س3","س4","س5"].forEach(function(l,i){s+='<text x="'+x(i)+'" y="'+(H-6)+'" text-anchor="middle">'+l+'</text>'});
+    $("c-chart").innerHTML=s}
+
+  function payTxt(pm){return pm===null?"أكثر من ٥ سنوات":pm<12?pm+" شهر":(pm/12).toFixed(1)+" سنة"}
+  var last=null;
+  /* discount simulator: contribution per unit before vs after a price discount d */
+  function dsimCalc(o,m,d){var y2=m.years[1],vd=y2.vatOn&&o.vatinc?1+GOV.vatRate:1,k=o.pay/100+o.dshare/100*o.dcomm/100,c=o.cogs/100;
+    var cm0=1-c-k*vd,cm1=cm0-d*(1-k*vd),R=y2.rev/12;
+    return {cm0:cm0,cm1:cm1,need:cm1>0?cm0/cm1-1:Infinity,lossMonth:R*d*(1-k*vd),R:R}}
+  function dsim(o,m){var el=$("c-dres"),tb=$("c-dtab"),d=clamp(n($("c-dpct").value),0,90)/100;
+    if(!o.cust||!o.ticket){el.textContent="اكتب أرقام المبيعات فوق عشان نحسب.";el.className="verdict";tb.innerHTML="";return}
+    var r=dsimCalc(o,m,d),bad=false,t;
+    if(r.cm0<=0){t="هامشك قبل الخصم سالب أصلاً: كل بيعة تخسر. عالج التكلفة أو السعر قبل أي عرض.";bad=true}
+    else if(r.cm1<=0){t="خصم "+Math.round(d*100)+"٪ أكبر من هامشك ("+(r.cm0*100).toFixed(0)+"٪). مع هالخصم كل بيعة تخسر، مهما زاد عدد العملاء.";bad=true}
+    else{var add=r.need,cust=o.cust*(1+add);
+      t="هامشك "+(r.cm0*100).toFixed(0)+"٪. عشان يعوّض خصم "+Math.round(d*100)+"٪ لازم تزيد المبيعات "+(add*100).toFixed(0)+"٪، يعني تقريباً من "+fmt(o.cust)+" إلى "+fmt(Math.ceil(cust))+" عميل في اليوم. لو العملاء ما زادوا، تخسر قرابة "+fmt(r.lossMonth)+" ر.س شهرياً من الربح.";
+      bad=add>0.3}
+    el.textContent=t;el.className="verdict"+(bad?" bad":"");
+    if(r.cm0>0)tb.innerHTML='<thead><tr><th>الخصم</th><th>الزيادة المطلوبة في المبيعات</th><th>العملاء المطلوبين يومياً</th></tr></thead><tbody>'+[5,10,15,20,25].map(function(p){var x=dsimCalc(o,m,p/100);
+      return '<tr><td>'+p+'٪</td><td class="num"'+(x.cm1<=0||x.need>0.5?' style="color:var(--data)"':'')+'>'+(x.cm1<=0?'يخسر دائماً':(x.need*100).toFixed(0)+'٪')+'</td><td class="num">'+(x.cm1<=0?'—':fmt(Math.ceil(o.cust*(1+x.need))))+'</td></tr>'}).join("")+'</tbody>';
+    else tb.innerHTML=""}
+  function render(){
+    var o=read();
+    var fixedM=o.rent+o.oth+o.sa*o.sasal+o.ex*o.exsal+o.owner,suggest=Math.round(fixedM*3/1000)*1000;
+    $("c-wc-hint").textContent="المقترح: ٣ أشهر من المصاريف الثابتة ≈ "+fmt(suggest)+" ر.س";
+    if(!wcTouched){$("c-wc").value=suggest;o.wc=suggest}
+    var G=GOV;$("c-small-note").textContent="يعفى أول "+G.smallExempt+" من المقابل المالي بشروط، والإعفاء الحالي ينتهي "+G.smallExemptEnds+" حسب المنشور. تحقق من قوى.";
+    var m=model(o);last={o:o,m:m};
+    var need=m.maxNeed,have=m.initial+o.wc;
+    $("c-kpis").innerHTML=
+      '<div class="kpi"><span class="label">متوسط الربح الشهري في السنة الثانية (بعد الزكاة)</span><span class="value num'+(m.monthNetY2<0?' stock-low':'')+'">'+fmt(m.monthNetY2)+' ر.س</span></div>'+
+      '<div class="kpi"><span class="label">أقصى مبلغ يحتاجه المشروع</span><span class="value num">'+fmt(need)+' ر.س</span></div>'+
+      '<div class="kpi"><span class="label">فترة الاسترداد</span><span class="value">'+payTxt(m.payM)+'</span></div>'+
+      '<div class="kpi"><span class="label">التكاليف الحكومية في السنة الأولى</span><span class="value num">'+fmt(m.govY1)+' ر.س</span></div>';
+    var v=$("c-verdict"),bad=false,t;
+    if(!o.cust||!o.ticket){t="اكتب عدد العملاء ومتوسط الفاتورة عشان تطلع النتائج.";bad=true}
+    else if(m.monthNetY2<=0){t="بهذي الأرقام المشروع يخسر بعد ما يستقر. تحتاج تقريباً "+(isFinite(m.beCust)?Math.ceil(m.beCust)+" عميل في اليوم":"مبيعات أعلى")+" عشان تتعادل، أو تخفض المصاريف الثابتة.";bad=true}
+    else if(m.payM!==null&&m.payM<=36&&m.npv>0)t="مؤشرات مبدئية إيجابية: ترجع فلوسك خلال "+payTxt(m.payM)+" ونقطة التعادل "+(isFinite(m.beCust)?Math.ceil(m.beCust)+" عميل في اليوم":"—")+". الخطوة الجاية تتأكد من عدد العملاء ومتوسط الفاتورة في السوق.";
+    else if(m.npv>0)t="المشروع يربح بس الاسترداد طويل ("+payTxt(m.payM)+"). راجع تكاليف التأسيس أو المصاريف الثابتة قبل القرار.";
+    else {t="المشروع يربح بعد ما يستقر، لكن خلال ٥ سنوات ما يغطي استثمارك بالعائد المطلوب ("+o.disc+"%).";bad=true}
+    v.textContent=t;v.className="verdict"+(bad?" bad":"");
+    var c=$("c-cash");
+    if(o.cust&&o.ticket&&need>have){c.hidden=false;c.textContent="انتبه: المشروع يحتاج في أسوأ شهر "+fmt(need)+" ر.س، وأنت راصد "+fmt(have)+" (التأسيس والتجهيز مع الاحتياطي). ارفع الاحتياطي "+fmt(need-have)+" ر.س على الأقل، لأن نقص السيولة في الأشهر الأولى من أكثر أسباب تعثر المشاريع."}else c.hidden=true;
+    /* gov table */
+    var gl=m.years[0].govLines;
+    $("c-gov").innerHTML='<thead><tr><th>البند</th><th>سنوياً (ر.س)</th><th>شهرياً</th></tr></thead><tbody>'+
+      (gl.length?gl.map(function(l){return '<tr><td>'+esc(l[0])+'</td><td class="num">'+fmt(l[1])+'</td><td class="num">'+fmt(l[1]/12)+'</td></tr>'}).join("")+
+      '<tr><td style="font-weight:600">الإجمالي</td><td class="num" style="font-weight:600">'+fmt(m.govY1)+'</td><td class="num">'+fmt(m.govY1/12)+'</td></tr>':'<tr><td colspan="3" class="sys-note">ما فيه تكاليف حكومية بالمدخلات الحالية.</td></tr>')+
+      (m.years[0].vatOn?'<tr><td colspan="3" class="sys-note">مبيعاتك فوق '+fmt(G.vatThreshold)+' ر.س سنوياً، فالتسجيل في ضريبة القيمة المضافة إلزامي، وحسبنا الإيرادات بعد خصم '+(G.vatRate*100)+'%'+(o.vatinc?'':' (أسعارك بدون الضريبة، فتضاف على العميل)')+'.</td></tr>':'')+'</tbody>';
+    $("c-gov-src").innerHTML="آخر تحديث للرسوم: <span class=\"num\">"+esc(G.updated)+"</span>. السجل التجاري يبدأ من السنة الثانية، والغرفة التجارية بعد "+G.chamberFreeYears+" سنوات إعفاء. "+(o.own==="fx"?"ضريبة الدخل "+(G.incomeTax*100)+"%":"الزكاة "+(G.zakatRate*100)+"%")+" محسوبة تقديرياً على صافي الربح، والوعاء الفعلي يحدده محاسب. تحقق من: "+
+      G.sources.map(function(s){return '<a href="'+s[1]+'" target="_blank" rel="noopener noreferrer">'+esc(s[0])+'</a>'}).join("، ");
+    /* sensitivity */
+    if(o.cust&&o.ticket){
+      var tests=[["المبيعات أقل ٢٠٪",{sales:.8}],["متوسط الفاتورة أقل ١٠٪",{ticket:.9}],["تكلفة البضاعة أعلى ٥ نقاط",{cogsPts:5}],["الرواتب أعلى ١٥٪",{sal:1.15}],["الإيجار أعلى ٢٠٪",{rent:1.2}],["الافتتاح يتأخر ٣ أشهر",{delay:3}],["المبيعات أعلى ٢٠٪",{sales:1.2}]];
+      var res=tests.map(function(t){var r=model(o,t[1]);return {l:t[0],r:r,d:r.npv-m.npv}}).sort(function(a,b){return Math.abs(b.d)-Math.abs(a.d)});
+      $("c-sens").innerHTML='<thead><tr><th>لو</th><th>الربح الشهري (س2)</th><th>الاسترداد</th><th>أثره على صافي القيمة الحالية</th></tr></thead><tbody>'+
+        '<tr><td>الأرقام زي ما هي</td><td class="num">'+fmt(m.monthNetY2)+'</td><td>'+payTxt(m.payM)+'</td><td class="num">'+fmt(m.npv)+'</td></tr>'+
+        res.map(function(x){return '<tr><td>'+x.l+'</td><td class="num">'+fmt(x.r.monthNetY2)+'</td><td>'+payTxt(x.r.payM)+'</td><td class="num"'+(x.d<0?' style="color:var(--data)"':'')+'>'+(x.d>=0?"+":"")+fmt(x.d)+'</td></tr>'}).join("")+'</tbody>';
+    }else $("c-sens").innerHTML="";
+    dsim(o,m);
+    var rows=[["الإيرادات (بعد الضريبة)","rev"],["تكلفة البضاعة","cogs"],["عمولات الدفع والتوصيل","comm"],["الرواتب","sal"],["التكاليف الحكومية","gov"],["الإيجار ومصاريف أخرى","rent"],["الربح قبل الزكاة والضريبة","pretax"],[o.own==="fx"?"ضريبة الدخل التقديرية":"الزكاة التقديرية","zak"],["صافي الربح","net"],["الرصيد التراكمي","cum"]];
+    $("c-table").innerHTML='<thead><tr><th>البند (ر.س)</th>'+m.years.map(function(r){return '<th>س'+r.y+'</th>'}).join("")+'</tr></thead><tbody>'+
+      rows.map(function(rw){return '<tr><td'+(rw[1]==="net"?' style="font-weight:600"':'')+'>'+rw[0]+'</td>'+m.years.map(function(r){return '<td class="num"'+(r[rw[1]]<0?' style="color:var(--data)"':'')+'>'+fmt(r[rw[1]])+'</td>'}).join("")+'</tr>'}).join("")+'</tbody>';
+    chart(m.years,m.initial)}
+
+  $("c-tpl").addEventListener("change",function(){if(TPL[this.value]){fill(this.value);render()}});
+  window.__daFeasBase=function(){return Object.assign({},TPL.blank)};
+  window.__daFeasLoad=function(o){NUM.forEach(function(f){if(f in o)$("c-"+f).value=o[f]});
+    SEL.forEach(function(f){if(f in o)$("c-"+f).value=f==="vatinc"?(o[f]?"1":"0"):String(o[f])});$("c-small").checked=!!o.small;
+    wcTouched="wc" in o;$("c-tpl").value="custom";render();var c=$("calc");if(c)c.scrollIntoView({behavior:"smooth",block:"start"})};
+  $("calc").addEventListener("input",function(e){if(e.target.id==="c-wc")wcTouched=true;render()});
+  $("calc").addEventListener("change",render);
+  $("c-dpct").addEventListener("input",function(){if(last)dsim(last.o,last.m)});
+  $("c-xl").addEventListener("click",function(){if(!last||!window.__daSaveXlsx)return;var o=last.o,m=last.m;
+    var labels={cust:"عملاء يومياً",ticket:"متوسط الفاتورة",days:"أيام العمل",cogs:"تكلفة البضاعة %",sa:"موظفين سعوديين",sasal:"راتب السعودي",ex:"موظفين غير سعوديين",exsal:"راتب غير السعودي",owner:"راتب المالك",med:"تأمين طبي سنوي/موظف",rent:"الإيجار",oth:"مصاريف أخرى شهرية",pay:"عمولة الدفع %",dshare:"مبيعات التوصيل %",dcomm:"عمولة التوصيل %",balady:"بلدي سنوياً",hc:"شهادة صحية/عامل",govoth:"رسوم أخرى سنوية",capex:"تكاليف التأسيس",pre:"أشهر التجهيز",wc:"احتياطي السيولة",ramp:"مبيعات أول شهر %",weak:"أشهر ضعيفة",drop:"انخفاضها %",grow:"النمو %",inf:"زيادة المصاريف %",disc:"معدل الخصم %"};
+    var inputs=Object.keys(labels).map(function(k){return {"الافتراض":labels[k],"القيمة":o[k]}});
+    var pl=m.years.map(function(r){return {"السنة":r.y,"الإيرادات":Math.round(r.rev),"تكلفة البضاعة":Math.round(r.cogs),"العمولات":Math.round(r.comm),"الرواتب":Math.round(r.sal),"التكاليف الحكومية":Math.round(r.gov),"الإيجار وأخرى":Math.round(r.rent),"قبل الزكاة":Math.round(r.pretax),"الزكاة أو الضريبة":Math.round(r.zak),"صافي الربح":Math.round(r.net),"الرصيد التراكمي":Math.round(r.cum)}});
+    var gov=m.years[0].govLines.map(function(l){return {"البند":l[0],"سنوياً":Math.round(l[1])}});
+    var kp=[["أقصى مبلغ يحتاجه المشروع",Math.round(m.maxNeed)],["فترة الاسترداد (شهر)",m.payM===null?"أكثر من 60":m.payM],["صافي القيمة الحالية",Math.round(m.npv)],["العائد الداخلي %",m.irr===null?"—":+(m.irr*100).toFixed(1)],["آخر تحديث للرسوم",GOV.updated]].map(function(r){return {"المؤشر":r[0],"القيمة":r[1]}});
+    window.__daSaveXlsx([{name:"الافتراضات",rows:inputs},{name:"قائمة الدخل",rows:pl},{name:"التكاليف الحكومية",rows:gov.length?gov:[{"البند":"—","سنوياً":0}]},{name:"المؤشرات",rows:kp}],"دراسة-جدوى-مبدئية.xlsx",$("c-xl-st"),function(msg){$("c-xl-st").textContent=msg})});
+  $("c-send").addEventListener("click",function(){if(!last)return;var o=last.o,m=last.m,tp=$("c-tpl");
+    var txt="أبي دراسة جدوى لمشروع: "+tp.options[tp.selectedIndex].text+"\nتكاليف التأسيس: "+fmt(o.capex)+" ر.س\nعملاء يومياً: "+o.cust+" · متوسط الفاتورة: "+o.ticket+" ر.س\nالموظفين: "+o.sa+" سعودي و"+o.ex+" غير سعودي\nنتيجة الحاسبة: ربح شهري "+fmt(m.monthNetY2)+" ر.س في السنة الثانية، أقصى احتياج "+fmt(m.maxNeed)+" ر.س، استرداد "+payTxt(m.payM);
+    var t=$("f-type"),msg=$("f-msg");if(t)t.value="دراسة جدوى تفصيلية";if(msg)msg.value=txt.slice(0,2000);
+    var c=$("contact");if(c)c.scrollIntoView({behavior:"smooth",block:"start"});setTimeout(function(){var nm=$("f-name");if(nm)nm.focus({preventScroll:true})},500)});
+  fill("cafe");render();
+})();
+</script>
+<script>
+/* ---------- feasibility examples: illustrative cases, metrics computed live from the calculator model ---------- */
+(function(){
+  function $(i){return document.getElementById(i)}
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+  function fmt(v){return Math.round(v).toLocaleString("en-US")}
+  var EX={"cafe": {"tab": "كافيه في حي سكني", "sector": "أغذية ومشروبات", "lesson": "التكاليف المخفية تاكل الربح", "idea": "كافيه مختص بمساحة كبيرة على شارع رئيسي، والخطة تعتمد على تطبيقات التوصيل في قرابة نص المبيعات.", "found": "عمولات التطبيقات مع الإيجار العالي والتكاليف الحكومية خلّت المشروع يخسر كل شهر حتى بعد ما يستقر. نقطة التعادل تحتاج {b.beCust} عميل في اليوم، والمتوقع ١١٠ بس.", "decision": "مساحة أصغر في نفس الحي بإيجار أقل وتشطيب أبسط، وتقليل الاعتماد على التطبيقات لـ١٥٪ مع تشجيع الطلب المباشر، ورفع متوسط الفاتورة بإضافات مثل الحلى مع القهوة، وعامل أقل.", "tip": "احسب عمولة التطبيقات والرسوم الحكومية من أول يوم. سعر الكوب ناقص تكلفته ما يقولك هل المشروع يربح.", "base": {"cust": 110, "ticket": 24, "days": 30, "cogs": 33, "sa": 2, "sasal": 5000, "ex": 3, "exsal": 3000, "oth": 6000, "balady": 3000, "hc": 150, "govoth": 1000, "capex": 300000, "pre": 3, "ramp": 50, "weak": 2, "drop": 25, "grow": 6, "small": true, "wc": 90000}, "before": {"rent": 18000, "dshare": 45, "dcomm": 25}, "after": {"rent": 10000, "dshare": 15, "dcomm": 20, "ex": 2, "capex": 220000, "ticket": 27, "wc": 80000}, "growth": {"research": ["راقب ٥ كافيهات في نطاق ٢–٣ كم لمدة أسبوع، صباح ومساء: الأسعار، والزحمة، وأكثر المشروبات طلب.", "عدّ المارة والسيارات في الموقع بثلاث أوقات (٧–٩ الصبح، ٤–٦ العصر، ٨–١١ الليل)، في أيام الدوام ونهاية الأسبوع.", "اسأل ٣٠–٥٠ من سكان الحي وش يشربون وبكم، وانتبه للمواقف وسهولة الوقوف السريع."], "marketing": ["ملفك في خرائط قوقل بصور حديثة وتقييمات حقيقية، لأنه أول مصدر لعملاء الحي.", "إعلانات إنستقرام وسناب وتيك توك محصورة بدائرة ٢–٣ كم حول الكافيه.", "صناع محتوى من الحي، وعينات وكوبونات للمكاتب والمدارس القريبة."], "budget": "٥–٨٪ من المبيعات المستهدفة.", "content": ["تيك توك وريلز إنستقرام: ٤–٥ مقاطع بالأسبوع.", "أفكار: كواليس استخلاص الإسبريسو ومصدر البن، جولة في المكان، سرعة تجهيز قهوة الدوام، آراء العملاء بإذنهم.", "حدّث صورك وعروضك في خرائط قوقل باستمرار."], "offers_good": ["بطاقة ولاء: السابع مجاناً.", "قهوة مع حلى بسعر مجمع.", "مشروب اليوم في أوقات الهدوء."], "offers_bad": ["خصم دائم ٣٠–٥٠٪ على الكوب: يهز صورة الجودة ويضغط الهامش."], "seasons": "قائمة مسائية وسحور في رمضان، بوكسات العيد واليوم الوطني، عروض صباحية أيام الرواتب.", "mistakes": [["ديكور مبالغ فيه وتجاهل المواقف والطلب السريع", "ركّز على سهولة الوقوف والاستلام قبل الجلسات."], ["قائمة طويلة تهدر المخزون", "ابدأ بـ٦–٨ مشروبات ونوعين حلى، وراقب مبيعات كل صنف."], ["الطعم يتغير من يوم ليوم", "وصفة موثقة بالميزان، وتدريب الباريستا عليها."]]}}, "online": {"tab": "متجر إلكتروني للعطور", "sector": "تجارة إلكترونية", "lesson": "الربح شي والسيولة شي ثاني", "idea": "متجر برأس مال صغير، وإعلانات قوية من أول شهر، واحتياطي سيولة ٣٠ ألف.", "found": "المشروع يربح على الورق ويسترد بسرعة، لكن المبيعات تبدأ ضعيفة والإعلانات تندفع مقدم. يحتاج في أسوأ شهر {b.need} ر.س، وهو راصد {b.have} بس. يعني بدون تعديل كان بيوقف قبل ما يوصل للربح.", "decision": "رفع احتياطي السيولة، وتقسيم ميزانية التسويق على مراحل تزيد مع المبيعات بدل ما تنصرف كلها من البداية.", "tip": "اسأل نفسك: كم أحتاج في أسوأ شهر؟ مو بس كم بربح. أغلب المشاريع الرابحة اللي تقفل، تقفل من نقص السيولة.", "base": {"cust": 22, "ticket": 220, "days": 30, "cogs": 48, "sa": 2, "sasal": 6000, "pay": 2, "rent": 2500, "balady": 0, "capex": 70000, "pre": 2, "ramp": 15, "grow": 12, "weak": 2, "drop": 20}, "before": {"oth": 28000, "wc": 30000}, "after": {"oth": 18000, "wc": 150000}, "growth": {"research": ["اشترِ من ٥–١٠ متاجر منافسة وقارن: السعر، والحجم، والثبات، والتغليف، ومدة التوصيل.", "افتح مكتبة إعلانات ميتا وتيك توك، وشوف وش الرسائل اللي يكررها المنافسين.", "اختبر ٣ مستويات أسعار مع ٣٠ عميل محتمل، وتحقق من متطلبات الوسم والتسجيل لدى هيئة الغذاء والدواء قبل البيع."], "marketing": ["إعلانات تيك توك وسناب بمقاطع قصيرة واقعية.", "صناع محتوى متخصصين في العطور، بالعمولة أو بالمراجعة.", "إعادة الاستهداف ورسائل السلات المتروكة عبر واتساب."], "budget": "١٠–١٥٪ من المبيعات، وممكن أعلى في أشهر الإطلاق. راقب تكلفة العميل قبل ما توسّع.", "content": ["تيك توك وإنستقرام: ٥–٧ مقاطع بالأسبوع، وسناب يومي خفيف.", "أفكار: تجربة عمياء وردة فعل الناس، شرح نوتات العطر، أي عطر لأي مناسبة، فتح الطلب والتغليف.", "لا تدّعي شي ما تقدر تثبته، مثل ثبات ٤٨ ساعة."], "offers_good": ["باقة عطرين، أو عينات مع كل طلب.", "هدية فوق مبلغ معين، وخصم أول طلب.", "شحن مجاني مدمج في السعر بدل رسوم تفاجئ العميل."], "offers_bad": ["خصم مستمر على الأكثر مبيعاً، أو بيع العطر بنص سعره. صرّف الأقل حركة داخل الباقات."], "seasons": "العيدين ورمضان (مجموعات هدايا)، الجمعة البيضاء، اليوم الوطني (تغليف موسمي)، باقات إهداء وقت الرواتب.", "mistakes": [["مخزون كبير قبل اختبار الطلب", "ابدأ بتشكيلة صغيرة وزِد على الأكثر طلب."], ["رسوم شحن تفاجئ العميل عند الدفع", "ادمجها في السعر وأعلن شحن مجاني."], ["إعلانات تجيب مبيعات خسرانة", "احسب ربح الطلب بعد الشحن والدفع والتغليف وتكلفة الإعلان."]]}}, "wash": {"tab": "مغسلة سيارات", "sector": "خدمات", "lesson": "الاشتراطات قبل الإيجار", "idea": "مغسلة في أرض على شارع داخلي بإيجار رخيص، وأرقامها ممتازة.", "found": "التحقق من اشتراطات بلدي والدفاع المدني بيّن إن النشاط ما ينسمح له في هالموقع. لو وقّع الإيجار وجهّز، كان خسر تكاليف التأسيس كلها.", "decision": "موقع على شارع تجاري مسموح فيه النشاط بإيجار أعلى، مع فترة تجهيز أطول للتراخيص. الربح أقل والاسترداد أطول، بس المشروع نظامي ويقدر يشتغل.", "tip": "تحقق من اشتراطات النشاط للموقع على منصة بلدي قبل ما توقّع أي عقد إيجار أو تدفع عربون.", "base": {"cust": 60, "ticket": 45, "days": 30, "cogs": 12, "sa": 1, "sasal": 5000, "ex": 4, "exsal": 2800, "oth": 7000, "balady": 3000, "govoth": 2000, "capex": 280000, "pre": 3, "ramp": 50, "weak": 1, "drop": 15, "grow": 5, "small": true, "wc": 70000}, "before": {"rent": 9000}, "after": {"rent": 14000, "pre": 5}, "growth": {"research": ["احصر ١٠ مغاسل في ٣–٥ كم: الأسعار، ووقت الانتظار، والخدمات الإضافية، وأوقات الزحمة.", "عدّ السيارات المارة صباح ومساء، وجرّب اشتراك تجريبي مع ٣٠ عميل.", "تحقق من اشتراطات بلدي والبيئة قبل الاستئجار: تصريف المياه، ومصائد الزيوت، والضوضاء."], "marketing": ["خرائط قوقل بصور وأسعار واضحة.", "إعلانات سناب وإنستقرام في نطاق ٥ كم.", "اشتراكات للشركات ومكاتب تأجير السيارات، ولوحة واضحة من الشارع الرئيسي."], "budget": "٣–٦٪ من المبيعات، وأعلى شوي في الأشهر الأولى.", "content": ["سناب وتيك توك: ٣–٤ مقاطع بالأسبوع.", "أفكار: قبل وبعد، تنظيف المراتب بالبخار، إزالة البقع والخدوش السطحية.", "ركّز على السرعة والنظافة، مو الخصومات بس."], "offers_good": ["اشتراك ٤ أو ٨ غسلات مدفوع مقدم.", "باقة داخلي وخارجي.", "أسعار خاصة للأساطيل والشركات."], "offers_bad": ["خصومات كبيرة على الغسيل العادي: زحمة وجودة أقل.", "خصم على التلميع والحماية بدون حساب المواد والوقت."], "seasons": "تجهيز السيارة قبل العيد والسفر، بعد موجات الغبار والمطر، واشتراكات وقت الرواتب.", "mistakes": [["بطء وتكدس السيارات", "قسّم العمل محطات: غسيل، ثم تجفيف، ثم تلميع داخلي."], ["مواد ومناشف تضر الطلاء", "مايكروفايبر لكل جزء وشامبو متوازن، واعرضها كميزة."], ["الاعتماد على العابرين", "ابنِ اشتراكات وعملاء متكررين، وراقب تكلفة المياه والمواد لكل غسلة."]]}}, "truck": {"tab": "عربة طعام", "sector": "أغذية متنقلة", "lesson": "لا تضرب يوم واحد في ٣٦٥", "idea": "عربة طعام برأس مال قليل، والحسبة على مبيعات ثابتة طول السنة.", "found": "في أشهر الحر الإقبال على المواقع المفتوحة ينزل كثير. لما حسبنا ٤ أشهر ضعيفة بمبيعات تقريباً النص، الربح نزل والاسترداد طال من {b.pay} إلى {a.pay}.", "decision": "المشروع ظل مجدي، بس الخطة صارت تشمل مواقع مغطاة وفعاليات في الصيف، وتقليل ساعات الطاقم في الأشهر الضعيفة.", "tip": "اعرف مواسم نشاطك: رمضان، الصيف، الإجازات، بداية الشهر ونهايته. وحط خطة للأشهر الضعيفة قبل ما تجيك.", "base": {"cust": 90, "ticket": 25, "days": 26, "cogs": 36, "sa": 1, "sasal": 4500, "ex": 2, "exsal": 2800, "oth": 3000, "rent": 2500, "balady": 2000, "hc": 150, "govoth": 500, "capex": 110000, "pre": 2, "ramp": 60, "grow": 5, "small": true, "wc": 30000}, "before": {"weak": 0, "drop": 0}, "after": {"weak": 4, "drop": 55}, "growth": {"research": ["قبل ما تشتري العربة، جرّب البيع في ٣ فعاليات أو مواقع مصرح بها، وسجّل الطلبات ومتوسط الفاتورة.", "راقب المنافسين في الفعاليات والواجهات البحرية، واحسب رسوم المشاركة والكهرباء.", "تحقق من تصريح العربة والموقع واشتراطات سلامة الغذاء. التصريح ما يعني إنك توقف في أي مكان."], "marketing": ["تيك توك وسناب.", "التعاون مع منظمي الفعاليات والمواقع.", "مؤثرين أكل محليين، وموقعك محدث على خرائط قوقل."], "budget": "٥–١٠٪ من المبيعات، ومركّزة في الشتاء والفعاليات.", "content": ["تيك توك: ٥ مقاطع بالأسبوع، وسناب وستوريات إنستقرام لموقع اليوم وساعات العمل.", "انشر جدول مواقعك الأسبوعي عشان يعرفون وين يلقونك.", "أفكار: صوت الشوي، تحضير الصوصات، أجواء الزبائن بالليل."], "offers_good": ["كومبو: وجبة ومشروب.", "إضافة مجانية رخيصة التكلفة، أو ترقية الحجم.", "عروض المجموعات."], "offers_bad": ["خصم نقدي مباشر: يستنزف هامش صغير أصلاً.", "خصومات وقت الذروة وأنت مزحوم."], "seasons": "بوكسات الشتاء والتخييم، سحور رمضان، وأصناف محدودة لليوم الوطني والفعاليات.", "mistakes": [["قائمة كبيرة وطلبات بطيئة", "٥–٨ أصناف بمكونات مشتركة، والطلب يطلع خلال ٣–٥ دقائق."], ["حر الصيف وانقطاع الكهرباء", "مولد وعزل حراري وتكييف من البداية."], ["الاعتماد على موقع أو فعالية وحدة", "وزّع مبيعاتك على أكثر من موقع وقناة."]]}}, "rest": {"tab": "مطعم كبير", "sector": "مطاعم", "lesson": "أحياناً القرار الصح: مو بهالشكل", "idea": "مطعم بمساحة كبيرة وديكور فاخر و١٨ موظف في موقع مميز، برأس مال ١٫٣ مليون.", "found": "حتى مع مبيعات عالية، الإيجار والرواتب والتكاليف الحكومية ({b.gov} ر.س في السنة الأولى) خلت المشروع ما يغطي استثماره خلال ٥ سنوات.", "decision": "نفس المطبخ والمنيو كمطبخ سحابي يبيع عبر التطبيقات، برأس مال أقل بكثير وفريق أصغر. والمطعم الكبير يصير مرحلة ثانية لو نجحت العلامة.", "tip": "الدراسة اللي تقول لا وفّرت عليك أضعاف قيمتها. اسأل: وش أصغر نسخة من فكرتي أقدر أختبر فيها السوق؟", "base": {"days": 30, "sasal": 5500, "exsal": 3200, "hc": 150, "grow": 5, "weak": 2, "drop": 20, "pay": 1.5}, "before": {"cust": 160, "ticket": 65, "cogs": 36, "sa": 4, "ex": 14, "rent": 45000, "oth": 20000, "dshare": 25, "dcomm": 20, "balady": 6000, "govoth": 3000, "capex": 1300000, "pre": 6, "ramp": 45, "wc": 400000}, "after": {"cust": 130, "ticket": 48, "cogs": 34, "sa": 2, "ex": 4, "rent": 8000, "oth": 9000, "dshare": 85, "dcomm": 20, "balady": 2500, "govoth": 1000, "capex": 280000, "pre": 3, "ramp": 45, "small": true, "wc": 120000}, "growth": {"title": "خطة النمو للمطبخ السحابي", "research": ["حلل ٢٠ مطعم منافس في تطبيقات التوصيل بنطاقك: الأسعار، والتقييمات، وأوقات التوصيل، والتصنيفات الأقل منافسة.", "اختبر ٥–٨ أصناف مع ٣٠–٥٠ شخص، واحسب تكلفة المكونات والتغليف لكل طبق.", "اطلب عروض عمولات من أكثر من تطبيق، وتحقق من اشتراطات المطابخ والتهوية والسلامة."], "marketing": ["الظهور والعروض داخل تطبيقات التوصيل نفسها.", "تيك توك وإنستقرام بروابط مباشرة لصفحتك في التطبيقات.", "التقييمات: رد على كل تقييم وعالج الشكاوى بسرعة، لأنها ترفع ظهورك في التطبيق."], "budget": "٥–١٥٪ من المبيعات بدون عمولات التطبيقات، وأعلى في أول ٣ أشهر.", "content": ["تيك توك وإنستقرام: ٤–٥ مقاطع بالأسبوع.", "صور احترافية ووصف دقيق في التطبيقات، وجرّب أكثر من صورة للصنف الأكثر مبيعاً.", "أفكار: تغليف يحفظ الأكل، اختبار وصول الوجبة مقرمشة، كواليس التجهيز."], "offers_good": ["خصم أول طلب داخل التطبيق.", "وجبات فردية وعائلية، وإضافة جانبية.", "اشتراك وجبات أسبوعي."], "offers_bad": ["خصمك فوق خصم المنصة فوق توصيل مجاني، مع إن عمولة التطبيق أصلاً تاخذ جزء كبير من الطلب."], "seasons": "فطور وسحور رمضان، باقات عائلية وقت الرواتب، تجمعات الأعياد، والجمعة البيضاء.", "mistakes": [["تغليف يخرّب الوجبة", "اختبر توصيل نص ساعة بنفسك قبل الإطلاق."], ["تأخير المندوب وإلغاء الطلبات", "التحضير ما يتعدى ٧–١٠ دقائق من وصول الطلب."], ["تسعير بدون حساب العمولة", "احسب ربح كل طلب بعد العمولة والتغليف والتسويق."]]}}};
+  var keys=Object.keys(EX),cur=keys[0];
+  function inputs(k,ph){return Object.assign(window.__daFeasBase(),EX[k].base,EX[k][ph])}
+  function payTxt(pm){return pm===null?"أكثر من ٥ سنوات":pm<12?pm+" شهر":(pm/12).toFixed(1)+" سنة"}
+  function metrics(k,ph){var o=inputs(k,ph),m=window.__daFeasModel(o);
+    return {o:o,m:m,mon:m.monthNetY2,need:m.maxNeed,have:o.capex+o.pre*o.rent+o.wc,pay:payTxt(m.payM),npv:m.npv,gov:m.govY1,beCust:isFinite(m.beCust)?Math.ceil(m.beCust):"—"}}
+  function fill(t,b,a){return esc(t).replace(/\{([ab])\.(\w+)\}/g,function(_,w,f){var v=(w==="a"?a:b)[f];return typeof v==="number"?fmt(v):esc(v)})}
+  function col(title,cls,x,ph){
+    return '<div class="'+cls+'"><h4>'+title+'</h4><dl>'+
+      '<dt>الربح الشهري في السنة الثانية</dt><dd class="num'+(x.mon<0?' neg':'')+'">'+fmt(x.mon)+'</dd>'+
+      '<dt>أقصى مبلغ يحتاجه</dt><dd class="num'+(x.need>x.have?' neg':'')+'">'+fmt(x.need)+'</dd>'+
+      '<dt>المبلغ المرصود</dt><dd class="num">'+fmt(x.have)+'</dd>'+
+      '<dt>الاسترداد</dt><dd'+(x.m.payM===null?' class="neg"':'')+'>'+x.pay+'</dd>'+
+      '<dt>صافي القيمة الحالية</dt><dd class="num'+(x.npv<0?' neg':'')+'">'+fmt(x.npv)+'</dd></dl>'+
+      '<button type="button" class="btn btn-ghost btn-sm" data-exload="'+ph+'" style="align-self:flex-start">افتحها في الحاسبة</button></div>'}
+  function render(){
+    if(!window.__daFeasModel){return}
+    $("ex-tabs").innerHTML=keys.map(function(k){return '<button type="button" data-ex="'+k+'" aria-pressed="'+(k===cur)+'">'+esc(EX[k].tab)+'</button>'}).join("");
+    var e=EX[cur],b=metrics(cur,"before"),a=metrics(cur,"after");
+    $("ex-panel").innerHTML='<div class="ex-head"><h3>'+esc(e.tab)+'</h3><div class="ex-tags"><span>'+esc(e.sector)+'</span><span class="lesson">الدرس: '+esc(e.lesson)+'</span></div><p>'+fill(e.idea,b,a)+'</p></div>'+
+      '<div class="ba">'+col("الخطة الأولى","before",b,"before")+col("بعد الدراسة","after",a,"after")+'</div>'+
+      '<dl class="ex-story"><div><dt>وش كشفت الدراسة</dt><dd>'+fill(e.found,b,a)+'</dd></div><div><dt>القرار</dt><dd>'+fill(e.decision,b,a)+'</dd></div><div class="tip"><dt>وش تسوي أنت في مشروعك</dt><dd>'+fill(e.tip,b,a)+'</dd></div></dl>'+
+      growth(e)+
+      '<p class="fmt">الأرقام بالريال، وتشمل التكاليف الحكومية والزكاة التقديرية. حالة توضيحية بأرقام افتراضية. ميزانيات التسويق للتخطيط، عدّلها بعد أول ٦٠–٩٠ يوم حسب نتايجك.</p>'}
+  function li(a){return '<ul>'+a.map(function(x){return '<li>'+esc(x)+'</li>'}).join("")+'</ul>'}
+  function growth(e){var g=e.growth;if(!g)return "";
+    return '<div class="growth"><h4 class="g-title">'+esc(g.title||"خطة النمو بعد الافتتاح")+'</h4>'+
+      '<details open><summary>البحث قبل الافتتاح</summary>'+li(g.research)+'</details>'+
+      '<details open><summary>التسويق: أهم ٣ قنوات بالترتيب</summary><ol>'+g.marketing.map(function(x){return '<li>'+esc(x)+'</li>'}).join("")+'</ol><p class="g-budget"><b>الميزانية المقترحة:</b> '+esc(g.budget)+'</p></details>'+
+      '<details><summary>النشر والمحتوى</summary>'+li(g.content)+'</details>'+
+      '<details><summary>العروض والخصومات</summary><div class="g-two"><div><p class="g-ok">ينفع</p>'+li(g.offers_good)+'</div><div><p class="g-no">يضر</p>'+li(g.offers_bad)+'</div></div><p class="g-budget"><b>المواسم:</b> '+esc(g.seasons)+'</p>'+
+        '<button type="button" class="btn btn-ghost btn-sm" data-exdisc="1">احسب هل الخصم يستاهل لهالمشروع</button></details>'+
+      '<details><summary>أخطاء يقع فيها التجار وعلاجها</summary><dl class="g-mis">'+g.mistakes.map(function(x){return '<div><dt>'+esc(x[0])+'</dt><dd>'+esc(x[1])+'</dd></div>'}).join("")+'</dl></details></div>'}
+  $("ex-tabs").addEventListener("click",function(ev){var t=ev.target.closest("[data-ex]");if(t){cur=t.dataset.ex;render()}});
+  $("ex-panel").addEventListener("click",function(ev){var t=ev.target.closest("[data-exload]");if(t&&window.__daFeasLoad)window.__daFeasLoad(inputs(cur,t.dataset.exload));
+    var d=ev.target.closest("[data-exdisc]");if(d&&window.__daFeasLoad){window.__daFeasLoad(inputs(cur,"after"));setTimeout(function(){var x=$("c-dsim");if(x)x.scrollIntoView({behavior:"smooth",block:"center"})},50)}});
+  render();
+})();
+</script>
+
+</body></html>
