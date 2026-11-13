@@ -396,6 +396,24 @@ footer a{color:var(--muted)}
 @media (prefers-reduced-motion:no-preference){
   .line-path{transition:d .5s ease}
 }
+.manual{margin-top:12px;padding:14px;border:1px dashed var(--line);border-radius:12px;background:var(--bg)}
+.man-grid input,.cs-lines input,.cs-lines select,#costing-app table input,#costing-app table select{min-height:38px;padding:6px 8px;font-size:.9rem}
+.man-grid td,#costing-app table td{padding:4px}
+input.qty{max-width:110px;min-width:64px}
+.cs-lines select{min-width:150px}
+.cs-split{display:grid;grid-template-columns:240px 1fr;gap:16px;align-items:start;margin-top:14px}
+.cs-split>*{min-width:0}
+.cs-list{display:flex;flex-direction:column;gap:6px}
+.cs-list>button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:right;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:10px;padding:8px 10px;cursor:pointer;font:inherit}
+.cs-list>button span{font-size:.8rem;color:var(--muted)}
+.cs-list>button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.cs-acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.cs-head{grid-template-columns:repeat(3,1fr)}
+.cs-row{display:flex;gap:8px;align-items:center;margin-bottom:6px}
+.cs-row input{min-height:38px;padding:6px 8px}
+#costing-app .res-actions{margin-top:16px}
+#costing-app .grid2{margin-top:14px}
+@media (max-width:760px){.cs-split{grid-template-columns:minmax(0,1fr)}.cs-head{grid-template-columns:1fr 1fr}.cs-list{flex-direction:row;overflow-x:auto}.cs-list>button{min-width:150px}.cs-list .card-t{display:none}}
 </style>
 
 <div class="wrap" dir="rtl" lang="ar">
@@ -407,6 +425,7 @@ footer a{color:var(--muted)}
     <ul>
       <li><a href="#services">الخدمات</a></li>
       <li><a href="#discover">وش أحتاج؟</a></li>
+      <li><a href="#costing">تكلفة المنتج</a></li>
       <li><a href="#feasibility">دراسات الجدوى</a></li>
       <li><a href="#work">نماذج أعمال</a></li>
       <li><a href="#packages">الباقات</a></li>
@@ -608,7 +627,7 @@ footer a{color:var(--muted)}
     <div class="sec-head">
       <p class="eyebrow">جرّب مجاناً</p>
       <h2>الأدوات تشتغل الحين على بياناتك</h2>
-      <p>ارفع ملفك أو جرّب بالبيانات التجريبية. البيانات التجريبية ما تنحسب من رصيدك.</p>
+      <p>ارفع ملفك، أو اكتب أرقامك يدويًا، أو جرّب بالبيانات التجريبية. البيانات التجريبية ما تنحسب من رصيدك.</p>
     </div>
     <div class="tool-wrap">
       <p class="safe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg><span>ملفاتك تنقرى وتتحلل داخل جهازك بالكامل، وما ننسخ ولا نحفظ محتواها في أي مكان. الحد الأقصى للملف <span class="num">5</span> ميقا، وصيغه المدعومة: ‎.xlsx و ‎.xls و ‎.csv. <a href="#privacy">سياسة الخصوصية</a></span></p>
@@ -627,10 +646,12 @@ footer a{color:var(--muted)}
         </div>
         <div class="toolbar">
           <span class="btn btn-primary file-btn">ارفع ملف Excel أو CSV<input type="file" id="f-sales" accept=".xlsx,.xls,.csv" aria-label="رفع ملف المبيعات"></span>
+          <button type="button" class="btn btn-ghost" data-manual="sales">أدخل البيانات يدويًا</button>
           <button type="button" class="btn btn-ghost" id="demo-sales">جرّب ببيانات تجريبية</button>
         </div>
         <p class="fmt">ارفع ملفك زي ما هو. نكتشف أعمدة المبلغ والفرع والصنف والتاريخ تلقائياً حتى لو أسماؤها مختلفة أو فوقها عنوان تقرير.</p>
         <div class="locked" id="lock-sales" hidden><span>خلص رصيد التحليلات المجانية. اطلب باقة النمو عشان تكمل بدون حدود.</span><a class="btn btn-primary btn-sm" href="#contact" data-pkg="تحليل بيانات ولوحة معلومات">اطلب الباقة</a></div>
+        <div class="manual" id="man-sales" hidden></div>
         <div id="err-sales" class="msg" hidden></div>
         <div id="out-sales"></div>
       </div>
@@ -661,10 +682,12 @@ footer a{color:var(--muted)}
         </div>
         <div class="toolbar">
           <span class="btn btn-primary file-btn">ارفع ملف Excel أو CSV<input type="file" id="f-traffic" accept=".xlsx,.xls,.csv" aria-label="رفع ملف الزيارات"></span>
+          <button type="button" class="btn btn-ghost" data-manual="traffic">أدخل البيانات يدويًا</button>
           <button type="button" class="btn btn-ghost" id="demo-traffic">جرّب ببيانات تجريبية</button>
         </div>
         <p class="fmt">ارفع التقرير زي ما صدّرته من Google Analytics أو منصة الإعلانات. نكتشف أعمدة المصدر والزيارات والطلبات تلقائياً.</p>
         <div class="locked" id="lock-traffic" hidden><span>خلص رصيد التحليلات المجانية. اطلب باقة النمو للتقارير الشهرية.</span><a class="btn btn-primary btn-sm" href="#contact" data-pkg="مشروع متكامل">اطلب الباقة</a></div>
+        <div class="manual" id="man-traffic" hidden></div>
         <div id="err-traffic" class="msg" hidden></div>
         <div id="out-traffic"></div>
       </div>
@@ -742,6 +765,16 @@ footer a{color:var(--muted)}
 
       <div class="upsell"><p>عجبك النموذج؟ نصمم لك نظام على مقاس إجراءاتك، بصلاحيات لكل دور وربط مع لوحة تحليل.</p><a class="btn btn-primary btn-sm" href="#contact" data-pkg="تحليل وتصميم نظام">ناقش نظامك</a></div>
     </div>
+  </section>
+
+
+  <section class="block" id="costing">
+    <div class="sec-head">
+      <p class="eyebrow">حاسبة تكلفة المنتج</p>
+      <h2>كم تكلفك الحبة فعلًا، وكم تبيعها، وكم تربح؟</h2>
+      <p>من البهارات بالجرام والزيت بالمل إلى سعر البيع والعمولات وصافي ربح الشهر. اختر نشاطك، وعدّل الوصفة والأسعار، وتطلع لك التكلفة لكل منتج والسعر المقترح وجاهزيتك للتوسع.</p>
+    </div>
+    <div class="tool-wrap" id="costing-app"><noscript>الحاسبة تحتاج JavaScript.</noscript></div>
   </section>
 
   <section class="block" id="feasibility">
@@ -1103,7 +1136,7 @@ footer a{color:var(--muted)}
 
 <!-- SheetJS 0.20.3 (fixes CVE-2023-30533 and CVE-2024-22363), served from this site, not a third-party CDN -->
 <script src="xlsx-0.20.3.full.min.js"></script>
-<script src="assets/api.js?v=2"></script>
+<script src="assets/api.js?v=3"></script>
 <script>
 (function(){
   /* ---------- helpers ---------- */
@@ -1372,6 +1405,9 @@ footer a{color:var(--muted)}
   $("f-traffic").addEventListener("change",function(e){var f=e.target.files[0];e.target.value="";if(!f)return;
     if(!left("traffic")){meter("traffic");return}
     readFile(f,function(rows){mem.used.traffic++;save();meter("traffic");runTraffic(rows,f.name,null,true)},function(m){err("traffic",m)})});
+  /* الإدخال اليدوي ينحسب من الرصيد مثل رفع الملف */
+  window.__daManual=function(tool,rows){if(!left(tool)){meter(tool);return false}
+    mem.used[tool]++;save();meter(tool);(tool==="sales"?runSales:runTraffic)(rows,"بيانات أدخلتها يدويًا",null,false);return true};
 
   /* ---------- maintenance requests ---------- */
   var stN=["جديد","قيد التنفيذ","مكتمل"],prN={high:"عالية",mid:"متوسطة",low:"منخفضة"},prO={high:0,mid:1,low:2};
@@ -2050,4 +2086,6 @@ footer a{color:var(--muted)}
 })();
 </script>
 
+<script src="assets/manual.js?v=3"></script>
+<script src="assets/costing.js?v=3"></script>
 </body></html>
