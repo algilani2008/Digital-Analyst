@@ -1,4 +1,4 @@
-/* المحلل الرقمي: طبقة البيانات
+/* العالم الرقمي: طبقة البيانات
    MODE = "demo"   : كل شي محفوظ في متصفح الجهاز (للتجربة قبل الاستضافة).
    MODE = "server" : نفس الدوال تكلم خادم Hostinger على BASE_URL (انظر server/API.md).
    الصفحات ما تعرف الفرق، فالانتقال للخادم يكون بتغيير السطرين تحت فقط. */
@@ -173,7 +173,7 @@
       var t = throttle(username); if (t.blocked) throw new Error("محاولات كثيرة. جرّب بعد 10 دقائق.");
       var d = db(), u = d.users.find(function (x) { return x.username === username && x.role === role; });
       if (!u || !(await checkPw(u, pw))) { t.fail(); throw new Error("اسم المستخدم أو كلمة المرور غير صحيحة."); }
-      if (!u.active) throw new Error("الحساب موقوف. تواصل مع المحلل الرقمي.");
+      if (!u.active) throw new Error("الحساب موقوف. تواصل مع العالم الرقمي.");
       if (role === "client") { var c = d.clients.find(function (x) { return x.id === u.client_id; }); if (!c || c.status === "ended") throw new Error("انتهى اشتراكك. تواصل معنا لتجديده."); }
       t.clear(); u.last_login = now(); logAct(d, u.name, "تسجيل دخول"); store(d); return setSession(u);
     },

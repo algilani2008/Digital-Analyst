@@ -42,14 +42,14 @@
   var CONTACT={whatsapp:"966569184730",email:""}; /* whatsapp: international digits only, e.g. 9665XXXXXXXX */
   function $id(i){return document.getElementById(i)}
   function waLink(text){return CONTACT.whatsapp?"https://wa.me/"+CONTACT.whatsapp.replace(/\D/g,"")+(text?"?text="+encodeURIComponent(text):""):""}
-  function mailLink(text){return CONTACT.email?"mailto:"+CONTACT.email+"?subject="+encodeURIComponent("طلب خدمة: المحلل الرقمي")+(text?"&body="+encodeURIComponent(text):""):""}
+  function mailLink(text){return CONTACT.email?"mailto:"+CONTACT.email+"?subject="+encodeURIComponent("طلب خدمة: العالم الرقمي")+(text?"&body="+encodeURIComponent(text):""):""}
   function reachLinks(text,small){var c=small?" btn-sm":"",out=[];
     var w=waLink(text),m=mailLink(text);
     if(w){var a=document.createElement("a");a.className="btn btn-primary"+c;a.href=w;a.target="_blank";a.rel="noopener noreferrer";a.textContent="واتساب";out.push(a)}
     if(m){var b=document.createElement("span");b.className="chip";b.style.userSelect="all";b.dir="ltr";b.textContent=CONTACT.email;out.push(b)}
     return out}
   function fillReach(el,text,small){el.textContent="";reachLinks(text,small).forEach(function(a){el.appendChild(a)})}
-  fillReach($id("reach"),"السلام عليكم، اطلعت على خدمات المحلل الرقمي وأبي أناقش احتياج منشأتي.");
+  fillReach($id("reach"),"السلام عليكم، اطلعت على خدمات العالم الرقمي وأبي أناقش احتياج منشأتي.");
   (function(){var f=$id("foot-reach"),parts=[];if(CONTACT.whatsapp)parts.push("واتساب: "+CONTACT.whatsapp);if(CONTACT.email)parts.push(CONTACT.email);f.textContent=parts.join(" · ")})();
 
   var form=$id("req"),sending=false;

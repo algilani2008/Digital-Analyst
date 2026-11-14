@@ -98,5 +98,5 @@
   button();
   if (lang !== "en") return;
   document.documentElement.classList.add("i18n-wait"); setTimeout(function () { document.documentElement.classList.remove("i18n-wait"); }, 2500);
-  var s = document.createElement("script"); s.src = BASE + "assets/i18n-en.js?v=8"; s.onload = start; s.onerror = function () { document.documentElement.classList.remove("i18n-wait"); }; document.head.appendChild(s);
+  var s = document.createElement("script"); s.src = BASE + "assets/i18n-en.js?v=9"; s.onload = start; s.onerror = function () { document.documentElement.classList.remove("i18n-wait"); }; document.head.appendChild(s);
 })();

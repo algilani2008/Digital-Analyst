@@ -1,4 +1,4 @@
-/* المحلل الرقمي: أنماط مشتركة لصفحة الدخول ومركز التحكم وبوابة العملاء */
+/* العالم الرقمي: أنماط مشتركة لصفحة الدخول ومركز التحكم وبوابة العملاء */
 :root{
   --bg:#F4F6F6;--surface:#FFFFFF;--fg:#11222B;--muted:#55676F;--line:#DCE3E4;
   --accent:#0B7A75;--accent-soft:#E1F1EF;--data:#C9822A;--data-soft:#F7EBDA;--on-accent:#FFFFFF;
@@ -46,8 +46,7 @@ label{display:flex;flex-direction:column;gap:5px;font-size:.88rem;font-weight:50
 .shell{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh}
 .side{background:var(--side);color:var(--side-fg);padding:18px 14px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh;overflow-y:auto}
 .brand{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:700;font-size:1.05rem;color:#fff;text-decoration:none;padding:4px 6px 14px}
-.mark{width:34px;height:34px;border-radius:9px;background:var(--accent);display:grid;place-items:center;flex:none}
-.mark svg{width:20px;height:20px}
+.mark{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#0E8F89,#064A47);display:grid;place-items:center;flex:none}.mark svg{width:100%;height:100%}
 .zone{font-size:.72rem;letter-spacing:.04em;color:#8FB3AF;padding:0 8px;margin-bottom:6px}
 .nav{display:flex;flex-direction:column;gap:2px}
 .nav button{all:unset;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 12px;border-radius:9px;cursor:pointer;font-size:.93rem;color:var(--side-fg)}
