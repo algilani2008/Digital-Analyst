@@ -75,432 +75,7 @@ html[dir="ltr"] h1,html[dir="ltr"] h2,html[dir="ltr"] h3{font-family:"Readex Pro
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Readex+Pro:wght@500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
-<style>
-/* Layout: right-aligned RTL column; hero pairs the pitch with a live KPI panel, sections stack below on a 1100px measure */
-:root{
-  --bg:#F4F6F6; --surface:#FFFFFF; --fg:#11222B; --muted:#55676F; --line:#DCE3E4;
-  --accent:#0B7A75; --accent-soft:#E1F1EF; --data:#C9822A; --data-soft:#F7EBDA; --on-accent:#FFFFFF;
-  --f-display:"Readex Pro","IBM Plex Sans Arabic",Tahoma,sans-serif;
-  --f-body:"IBM Plex Sans Arabic",Tahoma,"Segoe UI",sans-serif;
-  --f-data:"IBM Plex Mono",ui-monospace,Menlo,monospace;
-}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0D171C; --surface:#14222A; --fg:#E6EEF0; --muted:#9AAEB5; --line:#24363F;
-  --accent:#3FB8B0; --accent-soft:#16332F; --data:#E3A552; --data-soft:#3A2C18; --on-accent:#06201E; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#0D171C; --surface:#14222A; --fg:#E6EEF0; --muted:#9AAEB5; --line:#24363F;
-  --accent:#3FB8B0; --accent-soft:#16332F; --data:#E3A552; --data-soft:#3A2C18; --on-accent:#06201E; color-scheme:dark}
-
-*{box-sizing:border-box}
-body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.75;
-  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.wrap{max-width:1100px;margin-inline:auto}
-h1,h2,h3{font-family:var(--f-display);text-wrap:balance;line-height:1.3;margin:0}
-h1{font-size:clamp(2rem,5vw,3.1rem);font-weight:700}
-h2{font-size:clamp(1.5rem,3vw,2rem);font-weight:600}
-h3{font-size:1.15rem;font-weight:600}
-p{margin:0}
-a{color:var(--accent)}
-:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
-.num{font-family:var(--f-data);font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
-.eyebrow{font-size:.85rem;color:var(--accent);font-weight:600;letter-spacing:.02em}
-
-/* nav */
-nav.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:20px;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:700;font-size:1.15rem;color:var(--fg);text-decoration:none}
-.mark{width:42px;height:42px;border-radius:11px;background:linear-gradient(135deg,#0E8F89,#064A47);display:grid;place-items:center;box-shadow:0 4px 14px rgba(11,122,117,.28);flex:none}.mark svg{width:100%;height:100%}
-.wm{display:flex;flex-direction:column;line-height:1.15}.wm b{font-weight:700;font-size:1.2rem;letter-spacing:-.01em}.wm small{font:600 .62rem/1.2 "IBM Plex Sans",system-ui,sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--data)}
-html[dir="ltr"] .wm small{display:none}
-nav.top ul{display:flex;gap:20px;list-style:none;margin:0;padding:0;flex-wrap:wrap}
-nav.top ul a{color:var(--muted);text-decoration:none;font-size:.95rem}
-nav.top ul a:hover{color:var(--fg)}
-
-/* hero */
-.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;padding-block:32px 56px}
-.hero > *{min-width:0}
-.hero .lead{color:var(--muted);font-size:1.12rem;max-width:34em;margin-top:16px}
-.cta{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:10px;font-weight:600;font-family:var(--f-body);font-size:1rem;text-decoration:none;cursor:pointer;border:1px solid transparent;min-height:46px}
-.btn-primary{background:var(--accent);color:var(--on-accent)}
-.btn-primary:hover{filter:brightness(1.08)}
-.btn-ghost{border-color:var(--line);color:var(--fg);background:transparent}
-.btn-ghost:hover{border-color:var(--accent)}
-
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 12px 32px -18px rgba(11,40,45,.35)}
-.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.tag{font-size:.75rem;color:var(--muted);border:1px dashed var(--line);border-radius:999px;padding:2px 10px}
-.tabs{display:flex;gap:4px;background:var(--bg);border-radius:10px;padding:4px}
-.tabs button{border:0;background:transparent;color:var(--muted);font-family:var(--f-body);font-size:.88rem;padding:6px 12px;border-radius:7px;cursor:pointer;min-height:34px}
-.tabs button[aria-pressed="true"]{background:var(--surface);color:var(--fg);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.12)}
-.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-block:18px 6px}
-.kpi .label{font-size:.8rem;color:var(--muted)}
-.kpi .value{font-size:1.45rem;font-weight:500;display:block;text-align:right}
-.delta{font-size:.78rem;font-weight:600;color:var(--accent);background:var(--accent-soft);border-radius:6px;padding:1px 7px;display:inline-block}
-.chart{width:100%;height:auto;display:block;margin-top:8px}
-.chart text{fill:var(--muted);font-family:var(--f-body);font-size:11px}
-
-/* sections */
-section.block{padding-block:56px;border-top:1px solid var(--line)}
-.sec-head{display:flex;flex-direction:column;gap:8px;margin-bottom:32px;max-width:40em}
-.sec-head p{color:var(--muted)}
-.services{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px}
-.service{display:flex;flex-direction:column;gap:12px;padding:24px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
-.service > *{min-width:0}
-.service.featured{border:2px solid var(--accent)}
-
-/* needs finder: questions on one side, the plan they produce on the other */
-.finder{display:grid;grid-template-columns:1fr 1.05fr;gap:28px;align-items:start}
-.finder > *{min-width:0}
-.qs{display:flex;flex-direction:column;gap:22px}
-.qs fieldset{border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;min-width:0}
-.qs legend{font-weight:600;padding:0;margin-bottom:10px;display:flex;gap:10px;align-items:baseline}
-.qs legend .n{font-family:var(--f-data);font-size:.8rem;color:var(--accent)}
-.qs legend small{font-weight:400;color:var(--muted);font-size:.82rem}
-.opts{display:flex;flex-wrap:wrap;gap:8px}
-.opt{position:relative}
-.opt input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
-.opt span{display:inline-flex;align-items:center;min-height:40px;padding:6px 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:.92rem;cursor:pointer}
-.opt input:checked + span{border-color:var(--accent);background:var(--accent-soft);color:var(--accent);font-weight:600}
-.opt input:focus-visible + span{outline:2px solid var(--accent);outline-offset:2px}
-.plan{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:16px;box-shadow:0 12px 32px -18px rgba(11,40,45,.35)}
-.plan-head{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
-.need{display:flex;flex-direction:column;gap:8px;padding-top:14px;border-top:1px solid var(--line)}
-.need h4{margin:0;font-family:var(--f-display);font-size:1rem;font-weight:600}
-.need ul{margin:0;padding-inline-start:18px;font-size:.92rem;color:var(--muted);display:flex;flex-direction:column;gap:3px}
-.need ul li::marker{color:var(--data)}
-.need .chips .chip{font-size:.82rem;padding:3px 10px}
-.need .src{font-size:.85rem;color:var(--muted)}
-.plan-sum{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:.92rem;padding:14px;border-radius:12px;background:var(--bg)}
-.plan-sum dt{color:var(--muted)}
-.plan-sum dd{margin:0;font-weight:600}
-@media (max-width:900px){.finder{grid-template-columns:1fr}.plan{position:static}}
-
-/* systems demos */
-.sys{display:flex;flex-direction:column;gap:16px}
-.sys > *{min-width:0}
-.sform{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;align-items:end}
-.sform .field{gap:4px}
-.sform label{font-size:.82rem}
-.board-wrap{overflow-x:auto;padding-bottom:4px}
-.board{display:grid;grid-template-columns:repeat(5,minmax(170px,1fr));gap:10px;min-width:880px}
-.col{background:var(--bg);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:8px;min-width:0}
-.col-h{display:flex;justify-content:space-between;align-items:baseline;gap:6px;font-size:.85rem;font-weight:600}
-.col-h .num{font-size:.78rem;color:var(--muted);font-weight:500}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:6px;font-size:.88rem}
-.card .t{font-weight:600}
-.card .meta{font-size:.78rem;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap}
-.card .acts{display:flex;gap:4px;flex-wrap:wrap}
-.card .acts button{min-height:30px;padding:3px 9px;font-size:.78rem;border-radius:7px}
-.stock-low{color:var(--data);font-weight:600}
-.sys-note{font-size:.85rem;color:var(--muted)}
-.qty{width:70px;min-height:36px;padding:4px 8px;font-size:.88rem}
-
-/* feasibility */
-.parts{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
-.part{display:flex;flex-direction:column;gap:8px;padding:18px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
-.part > *{min-width:0}
-.part .k{font-family:var(--f-data);font-size:.78rem;color:var(--data)}
-.part p,.part li{color:var(--muted);font-size:.92rem}
-.part ul{margin:0;padding-inline-start:18px;display:flex;flex-direction:column;gap:3px}
-.sub-h{margin:36px 0 14px;font-size:1.2rem}
-.ftypes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.ftype{display:flex;flex-direction:column;gap:10px;padding:22px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
-.ftype > *{min-width:0}
-.ftype.featured{border:2px solid var(--accent)}
-.ftype .for{color:var(--muted);font-size:.93rem}
-.ftype ul{margin:0;padding-inline-start:18px;font-size:.92rem;display:flex;flex-direction:column;gap:4px;flex:1}
-.ftype .btn{justify-content:center}
-.deliver{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
-.deliver div{padding:14px 16px;border-radius:12px;background:var(--accent-soft);font-size:.92rem}
-.deliver b{display:block;margin-bottom:2px}
-.calc{display:grid;grid-template-columns:1fr 1.15fr;gap:24px;align-items:start}
-.calc > *{min-width:0}
-.cin{display:flex;flex-direction:column;gap:16px}
-.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.cgrid .field{gap:4px}
-.cgrid label{font-size:.82rem}
-.cgrp{font-size:.82rem;font-weight:600;color:var(--accent);margin-bottom:-4px}
-.cout{display:flex;flex-direction:column;gap:16px}
-.verdict{padding:14px 16px;border-radius:12px;font-size:.95rem;border-inline-start:4px solid var(--accent);background:var(--accent-soft)}
-.verdict.bad{border-color:var(--data);background:var(--data-soft)}
-.scen td:first-child{font-weight:600}
-.cbox{border:1px solid var(--line);border-radius:12px;padding:0 14px;background:var(--surface)}
-.cbox summary{cursor:pointer;font-weight:600;color:var(--accent);padding-block:12px;min-height:44px;display:flex;align-items:center}
-.cbox[open] summary{margin-bottom:4px}
-.cbox .cgrid{padding-bottom:14px}
-.chk{display:flex;gap:8px;align-items:flex-start;font-size:.88rem;font-weight:500}
-.chk input{width:auto;min-height:0;margin-top:6px}
-.ex-tabs{display:flex;gap:8px;flex-wrap:wrap}
-.ex-tabs button{border:1px solid var(--line);background:var(--surface);color:var(--fg);font:inherit;font-size:.9rem;padding:7px 14px;border-radius:10px;cursor:pointer;min-height:40px}
-.ex-tabs button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent);font-weight:600}
-.ex-panel{display:flex;flex-direction:column;gap:18px}
-.ex-panel > *{min-width:0}
-.ex-head{display:flex;flex-direction:column;gap:8px}
-.ex-tags{display:flex;gap:8px;flex-wrap:wrap}
-.ex-tags span{font-size:.78rem;padding:2px 10px;border-radius:999px;background:var(--bg);color:var(--muted)}
-.ex-tags span.lesson{background:var(--data-soft);color:var(--fg);font-weight:600}
-.ba{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.ba > div{min-width:0;padding:16px;border-radius:12px;border:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
-.ba > div.after{border:2px solid var(--accent)}
-.ba h4{margin:0;font-family:var(--f-display);font-size:1rem}
-.ba dl{margin:0;display:grid;grid-template-columns:1fr auto;gap:6px 12px;font-size:.9rem}
-.ba dt{color:var(--muted)}
-.ba dd{margin:0;font-weight:600;text-align:left}
-.ba dd.neg{color:var(--data)}
-.ex-story{display:grid;gap:12px;margin:0}
-.ex-story div{padding:14px 16px;border-radius:12px;background:var(--bg)}
-.ex-story dt{font-weight:600;margin-bottom:4px}
-.ex-story dd{margin:0;color:var(--muted);font-size:.95rem}
-.ex-story div.tip{background:var(--accent-soft)}
-.ex-story div.tip dd{color:var(--fg)}
-@media (max-width:700px){.ba{grid-template-columns:1fr}}
-.growth{display:flex;flex-direction:column;gap:10px;padding-top:6px;border-top:1px solid var(--line)}
-.g-title{margin:6px 0 0;font-family:var(--f-display);font-size:1.05rem}
-.growth details{border:1px solid var(--line);border-radius:12px;padding:0 16px;background:var(--surface)}
-.growth summary{cursor:pointer;font-weight:600;padding-block:12px;min-height:44px;display:flex;align-items:center}
-.growth ul,.growth ol{margin:0 0 12px;padding-inline-start:20px;display:flex;flex-direction:column;gap:5px;font-size:.93rem;color:var(--muted)}
-.growth ol li::marker{color:var(--accent);font-family:var(--f-data)}
-.growth ul li::marker{color:var(--data)}
-.g-budget{font-size:.9rem;margin-bottom:12px;padding:8px 12px;border-radius:8px;background:var(--bg)}
-.g-two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.g-two > div{min-width:0}
-.g-ok,.g-no{font-size:.82rem;font-weight:600;margin-bottom:4px}
-.g-ok{color:var(--accent)}
-.g-no{color:var(--data)}
-.growth details .btn{margin-bottom:12px}
-.g-mis{margin:0 0 12px;display:grid;gap:8px}
-.g-mis div{padding:10px 12px;border-radius:8px;background:var(--bg)}
-.g-mis dt{font-weight:600;font-size:.92rem}
-.g-mis dd{margin:2px 0 0;color:var(--muted);font-size:.9rem}
-@media (max-width:560px){.g-two{grid-template-columns:1fr}}
-.dsim-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:.92rem}
-.dsim-row input{width:90px}
-.cal{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
-.cal div{padding:14px 16px;border-radius:12px;background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;gap:4px}
-.cal b{font-family:var(--f-display)}
-.cal span{font-size:.88rem;color:var(--muted)}
-.cal .when{font-size:.8rem;color:var(--accent);font-weight:600}
-.disclaimer{font-size:.82rem;color:var(--muted);padding:12px 14px;border-radius:10px;border:1px dashed var(--line)}
-@media (max-width:900px){.ftypes,.calc{grid-template-columns:1fr}}
-@media (max-width:560px){.cgrid{grid-template-columns:1fr 1fr}}
-.svc-sub{margin:-4px 0 2px;font-size:.82rem;color:var(--muted);font-weight:600}
-.svc-tag{align-self:flex-start;font-size:.75rem;font-weight:600;border-radius:999px;padding:2px 10px;background:var(--bg);color:var(--muted)}
-.svc-tag.main{background:var(--accent);color:var(--on-accent)}
-.service .ico{width:42px;height:42px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center;color:var(--accent)}
-.service .ico svg{width:22px;height:22px}
-.service p{color:var(--muted);font-size:.95rem}
-.service ul{margin:0;padding-inline-start:18px;font-size:.92rem;display:flex;flex-direction:column;gap:4px}
-.service li::marker{color:var(--data)}
-
-.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;list-style:none;padding:0;margin:0;counter-reset:s}
-.steps li{position:relative;padding:0 0 0 20px;display:flex;flex-direction:column;gap:8px;counter-increment:s}
-.steps li::before{content:counter(s);font-family:var(--f-data);font-size:.85rem;width:32px;height:32px;border-radius:50%;border:1.5px solid var(--accent);color:var(--accent);display:grid;place-items:center;background:var(--bg);position:relative;z-index:1}
-.steps li::after{content:"";position:absolute;top:16px;right:32px;left:0;height:1.5px;background:var(--line)}
-.steps li:last-child::after{display:none}
-.steps p{color:var(--muted);font-size:.93rem;padding-left:8px}
-
-.skills{display:grid;grid-template-columns:repeat(2,1fr);gap:28px 40px}
-.skills > div{min-width:0}
-.skills h3{margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.skills h3::before{content:"";width:10px;height:10px;border-radius:3px;background:var(--data)}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{font-size:.88rem;padding:5px 12px;border-radius:8px;background:var(--surface);border:1px solid var(--line)}
-.chip b{font-weight:600}
-.note{margin-top:28px;padding:16px 18px;border-radius:12px;background:var(--data-soft);font-size:.93rem}
-
-/* work */
-.cases{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.case{display:flex;flex-direction:column;border-radius:14px;background:var(--surface);border:1px solid var(--line);overflow:hidden}
-.case > *{min-width:0}
-.case-vis{height:164px;background:var(--accent-soft);display:block;width:100%;object-fit:cover;object-position:center 58%;border-bottom:1px solid var(--line)}
-.case-body{padding:20px;display:flex;flex-direction:column;gap:10px}
-.case-meta{font-size:.8rem;color:var(--accent);font-weight:600}
-.case dl{margin:0;display:grid;gap:8px;font-size:.92rem}
-.case dt{font-weight:600}
-.case dd{margin:0;color:var(--muted)}
-.result{margin-top:4px;padding:10px 12px;border-radius:8px;background:var(--data-soft);font-size:.9rem}
-
-/* packages */
-.packages{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch}
-.pkg{display:flex;flex-direction:column;gap:14px;padding:26px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
-.pkg > *{min-width:0}
-.pkg.featured{border:2px solid var(--accent)}
-.pkg .badge{align-self:flex-start;font-size:.75rem;font-weight:600;background:var(--accent);color:var(--on-accent);border-radius:999px;padding:2px 10px}
-.pkg .for{color:var(--muted);font-size:.93rem}
-.pkg ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:.93rem;flex:1}
-.pkg li{display:flex;gap:8px;align-items:flex-start}
-.pkg li::before{content:"";flex:none;width:16px;height:16px;margin-top:5px;border-radius:50%;background:var(--accent-soft);box-shadow:inset 0 0 0 4px var(--accent-soft),inset 0 0 0 8px var(--accent)}
-.pkg .dur{font-size:.85rem;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
-.pkg .btn{justify-content:center}
-
-/* faq */
-.faq{display:flex;flex-direction:column;gap:10px;max-width:820px}
-.faq details{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:0 18px}
-.faq summary{cursor:pointer;padding-block:16px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:12px;min-height:44px}
-.faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:"+";font-family:var(--f-data);color:var(--accent);font-size:1.2rem;line-height:1}
-.faq details[open] summary::after{content:"−"}
-.faq details p{color:var(--muted);padding-bottom:16px;font-size:.95rem}
-
-/* free band */
-.free-band{display:grid;grid-template-columns:1.2fr 1fr;gap:24px;padding:26px;border-radius:14px;background:var(--accent-soft);border:1px solid var(--accent);margin-bottom:24px;align-items:center}
-.free-band > *{min-width:0}
-.free-band p{color:var(--muted);margin-top:8px}
-.limits{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:.93rem}
-.limits li{display:flex;justify-content:space-between;gap:12px;padding:8px 12px;background:var(--surface);border-radius:8px}
-.limits b{color:var(--accent)}
-
-/* tools */
-.tool-wrap{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:18px}
-.tool-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.tool{display:flex;flex-direction:column;gap:18px}
-.tool > *{min-width:0}
-.tool-intro{color:var(--muted);font-size:.95rem;max-width:46em}
-.meter{display:flex;align-items:center;gap:10px;font-size:.88rem;color:var(--muted)}
-.meter-bar{width:120px;height:8px;background:var(--line);border-radius:99px;overflow:hidden}
-.meter-bar i{display:block;height:100%;background:var(--accent);border-radius:99px}
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.file-btn{position:relative;overflow:hidden}
-.file-btn input{position:absolute;inset:0;opacity:0;cursor:pointer;min-height:0}
-.fmt{font-size:.85rem;color:var(--muted)}
-.fmt code{font-family:var(--f-body);background:var(--bg);padding:1px 6px;border-radius:5px}
-.msg{font-size:.9rem;padding:10px 14px;border-radius:10px;background:var(--data-soft)}
-.locked{padding:18px;border-radius:12px;background:var(--data-soft);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.res-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.res-kpis .kpi{padding:12px;border-radius:10px;background:var(--bg)}
-.res-kpis .value{font-size:1.15rem;text-align:right}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.grid2 > *{min-width:0}
-.card-t{font-weight:600;font-size:.95rem;margin-bottom:10px}
-.hbars{display:flex;flex-direction:column;gap:8px}
-.hb{display:grid;grid-template-columns:minmax(80px,120px) 1fr auto;gap:10px;align-items:center;font-size:.88rem}
-.hb .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.hb .track{height:12px;background:var(--bg);border-radius:4px;overflow:hidden}
-.hb .fill{height:100%;background:var(--accent);border-radius:4px}
-.hb .fill.warn{background:var(--data)}
-.tbl-wrap{overflow-x:auto}
-table.data{width:100%;border-collapse:collapse;font-size:.9rem}
-table.data th{text-align:right;font-weight:600;color:var(--muted);padding:8px;border-bottom:1px solid var(--line);white-space:nowrap}
-table.data td{padding:8px;border-bottom:1px solid var(--line)}
-.flag{font-size:.75rem;padding:1px 8px;border-radius:99px;background:var(--data-soft);white-space:nowrap}
-.flag.good{background:var(--accent-soft);color:var(--accent)}
-.insights{margin:0;padding:16px 18px 16px 18px;padding-inline-start:34px;background:var(--bg);border-radius:12px;display:flex;flex-direction:column;gap:6px;font-size:.93rem}
-.insights li::marker{color:var(--data)}
-.mini-chart{width:100%;height:auto;display:block}
-.mini-chart text{fill:var(--muted);font-family:var(--f-body);font-size:11px}
-.mform{display:grid;grid-template-columns:2fr 1.3fr 1fr 1.2fr auto;gap:10px;align-items:end}
-.mform .field{gap:4px}
-.mform label{font-size:.82rem}
-.counts{display:flex;gap:10px;flex-wrap:wrap}
-.counts span{font-size:.85rem;padding:4px 12px;border-radius:8px;background:var(--bg)}
-.reqs{display:flex;flex-direction:column;gap:10px}
-.req{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);border-inline-start:4px solid var(--line)}
-.req > *{min-width:0}
-.req.p-high{border-inline-start-color:var(--data)}
-.req.p-mid{border-inline-start-color:var(--accent)}
-.req.done{opacity:.6}
-.req .t{font-weight:600}
-.req .meta{font-size:.82rem;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap}
-.req-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
-.pill{font-size:.78rem;padding:2px 10px;border-radius:99px;white-space:nowrap}
-.s0{background:var(--data-soft);color:var(--fg)}
-.s1{background:var(--accent-soft);color:var(--accent)}
-.s2{background:var(--bg);color:var(--muted)}
-.late{background:var(--data);color:var(--on-accent)}
-.btn-sm{padding:6px 12px;min-height:36px;font-size:.85rem;border-radius:8px}
-.case .btn{align-self:flex-start;margin-top:4px}
-
-.mapper{padding:16px;border-radius:12px;border:1px dashed var(--accent);background:var(--bg);display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
-.map-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
-.map-row label{font-size:.82rem}
-#out-sales,#out-traffic{display:flex;flex-direction:column;gap:18px}
-
-/* contact */
-.contact{display:grid;grid-template-columns:.85fr 1.15fr;gap:40px;align-items:start}
-.contact > *{min-width:0}
-form{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.field{display:flex;flex-direction:column;gap:6px}
-.field.full{grid-column:1/-1}
-label{font-size:.9rem;font-weight:500}
-input,select,textarea{font:inherit;font-size:.97rem;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-height:46px;width:100%}
-textarea{min-height:110px;resize:vertical}
-input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:0;border-color:var(--accent)}
-.err{color:#B4232A;font-size:.82rem;min-height:1.2em}
-:root[data-theme="dark"] .err{color:#FF8A8F}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .err{color:#FF8A8F}}
-#out{grid-column:1/-1;background:var(--surface);border:1px solid var(--accent);border-radius:12px;padding:16px}
-#out pre{white-space:pre-wrap;font-family:var(--f-body);margin:8px 0 12px;font-size:.93rem}
-.out-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.status{font-size:.88rem;color:var(--accent)}
-footer{padding-block:28px 40px;border-top:1px solid var(--line);color:var(--muted);font-size:.88rem;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-footer a{color:var(--muted)}
-
-/* trust + privacy */
-.safe{display:flex;gap:10px;align-items:flex-start;font-size:.88rem;color:var(--fg);background:var(--accent-soft);border-radius:10px;padding:10px 14px}
-.safe svg{flex:none;width:18px;height:18px;margin-top:4px;color:var(--accent)}
-.policy{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-.policy > div{min-width:0;padding:20px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
-.policy h3{margin-bottom:8px}
-.policy p,.policy li{color:var(--muted);font-size:.93rem}
-.policy ul{margin:0;padding-inline-start:18px;display:flex;flex-direction:column;gap:4px}
-.upsell{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:16px 18px;border-radius:12px;border:1px solid var(--accent);background:var(--surface)}
-.upsell p{font-size:.93rem}
-.res-actions{display:flex;gap:8px;flex-wrap:wrap}
-.reach{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
-.inbox{grid-column:1/-1;margin-top:8px;padding:16px;border-radius:12px;border:1px dashed var(--accent);background:var(--bg);display:flex;flex-direction:column;gap:10px}
-.lead{padding:12px 14px;border-radius:10px;background:var(--surface);border:1px solid var(--line);font-size:.9rem}
-.lead pre{white-space:pre-wrap;font-family:var(--f-body);margin:6px 0 0;font-size:.9rem;color:var(--muted)}
-.lead .meta{font-size:.8rem;color:var(--muted)}
-.mode{font-size:.8rem;color:var(--muted)}
-@media (max-width:900px){
-  .hero,.contact{grid-template-columns:1fr}
-  .services,.cases,.packages,.free-band,.grid2{grid-template-columns:1fr}
-  .res-kpis{grid-template-columns:1fr 1fr}
-  .mform{grid-template-columns:1fr 1fr}
-  .mform .field:first-child{grid-column:1/-1}
-  .steps{grid-template-columns:1fr 1fr;gap:28px}
-  .steps li::after{display:none}
-}
-@media (max-width:560px){
-  nav.top ul{display:none}
-  .skills,form,.policy{grid-template-columns:1fr}
-  .steps{grid-template-columns:1fr}
-  .kpi .value{font-size:1.15rem}
-}
-@media (prefers-reduced-motion:no-preference){
-  .line-path{transition:d .5s ease}
-}
-.manual{margin-top:12px;padding:14px;border:1px dashed var(--line);border-radius:12px;background:var(--bg)}
-.man-grid input,.cs-lines input,.cs-lines select,#costing-app table input,#costing-app table select{min-height:38px;padding:6px 8px;font-size:.9rem}
-.man-grid td,#costing-app table td{padding:4px}
-input.qty{max-width:110px;min-width:64px}
-.cs-lines select{min-width:150px}
-.cs-split{display:grid;grid-template-columns:240px 1fr;gap:16px;align-items:start;margin-top:14px}
-.rent-f{grid-template-columns:repeat(5,1fr);margin-bottom:12px}
-.rent-map-wrap{position:relative;margin-bottom:8px}
-.rent-map{height:420px;border-radius:12px;border:1px solid var(--line);background:#dfe7e6;overflow:hidden;z-index:0}
-.rent-map-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px}
-.rent-links{font-size:.88rem;margin:0 0 12px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.rent-na{margin-top:14px;font-size:.92rem}
-.rent-na summary{cursor:pointer;color:var(--accent)}
-.leaflet-container{font-family:inherit}
-.leaflet-tooltip{direction:rtl;text-align:right}
-.rent-src{font-size:.85rem;color:var(--muted);margin:0 0 10px}
-.hb.on .nm{font-weight:600}
-@media (max-width:760px){.rent-f{grid-template-columns:1fr 1fr}.rent-map{height:320px}}
-.cs-split>*{min-width:0}
-.cs-list{display:flex;flex-direction:column;gap:6px}
-.cs-list>button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:right;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:10px;padding:8px 10px;cursor:pointer;font:inherit}
-.cs-list>button span{font-size:.8rem;color:var(--muted)}
-.cs-list>button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
-.cs-acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.cs-head{grid-template-columns:repeat(3,1fr)}
-.cs-row{display:flex;gap:8px;align-items:center;margin-bottom:6px}
-.cs-row input{min-height:38px;padding:6px 8px}
-#costing-app .res-actions{margin-top:16px}
-#costing-app .grid2{margin-top:14px}
-@media (max-width:760px){.cs-split{grid-template-columns:minmax(0,1fr)}.cs-head{grid-template-columns:1fr 1fr}.cs-list{flex-direction:row;overflow-x:auto}.cs-list>button{min-width:150px}.cs-list .card-t{display:none}}
-</style>
+<link rel="stylesheet" href="assets/site.css?v=10">
 </head><body>
 <a class="skip" href="#services">تخطَّ إلى المحتوى</a>
 <div class="wrap" dir="rtl" lang="ar">
@@ -512,10 +87,9 @@ input.qty{max-width:110px;min-width:64px}
     <ul>
       <li><a href="#services">الخدمات</a></li>
       <li><a href="#discover">وش أحتاج؟</a></li>
-      <li><a href="#top-products">الأعلى طلباً</a></li>
-      <li><a href="#costing">تكلفة المنتج</a></li>
-      <li><a href="#rent">أسعار الإيجار</a></li>
-      <li><a href="#feasibility">دراسات الجدوى</a></li>
+      <li><a href="tools.html">الأدوات المجانية</a></li>
+      <li><a href="systems.html">الأنظمة</a></li>
+      <li><a href="feasibility.html">دراسات الجدوى</a></li>
       <li><a href="#work">نماذج أعمال</a></li>
       <li><a href="#packages">الباقات</a></li>
       <li><a href="#faq">أسئلة شائعة</a></li>
@@ -562,8 +136,8 @@ input.qty{max-width:110px;min-width:64px}
       <h2>من حبة القهوة لين موقع فرعك الجديد</h2>
       <p>نحسب تكلفة منتجك بالجرام والمل، ونحلل مبيعاتك وأرباحك، ونوريك أسعار إيجار الأحياء على خريطة أقمار صناعية.</p>
       <div class="cta">
-        <a class="btn btn-primary" href="#costing">جرّب حاسبة التكاليف</a>
-        <a class="btn btn-ghost" href="#rent">شوف أسعار الإيجار</a>
+        <a class="btn btn-primary" href="tools.html#costing">جرّب حاسبة التكاليف</a>
+        <a class="btn btn-ghost" href="tools.html#rent">شوف أسعار الإيجار</a>
       </div>
     </div>
     <span class="ad-credit">الصورة مولّدة بالذكاء الاصطناعي</span>
@@ -572,15 +146,14 @@ input.qty{max-width:110px;min-width:64px}
   <section class="block" id="services">
     <div class="sec-head">
       <p class="eyebrow">الخدمات</p>
-      <h2>تحليل البيانات أولاً، وخدمات تكمّله</h2>
-      <p>شغلنا الأساسي تحليل البيانات وذكاء الأعمال. ولو تبي تفتح مشروع جديد، أو تحتاج نظام يجمع بياناتك أو موقع يستقبل عملاءك، نقدمها كخدمات إضافية.</p>
+      <h2>أربع خدمات أساسية، تطلبها كل وحدة أو مع بعض</h2>
+      <p>تحليل البيانات، بناء الأنظمة، تصميم المواقع، ودراسات الجدوى. كلها خدمات نقدمها بنفس الاهتمام، سواء كنت تبي وحدة منها أو مشروع متكامل.</p>
     </div>
     <div class="services">
-      <article class="service featured">
+      <article class="service">
         <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-5 4 4 8-8"/><path d="M15 8h5v5"/></svg></span>
-        <span class="svc-tag main">الخدمة الأساسية</span>
         <h3>افهم أداء مبيعاتك من نظرة</h3><p class="svc-sub">تحليل البيانات وذكاء الأعمال</p>
-        <p>أرقامك مرتبة في لوحة واحدة، مع توصيات واضحة.</p>
+        <p>أرقامك مرتبة في لوحة واحدة، مع توصيات واضحة. <a href="tools.html">جرّب الأدوات</a></p>
         <ul>
           <li>لوحات معلومات Power BI أو ويب تفاعلية</li>
           <li>تحليلات الموقع عبر Google Analytics 4</li>
@@ -590,9 +163,8 @@ input.qty{max-width:110px;min-width:64px}
       </article>
       <article class="service">
         <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><path d="M10 6.5h4a3 3 0 0 1 3 3V14"/></svg></span>
-        <span class="svc-tag">خدمة إضافية</span>
         <h3>نظّم شغل منشأتك في نظام واحد</h3><p class="svc-sub">تحليل وتصميم الأنظمة</p>
-        <p>أنظمة داخلية تنظم شغلك: إدارة العملاء والمبيعات، المخزون والمشتريات، الموارد البشرية، وطلبات الصيانة. <a href="#systems">جرّب النماذج</a></p>
+        <p>أنظمة داخلية تنظم شغلك: إدارة العملاء والمبيعات، المخزون والمشتريات، الموارد البشرية، وطلبات الصيانة. <a href="systems.html">جرّب النماذج</a></p>
         <ul>
           <li>كتابة المتطلبات (BRD / SRS)</li>
           <li>مخططات سير العمل وقواعد البيانات</li>
@@ -602,7 +174,6 @@ input.qty{max-width:110px;min-width:64px}
       </article>
       <article class="service">
         <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v5"/></svg></span>
-        <span class="svc-tag">خدمة إضافية</span>
         <h3>خلّ عملاءك يلقونك على الجوال</h3><p class="svc-sub">تصميم المواقع</p>
         <p>مواقع عربية متجاوبة، سريعة، ومبنية على رحلة العميل.</p>
         <ul>
@@ -614,9 +185,8 @@ input.qty{max-width:110px;min-width:64px}
       </article>
       <article class="service">
         <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7"/><circle cx="19" cy="6" r="3"/><path d="M2 20h20"/></svg></span>
-        <span class="svc-tag">خدمة إضافية</span>
         <h3>اختبر فكرتك قبل ما تستثمر</h3><p class="svc-sub">دراسات الجدوى</p>
-        <p>لأي مشروع تبي تفتحه: هل يستاهل، وكم يكلف، ومتى ترجع فلوسك. <a href="#feasibility">جرّب الحاسبة</a></p>
+        <p>لأي مشروع تبي تفتحه: هل يستاهل، وكم يكلف، ومتى ترجع فلوسك. <a href="feasibility.html">جرّب الحاسبة</a></p>
         <ul>
           <li>دراسة السوق والمنافسين</li>
           <li>نموذج مالي لخمس سنوات بثلاث سيناريوهات</li>
@@ -676,7 +246,7 @@ input.qty{max-width:110px;min-width:64px}
             <div><dt>الحل</dt><dd>توحيد البيانات بـ Power Query، ولوحة تقارن الفروع والأصناف والأيام.</dd></div>
           </dl>
           <p class="result">التقرير صار يتحدث تلقائياً، وظهر أي الأصناف تبيع ببطء في كل فرع.</p>
-          <a class="btn btn-ghost btn-sm" href="#tools" data-tool="sales">جرّب الأداة مجاناً</a>
+          <a class="btn btn-ghost btn-sm" href="tools.html?tool=sales">جرّب الأداة مجاناً</a>
         </div>
       </article>
       <article class="case">
@@ -692,7 +262,7 @@ input.qty{max-width:110px;min-width:64px}
             <div><dt>الحل</dt><dd>مخطط سير عمل، قاعدة بيانات للطلبات، وصلاحيات للمشرف والفني ومقدم الطلب.</dd></div>
           </dl>
           <p class="result">كل طلب له رقم وحالة ومسؤول، والمشرف يشوف المتأخر من أول نظرة.</p>
-          <a class="btn btn-ghost btn-sm" href="#tools" data-tool="maint">جرّب الأداة مجاناً</a>
+          <a class="btn btn-ghost btn-sm" href="tools.html?tool=maint">جرّب الأداة مجاناً</a>
         </div>
       </article>
       <article class="case">
@@ -708,351 +278,12 @@ input.qty{max-width:110px;min-width:64px}
             <div><dt>الحل</dt><dd>موقع عربي سريع على الجوال، وربط Google Analytics 4 بتتبع الطلبات والتواصل.</dd></div>
           </dl>
           <p class="result">صار واضح أي قناة تجيب طلبات، ووين يطلع الزائر قبل ما يكمل.</p>
-          <a class="btn btn-ghost btn-sm" href="#tools" data-tool="traffic">جرّب الأداة مجاناً</a>
+          <a class="btn btn-ghost btn-sm" href="tools.html?tool=traffic">جرّب الأداة مجاناً</a>
         </div>
       </article>
     </div>
   </section>
 
-  <section class="block" id="tools">
-    <div class="sec-head">
-      <p class="eyebrow">جرّب مجاناً</p>
-      <h2>الأدوات تشتغل الحين على بياناتك</h2>
-      <p>ارفع ملفك، أو اكتب أرقامك يدويًا، أو جرّب بالبيانات التجريبية. البيانات التجريبية ما تنحسب من رصيدك.</p>
-    </div>
-    <div class="tool-wrap">
-      <p class="safe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg><span>ملفاتك تنقرى وتتحلل داخل جهازك بالكامل، وما ننسخ ولا نحفظ محتواها في أي مكان. الحد الأقصى للملف <span class="num">5</span> ميقا، وصيغه المدعومة: ‎.xlsx و ‎.xls و ‎.csv. <a href="#privacy">سياسة الخصوصية</a></span></p>
-      <div class="tool-top">
-        <div class="tabs" role="group" aria-label="اختيار الأداة">
-          <button type="button" id="tt-sales" aria-pressed="true" data-t="sales">لوحة المبيعات</button>
-          <button type="button" id="tt-maint" aria-pressed="false" data-t="maint">طلبات الصيانة</button>
-          <button type="button" id="tt-traffic" aria-pressed="false" data-t="traffic">مصادر الزيارات</button>
-        </div>
-      </div>
-
-      <div class="tool" id="t-sales">
-        <div class="tool-top">
-          <p class="tool-intro">ارفع ملف مبيعاتك، وتطلع لك لوحة تقارن الفروع والأصناف والأشهر، مع الأصناف البطيئة.</p>
-          <div class="meter" id="m-sales"><span class="mt"></span><span class="meter-bar"><i></i></span></div>
-        </div>
-        <div class="toolbar">
-          <span class="btn btn-primary file-btn">ارفع ملف Excel أو CSV<input type="file" id="f-sales" accept=".xlsx,.xls,.csv" aria-label="رفع ملف المبيعات"></span>
-          <button type="button" class="btn btn-ghost" data-manual="sales">أدخل البيانات يدويًا</button>
-          <button type="button" class="btn btn-ghost" id="demo-sales">جرّب ببيانات تجريبية</button>
-        </div>
-        <p class="fmt">الإدخال اليدوي يخصم من رصيدك أقل من رفع الملف. ارفع ملفك زي ما هو. نكتشف أعمدة المبلغ والفرع والصنف والتاريخ تلقائياً حتى لو أسماؤها مختلفة أو فوقها عنوان تقرير.</p>
-        <div class="locked" id="lock-sales" hidden><span>خلص رصيد التحليلات المجانية. اطلب باقة النمو عشان تكمل بدون حدود.</span><a class="btn btn-primary btn-sm" href="#contact" data-pkg="تحليل بيانات ولوحة معلومات">اطلب الباقة</a></div>
-        <div class="manual" id="man-sales" hidden></div>
-        <div id="err-sales" class="msg" hidden></div>
-        <div id="out-sales"></div>
-      </div>
-
-      <div class="tool" id="t-maint" hidden>
-        <div class="tool-top">
-          <p class="tool-intro">سجّل طلبات الصيانة، وحدد المسؤول والأولوية، وتابع حالتها. الطلب المفتوح أكثر من ٤٨ ساعة ينعلّم متأخر. <span class="mode" id="m-mode"></span></p>
-          <div class="meter" id="m-maint"><span class="mt"></span><span class="meter-bar"><i></i></span></div>
-        </div>
-        <form class="mform" id="mform" novalidate>
-          <div class="field"><label for="m-title">وصف المشكلة</label><input id="m-title" placeholder="مثال: تسريب مكيف"></div>
-          <div class="field"><label for="m-loc">الموقع</label><input id="m-loc" placeholder="مثال: الدور الثاني"></div>
-          <div class="field"><label for="m-pr">الأولوية</label><select id="m-pr"><option value="high">عالية</option><option value="mid" selected>متوسطة</option><option value="low">منخفضة</option></select></div>
-          <div class="field"><label for="m-who">المسؤول</label><input id="m-who" placeholder="مثال: الفني خالد"></div>
-          <button class="btn btn-primary" type="submit">أضف الطلب</button>
-        </form>
-        <div id="err-maint" class="msg" hidden></div>
-        <div class="locked" id="lock-maint" hidden><span>وصلت لحد الطلبات المجانية. اطلب الباقة المتكاملة عشان يصير لك نظام كامل لمنشأتك.</span><a class="btn btn-primary btn-sm" href="#contact" data-pkg="تحليل وتصميم نظام">اطلب الباقة</a></div>
-        <div class="toolbar" style="justify-content:space-between"><div class="counts" id="m-counts"></div><button type="button" class="btn btn-ghost btn-sm" id="m-export">صدّر الطلبات Excel</button></div>
-        <div class="reqs" id="m-list"></div>
-        <div class="upsell"><p>تبي هذا النظام لمنشأتك بحسابات للفنيين والمشرفين وتنبيهات للطلبات المتأخرة؟</p><a class="btn btn-primary btn-sm" href="#contact" data-pkg="تحليل وتصميم نظام">ناقش احتياجك</a></div>
-      </div>
-
-      <div class="tool" id="t-traffic" hidden>
-        <div class="tool-top">
-          <p class="tool-intro">ارفع تقرير الزيارات من Google Analytics أو من إعلاناتك، ونقولك أي قناة تجيب طلبات وأي قناة تصرف عليها بدون نتيجة.</p>
-          <div class="meter" id="m-traffic"><span class="mt"></span><span class="meter-bar"><i></i></span></div>
-        </div>
-        <div class="toolbar">
-          <span class="btn btn-primary file-btn">ارفع ملف Excel أو CSV<input type="file" id="f-traffic" accept=".xlsx,.xls,.csv" aria-label="رفع ملف الزيارات"></span>
-          <button type="button" class="btn btn-ghost" data-manual="traffic">أدخل البيانات يدويًا</button>
-          <button type="button" class="btn btn-ghost" id="demo-traffic">جرّب ببيانات تجريبية</button>
-        </div>
-        <p class="fmt">ارفع التقرير زي ما صدّرته من Google Analytics أو منصة الإعلانات. نكتشف أعمدة المصدر والزيارات والطلبات تلقائياً.</p>
-        <div class="locked" id="lock-traffic" hidden><span>خلص رصيد التحليلات المجانية. اطلب باقة النمو للتقارير الشهرية.</span><a class="btn btn-primary btn-sm" href="#contact" data-pkg="مشروع متكامل">اطلب الباقة</a></div>
-        <div class="manual" id="man-traffic" hidden></div>
-        <div id="err-traffic" class="msg" hidden></div>
-        <div id="out-traffic"></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="block" id="systems">
-    <div class="sec-head">
-      <p class="eyebrow">نماذج الأنظمة</p>
-      <h2>جرّب أنظمة شغالة قبل ما نصمم نظامك</h2>
-      <p>نماذج مبسطة ببيانات تجريبية تحس فيها كيف يشتغل النظام. نظامك الفعلي ينبني على إجراءات منشأتك وصلاحيات موظفيك. وتلقى نظام طلبات الصيانة في <a href="#tools" data-tool="maint">الأدوات المجانية</a>.</p>
-    </div>
-    <div class="tool-wrap">
-      <div class="tool-top">
-        <div class="tabs" role="group" aria-label="اختيار النظام">
-          <button type="button" aria-pressed="true" data-s="crm">العملاء والمبيعات</button>
-          <button type="button" aria-pressed="false" data-s="inv">المخزون</button>
-          <button type="button" aria-pressed="false" data-s="hr">الموارد البشرية</button>
-        </div>
-        <p class="sys-note">البيانات تنحفظ في متصفحك فقط. <button type="button" class="btn btn-ghost btn-sm" id="sys-reset">ارجع للبيانات التجريبية</button></p>
-      </div>
-
-      <div class="sys" id="s-crm">
-        <p class="tool-intro">تابع كل عميل محتمل من أول استفسار لين يوقّع، ولا تضيع عليك متابعة.</p>
-        <form class="sform" id="crm-form" novalidate>
-          <div class="field"><label for="crm-name">العميل أو الجهة</label><input id="crm-name" maxlength="80" placeholder="مثال: مطعم الريف"></div>
-          <div class="field"><label for="crm-val">قيمة الفرصة (ر.س)</label><input id="crm-val" type="number" min="0" step="100" placeholder="12000"></div>
-          <div class="field"><label for="crm-next">المتابعة القادمة</label><input id="crm-next" type="date"></div>
-          <button class="btn btn-primary" type="submit">أضف فرصة</button>
-        </form>
-        <div id="crm-err" class="msg" hidden></div>
-        <div class="res-kpis" id="crm-kpis"></div>
-        <div class="board-wrap"><div class="board" id="crm-board"></div></div>
-        <div class="res-actions"><button type="button" class="btn btn-ghost btn-sm" data-sx="crm">صدّر Excel</button><span class="status" id="sx-crm" aria-live="polite"></span></div>
-      </div>
-
-      <div class="sys" id="s-inv" hidden>
-        <p class="tool-intro">سجّل الوارد والمنصرف، ويقولك النظام وش الأصناف اللي قربت تخلص قبل ما تخلص.</p>
-        <form class="sform" id="inv-form" novalidate>
-          <div class="field"><label for="inv-name">الصنف</label><input id="inv-name" maxlength="80" placeholder="مثال: أكواب ورق 12 أونص"></div>
-          <div class="field"><label for="inv-qty">الكمية الحالية</label><input id="inv-qty" type="number" min="0" placeholder="200"></div>
-          <div class="field"><label for="inv-min">حد إعادة الطلب</label><input id="inv-min" type="number" min="0" placeholder="50"></div>
-          <div class="field"><label for="inv-cost">تكلفة الوحدة (ر.س)</label><input id="inv-cost" type="number" min="0" step="0.01" placeholder="0.35"></div>
-          <button class="btn btn-primary" type="submit">أضف صنف</button>
-        </form>
-        <div id="inv-err" class="msg" hidden></div>
-        <div class="res-kpis" id="inv-kpis"></div>
-        <div class="tbl-wrap"><table class="data"><thead><tr><th>الصنف</th><th>الكمية</th><th>حد الطلب</th><th>القيمة</th><th>الحالة</th><th>حركة</th></tr></thead><tbody id="inv-body"></tbody></table></div>
-        <div><p class="card-t">آخر الحركات</p><ul class="insights" id="inv-log"></ul></div>
-        <div class="res-actions"><button type="button" class="btn btn-ghost btn-sm" data-sx="inv">صدّر Excel</button><span class="status" id="sx-inv" aria-live="polite"></span></div>
-      </div>
-
-      <div class="sys" id="s-hr" hidden>
-        <p class="tool-intro">ملفات الموظفين، طلبات الإجازة، والموافقة عليها مع خصم الرصيد تلقائياً.</p>
-        <form class="sform" id="hr-form" novalidate>
-          <div class="field"><label for="hr-emp">الموظف</label><select id="hr-emp"></select></div>
-          <div class="field"><label for="hr-from">من تاريخ</label><input id="hr-from" type="date"></div>
-          <div class="field"><label for="hr-days">عدد الأيام</label><input id="hr-days" type="number" min="1" max="60" placeholder="3"></div>
-          <button class="btn btn-primary" type="submit">قدّم طلب إجازة</button>
-        </form>
-        <div id="hr-err" class="msg" hidden></div>
-        <div class="res-kpis" id="hr-kpis"></div>
-        <div class="grid2">
-          <div><p class="card-t">طلبات الإجازة</p><div class="reqs" id="hr-reqs"></div></div>
-          <div><p class="card-t">الموظفين</p><div class="tbl-wrap"><table class="data"><thead><tr><th>الاسم</th><th>القسم</th><th>رصيد الإجازة</th></tr></thead><tbody id="hr-emps"></tbody></table></div>
-            <form class="sform" id="hr-add" novalidate style="margin-top:12px">
-              <div class="field"><label for="hr-nm">موظف جديد</label><input id="hr-nm" maxlength="60" placeholder="الاسم"></div>
-              <div class="field"><label for="hr-dp">القسم</label><input id="hr-dp" maxlength="40" placeholder="المبيعات"></div>
-              <button class="btn btn-ghost" type="submit">أضف</button>
-            </form>
-          </div>
-        </div>
-        <div class="res-actions"><button type="button" class="btn btn-ghost btn-sm" data-sx="hr">صدّر Excel</button><span class="status" id="sx-hr" aria-live="polite"></span></div>
-      </div>
-
-      <div class="upsell"><p>عجبك النموذج؟ نصمم لك نظام على مقاس إجراءاتك، بصلاحيات لكل دور وربط مع لوحة تحليل.</p><a class="btn btn-primary btn-sm" href="#contact" data-pkg="تحليل وتصميم نظام">ناقش نظامك</a></div>
-    </div>
-  </section>
-
-
-
-  <section class="block" id="top-products-sec">
-    <div class="sec-head">
-      <p class="eyebrow">يتحدث كل أسبوع</p>
-      <h2>وش الأكثر طلباً في نشاطك هذي الأيام؟</h2>
-      <p>قائمة المنتجات الأعلى طلباً في كل نشاط، مع سعر البيع الشائع وتقييم العملاء ومصدر كل رقم. يحدّثها الموقع أسبوعياً من تقارير السوق ومنصات التقييم، وتستخدمها قبل ما تضيف صنف جديد أو تغيّر أسعارك.</p>
-    </div>
-    <div class="tool-wrap" id="top-products"><p class="fmt">جاري التحميل…</p></div>
-  </section>
-
-  <section class="block" id="costing">
-    <div class="sec-head">
-      <p class="eyebrow">حاسبة تكلفة المنتج</p>
-      <h2>كم تكلفك الحبة فعلًا، وكم تبيعها، وكم تربح؟</h2>
-      <p>من البهارات بالجرام والزيت بالمل إلى سعر البيع والعمولات وصافي ربح الشهر. اختر نشاطك، وعدّل الوصفة والأسعار، وتطلع لك التكلفة لكل منتج والسعر المقترح وجاهزيتك للتوسع.</p>
-    </div>
-    <div class="tool-wrap" id="costing-app"><noscript>الحاسبة تحتاج JavaScript.</noscript></div>
-  </section>
-
-  <section class="block" id="rent">
-    <div class="sec-head">
-      <p class="eyebrow">أسعار الإيجار</p>
-      <h2>كم سعر المتر في الحي اللي تبيه؟</h2>
-      <p>اختر المنطقة ثم المدينة أو المحافظة ثم الحي، أو اضغط على الخريطة. صور أقمار صناعية وحدود الأحياء من العنوان الوطني، وأسعار المحلات والمكاتب والمستودعات والمصانع والمزارع والسكني، وكم يطلع إيجار مساحتك.</p>
-    </div>
-    <div class="tool-wrap" id="rent-app"><p class="fmt">جاري التحميل…</p></div>
-  </section>
-
-  <section class="block" id="feasibility">
-    <div class="sec-head">
-      <p class="eyebrow">دراسات الجدوى</p>
-      <h2>قبل ما تحط فلوسك، اعرف هل المشروع يستاهل</h2>
-      <p>نسوي لك دراسة جدوى لأي مشروع تبي تفتحه: نقيس السوق، ونحسب التكاليف والأرباح المتوقعة، ونقولك متى ترجع فلوسك ووش المخاطر. ونبدأها من أرقام واقعية مو من تفاؤل.</p>
-    </div>
-
-    <h3 class="sub-h">جرّب الحاسبة المبدئية على فكرة مشروعك</h3>
-    <div class="tool-wrap">
-      <div class="calc">
-        <form class="cin" id="calc" novalidate>
-          <div class="field"><label for="c-tpl">ابدأ من نموذج</label>
-            <select id="c-tpl"><option value="cafe">كافيه</option><option value="rest">مطعم</option><option value="online">متجر إلكتروني</option><option value="salon">صالون أو مركز خدمات</option><option value="blank">من الصفر</option><option value="custom" hidden>أرقام من الأمثلة</option></select>
-            <span class="fmt">أرقام النماذج افتراضية للتجربة، مو متوسطات سوق. غيّرها بأرقام مشروعك.</span></div>
-
-          <details class="cbox" open><summary>المبيعات</summary><div class="cgrid">
-            <div class="field"><label for="c-cust">عملاء أو طلبات في اليوم</label><input id="c-cust" type="number" min="0"></div>
-            <div class="field"><label for="c-ticket">متوسط الفاتورة (ر.س)</label><input id="c-ticket" type="number" min="0" step="0.5"></div>
-            <div class="field"><label for="c-days">أيام العمل في الشهر</label><input id="c-days" type="number" min="1" max="31"></div>
-            <div class="field"><label for="c-cogs">تكلفة البضاعة من المبيعات %</label><input id="c-cogs" type="number" min="0" max="100"></div>
-            <div class="field"><label for="c-vatinc">الأسعار</label><select id="c-vatinc"><option value="1">شاملة ضريبة القيمة المضافة</option><option value="0">بدون الضريبة</option></select></div>
-          </div></details>
-
-          <details class="cbox" open><summary>الموظفين</summary><div class="cgrid">
-            <div class="field"><label for="c-sa">عدد السعوديين</label><input id="c-sa" type="number" min="0"></div>
-            <div class="field"><label for="c-sasal">متوسط راتب السعودي (أساسي + سكن)</label><input id="c-sasal" type="number" min="0" step="100"></div>
-            <div class="field"><label for="c-ex">عدد غير السعوديين</label><input id="c-ex" type="number" min="0"></div>
-            <div class="field"><label for="c-exsal">متوسط راتب غير السعودي</label><input id="c-exsal" type="number" min="0" step="100"></div>
-            <div class="field"><label for="c-owner">راتب المالك لو بيشتغل فيه</label><input id="c-owner" type="number" min="0" step="500"><span class="fmt">لو ما حسبته، الربح يطلع أكبر من الحقيقة.</span></div>
-            <div class="field"><label for="c-med">التأمين الطبي سنوياً لكل موظف (تقديري)</label><input id="c-med" type="number" min="0" step="100"><span class="fmt">خذ عرض سعر من شركة تأمين.</span></div>
-            <div class="field" style="grid-column:1/-1"><label class="chk"><input type="checkbox" id="c-small"> منشأة صغيرة (٩ عمال أو أقل) ومالكها متفرغ ومسجل في التأمينات</label><span class="fmt" id="c-small-note"></span></div>
-          </div></details>
-
-          <details class="cbox" open><summary>المصاريف الشهرية والرسوم</summary><div class="cgrid">
-            <div class="field"><label for="c-rent">الإيجار الشهري</label><input id="c-rent" type="number" min="0" step="500"></div>
-            <div class="field"><label for="c-oth">كهرباء وماء وتسويق واشتراكات</label><input id="c-oth" type="number" min="0" step="500"></div>
-            <div class="field"><label for="c-pay">عمولة الدفع الإلكتروني % (حسب عقد البنك)</label><input id="c-pay" type="number" min="0" max="10" step="0.1"></div>
-            <div class="field"><label for="c-dshare">مبيعات تطبيقات التوصيل %</label><input id="c-dshare" type="number" min="0" max="100"></div>
-            <div class="field"><label for="c-dcomm">عمولة التطبيق % (حسب العقد)</label><input id="c-dcomm" type="number" min="0" max="60"></div>
-            <div class="field"><label for="c-ent">الكيان</label><select id="c-ent"><option value="est">مؤسسة فردية</option><option value="llc">شركة ذات مسؤولية محدودة</option></select></div>
-            <div class="field"><label for="c-balady">رخصة بلدي واللوحة سنوياً (تقديري)</label><input id="c-balady" type="number" min="0" step="100"></div>
-            <div class="field"><label for="c-hc">الشهادة الصحية لكل عامل سنوياً</label><input id="c-hc" type="number" min="0" step="10"><span class="fmt">للأنشطة الغذائية والصحية. خلّها صفر لو ما تنطبق.</span></div>
-            <div class="field"><label for="c-govoth">رسوم أخرى سنوية: سلامة، تصاريح</label><input id="c-govoth" type="number" min="0" step="100"></div>
-            <div class="field"><label for="c-own">الملكية</label><select id="c-own"><option value="sa">سعودي أو خليجي (زكاة)</option><option value="fx">أجنبي (ضريبة دخل)</option></select></div>
-          </div></details>
-
-          <details class="cbox" open><summary>التأسيس والسيولة</summary><div class="cgrid">
-            <div class="field" style="grid-column:1/-1"><label for="c-capex">تكاليف التأسيس: ديكور، معدات، أثاث، أنظمة (ر.س)</label><input id="c-capex" type="number" min="0" step="1000"></div>
-            <div class="field"><label for="c-pre">أشهر التجهيز قبل الافتتاح</label><input id="c-pre" type="number" min="0" max="24"><span class="fmt">تدفع فيها إيجار بدون مبيعات.</span></div>
-            <div class="field"><label for="c-wc">احتياطي السيولة (ر.س)</label><input id="c-wc" type="number" min="0" step="1000"><span class="fmt" id="c-wc-hint"></span></div>
-          </div></details>
-
-          <details class="cbox"><summary>افتراضات متقدمة</summary><div class="cgrid">
-            <div class="field"><label for="c-ramp">مبيعات أول شهر من الطاقة %</label><input id="c-ramp" type="number" min="10" max="100"><span class="fmt">وتوصل للطاقة الكاملة مع نهاية السنة الأولى.</span></div>
-            <div class="field"><label for="c-weak">أشهر ضعيفة في السنة</label><input id="c-weak" type="number" min="0" max="6"></div>
-            <div class="field"><label for="c-drop">انخفاض المبيعات فيها %</label><input id="c-drop" type="number" min="0" max="90"></div>
-            <div class="field"><label for="c-grow">نمو المبيعات سنوياً %</label><input id="c-grow" type="number" min="-50" max="100"></div>
-            <div class="field"><label for="c-inf">زيادة المصاريف سنوياً %</label><input id="c-inf" type="number" min="0" max="50"></div>
-            <div class="field"><label for="c-disc">معدل الخصم %</label><input id="c-disc" type="number" min="0" max="50"></div>
-          </div></details>
-        </form>
-
-        <div class="cout" aria-live="polite">
-          <div class="res-kpis" id="c-kpis"></div>
-          <p class="verdict" id="c-verdict"></p>
-          <p class="verdict bad" id="c-cash" hidden></p>
-          <div><p class="card-t">صافي الربح والرصيد التراكمي على ٥ سنوات</p><svg class="mini-chart" id="c-chart" viewBox="0 0 440 210" role="img" aria-label="صافي الربح السنوي والرصيد التراكمي"></svg>
-            <p class="fmt">الأعمدة: صافي ربح كل سنة. الخط: الرصيد التراكمي بعد خصم التأسيس، ولما يتعدى الصفر ترجع فلوسك.</p></div>
-          <div><p class="card-t">التكاليف الحكومية في السنة الأولى</p><div class="tbl-wrap"><table class="data" id="c-gov"></table></div>
-            <p class="fmt" id="c-gov-src"></p></div>
-          <div><p class="card-t">لو تغيّر شي واحد، وش يصير؟</p><div class="tbl-wrap"><table class="data scen" id="c-sens"></table></div>
-            <p class="fmt">مرتبة من الأكثر تأثيراً على صافي القيمة الحالية.</p></div>
-          <div id="c-dsim"><p class="card-t">محاكي الخصومات: هل العرض يستاهل؟</p>
-            <div class="dsim-row"><label for="c-dpct">لو سويت خصم</label><input id="c-dpct" type="number" min="1" max="90" value="10" inputmode="decimal"><span>%</span></div>
-            <p class="verdict" id="c-dres"></p>
-            <div class="tbl-wrap"><table class="data" id="c-dtab"></table></div>
-            <p class="fmt">الحساب يعتمد على هامش مشروعك بعد تكلفة البضاعة وعمولات الدفع والتوصيل، ويفترض إن تكلفة البضاعة للوحدة ما تتغير. وما يحسب تكلفة الإعلان عن العرض نفسه.</p></div>
-          <div><p class="card-t">قائمة الدخل التقديرية</p><div class="tbl-wrap"><table class="data" id="c-table"></table></div></div>
-          <div class="res-actions"><button type="button" class="btn btn-ghost btn-sm" id="c-xl">صدّر النموذج المالي Excel</button><span class="status" id="c-xl-st" aria-live="polite"></span><button type="button" class="btn btn-primary btn-sm" id="c-send">اطلب دراسة كاملة بهذي الأرقام</button></div>
-          <p class="disclaimer"><b>إخلاء مسؤولية:</b> الحاسبة أداة تخطيط مبدئية تحسب على الأرقام اللي تكتبها أنت، والرسوم الحكومية فيها تقديرية من مصادر منشورة وتتغير بالقرارات. النتائج ما تعتبر دراسة جدوى، ولا ضمان لأرباح أو لقبول تمويل. تحقق من الرسوم من المنصات الرسمية، واستشر محاسب في الزكاة والضريبة.</p>
-        </div>
-      </div>
-    </div>
-
-    <h3 class="sub-h">أمثلة دراسات: كيف تتصرف لو كنت مكانهم</h3>
-    <p class="fmt" style="max-width:46em;margin-bottom:14px">خمس حالات توضيحية بأرقام افتراضية، مو عملاء حقيقيين. كل حالة توريك وش كانت الخطة، ووش كشفت الدراسة، ووش القرار، ووش تتعلم منها لمشروعك. الأرقام تنحسب مباشرة من الحاسبة فوق بالرسوم الحكومية الحالية، وتقدر تفتح أي خطة فيها وتجرب.</p>
-    <div class="tool-wrap">
-      <div class="ex-tabs" role="group" aria-label="اختيار المثال" id="ex-tabs"></div>
-      <div class="ex-panel" id="ex-panel" aria-live="polite"></div>
-    </div>
-
-    <h3 class="sub-h">تقويم المواسم في السعودية: جهّز عروضك قبلها</h3>
-    <div class="cal">
-      <div><span class="when">يتغير كل سنة (هجري)</span><b>رمضان</b><span>يتغير وقت الذروة لليل، ويرتفع الطلب على الفطور والسحور والهدايا. جهّز قبله بشهر.</span></div>
-      <div><span class="when">يتغير كل سنة (هجري)</span><b>عيد الفطر وعيد الأضحى</b><span>هدايا، تجهيز للسفر، وتجمعات عائلية. أقوى موسم للعطور والحلويات وغسيل السيارات.</span></div>
-      <div><span class="when">٢٢ فبراير</span><b>يوم التأسيس</b><span>منتجات وتغليف بهوية المناسبة، بدون خصومات كبيرة.</span></div>
-      <div><span class="when">٢٣ سبتمبر</span><b>اليوم الوطني</b><span>إصدارات محدودة وعروض حزم. المنافسة فيه عالية، فتميّز بالفكرة مو بالسعر.</span></div>
-      <div><span class="when">٢٧ من كل شهر</span><b>نزول الرواتب الحكومية</b><span>الأيام اللي بعدها غالباً ترتفع فيها المشتريات. وقت مناسب للباقات والاشتراكات.</span></div>
-      <div><span class="when">نوفمبر</span><b>الجمعة البيضاء</b><span>للمتاجر الإلكترونية بالذات. خصّص العروض لمنتجات محددة بدل خصم على كل شي.</span></div>
-      <div><span class="when">يونيو إلى سبتمبر تقريباً</span><b>الصيف والإجازات</b><span>سفر وحر: تضعف الأنشطة المفتوحة، ويقوى التوصيل والأماكن المكيفة.</span></div>
-      <div><span class="when">أغسطس وسبتمبر</span><b>العودة للمدارس</b><span>قرطاسية وملابس وطلبات صباحية. للكافيهات القريبة من المدارس والمكاتب.</span></div>
-    </div>
-
-    <h3 class="sub-h">وش تشمل دراسة الجدوى الكاملة؟</h3>
-    <div class="parts">
-      <div class="part"><span class="k">السوق</span><h3>الدراسة السوقية</h3><ul><li>حجم الطلب والشريحة المستهدفة</li><li>المنافسين ونقاط قوتهم وضعفهم</li><li>الأسعار السائدة وموقعك منها</li><li>استبيان أو زيارات ميدانية حسب المشروع</li></ul></div>
-      <div class="part"><span class="k">التشغيل</span><h3>الدراسة الفنية والتشغيلية</h3><ul><li>الموقع والمساحة المناسبة</li><li>المعدات والتجهيزات بعروض أسعار من ٣ موردين لكل بند رئيسي</li><li>الموردين والمواد الخام</li><li>الهيكل الوظيفي وعدد الموظفين</li></ul></div>
-      <div class="part"><span class="k">المال</span><h3>الدراسة المالية</h3><ul><li>تكاليف التأسيس ورأس المال العامل وأقصى احتياج للسيولة</li><li>التدفق النقدي الشهري، مو السنوي بس</li><li>قائمة الدخل والتدفقات النقدية لخمس سنوات</li><li>نقطة التعادل وفترة الاسترداد</li><li>صافي القيمة الحالية (NPV) ومعدل العائد الداخلي (IRR)</li></ul></div>
-      <div class="part"><span class="k">التسويق</span><h3>الخطة التسويقية</h3><ul><li>استراتيجية التسعير</li><li>قنوات الوصول للعملاء وميزانيتها</li><li>خطة الافتتاح وأول ٦ أشهر</li></ul></div>
-      <div class="part"><span class="k">النظام</span><h3>الجوانب النظامية</h3><ul><li>التحقق المبكر من اشتراطات بلدي والدفاع المدني للموقع المقترح، قبل توقيع الإيجار</li><li>الترخيص والاشتراطات المطلوبة للنشاط</li><li>الشكل القانوني المناسب للمنشأة</li><li>متطلبات التوظيف والسعودة للنشاط حسب نطاقات</li><li>التكاليف الحكومية: التأمينات، المقابل المالي، الإقامات، السجل، الرخص، الزكاة والضريبة</li></ul></div>
-      <div class="part"><span class="k">المخاطر</span><h3>المخاطر والسيناريوهات</h3><ul><li>تحليل الحساسية: المبيعات، الأسعار، الإيجار، الرواتب، تأخر الافتتاح</li><li>الموسمية: رمضان والصيف والأعياد حسب النشاط</li><li>تحليل نقاط القوة والضعف والفرص والتهديدات (SWOT)</li><li>خطة للتعامل مع أهم المخاطر</li></ul></div>
-      <div class="part"><span class="k">القرار</span><h3>التوصية النهائية</h3><p>خلاصة واضحة: يستاهل المشروع ولا لا، وبأي شروط، ووش اللي لازم يتغير عشان ينجح.</p></div>
-    </div>
-
-    <h3 class="sub-h">اختر نوع الدراسة</h3>
-    <div class="ftypes">
-      <article class="ftype"><h3>دراسة مبدئية</h3><p class="for">عندك فكرة وتبي تعرف بسرعة هل تستاهل تكمل فيها.</p>
-        <ul><li>تقدير التكاليف والإيرادات</li><li>نقطة التعادل وفترة الاسترداد</li><li>نظرة سريعة على المنافسين</li><li>توصية: نكمل ولا نوقف</li></ul>
-        <a class="btn btn-ghost" href="#contact" data-pkg="دراسة جدوى مبدئية">اطلب دراسة مبدئية</a></article>
-      <article class="ftype featured"><span class="badge" style="align-self:flex-start;font-size:.75rem;font-weight:600;background:var(--accent);color:var(--on-accent);border-radius:999px;padding:2px 10px">الأشمل</span><h3>دراسة تفصيلية</h3><p class="for">قررت تستثمر وتبي خطة كاملة قبل ما تصرف.</p>
-        <ul><li>كل مكونات الدراسة السبعة</li><li>نموذج مالي لخمس سنوات بثلاث سيناريوهات</li><li>دراسة سوق ميدانية</li><li>عرض مختصر للشركاء أو المستثمرين</li></ul>
-        <a class="btn btn-primary" href="#contact" data-pkg="دراسة جدوى تفصيلية">اطلب دراسة تفصيلية</a></article>
-      <article class="ftype"><h3>دراسة للتمويل</h3><p class="for">بتقدّم على تمويل من بنك، أو جهة دعم مثل بنك التنمية الاجتماعية أو برنامج كفالة.</p>
-        <ul><li>الدراسة التفصيلية بصيغة جهة التمويل</li><li>تجهيز النموذج المالي حسب متطلباتها</li><li>مراجعة الملف قبل التقديم</li></ul>
-        <a class="btn btn-ghost" href="#contact" data-pkg="دراسة جدوى للتمويل">اطلب دراسة للتمويل</a></article>
-    </div>
-    <p class="fmt" style="margin-top:10px">نجهز الدراسة حسب متطلبات الجهة اللي تقدم لها، وقرار التمويل يرجع لها.</p>
-
-    <h3 class="sub-h">القطاعات اللي نغطيها</h3>
-    <div class="parts">
-      <div class="part"><span class="k">نغطيها</span><h3>مشاريع صغيرة ومتوسطة</h3><ul><li>المطاعم والكافيهات والأغذية</li><li>المتاجر والتجزئة والمتاجر الإلكترونية</li><li>الصالونات والخدمات الشخصية</li><li>المشاريع الخدمية والمكتبية الصغيرة</li></ul></div>
-      <div class="part"><span class="k">مع متخصص</span><h3>مشاريع تحتاج خبرة فنية</h3><p>المصانع، والمنشآت الطبية، والمشاريع الزراعية والعقارية الكبيرة نقبلها بس مع متخصص في القطاع يشاركنا، لأن الجانب الفني فيها يحتاج خبرة ما تغطيها الدراسة المالية لحالها.</p></div>
-    </div>
-
-    <h3 class="sub-h">من وين نجيب الأرقام</h3>
-    <p class="fmt" style="max-width:46em;margin-bottom:12px">كل دراسة فيها صفحة اسمها "الافتراضات ومصادر البيانات" توضح لكل رقم مصدره، عشان تعرف وش الثابت ووش التقديري:</p>
-    <div class="deliver">
-      <div><b>عرض سعر فعلي</b>من مورد أو مؤجر، مؤرخ وله صلاحية.</div>
-      <div><b>مصدر رسمي</b>الهيئة العامة للإحصاء، منشآت، المنصات الحكومية.</div>
-      <div><b>بحث ميداني</b>زيارات للمنافسين، عدّ الزبائن، استبيان.</div>
-      <div><b>تقدير تحليلي</b>من معايير القطاع، ونوضح كيف حسبناه.</div>
-      <div><b>رقم من العميل</b>نعلّمه بوضوح ونختبره في تحليل الحساسية.</div>
-    </div>
-
-    <h3 class="sub-h">التزاماتنا وحدودنا</h3>
-    <div class="policy">
-      <div><h3>نلتزم بـ</h3><ul><li>نطاق مكتوب يوضح وش تشمل الدراسة ووش ما تشمل</li><li>جولتين تعديل على المسودة</li><li>نموذج Excel بمعادلات مكشوفة تقدر تراجعها</li><li>سرية معلوماتك المالية والتجارية، واتفاقية سرية لو طلبتها</li><li>توثيق مصدر كل رقم وتاريخ عروض الأسعار</li></ul></div>
-      <div><h3>ما نضمن</h3><ul><li>نجاح المشروع أو تحقيق الأرباح المتوقعة، لأن الدراسة مبنية على افتراضات وظروف السوق وقت إعدادها</li><li>قبول التمويل، لأن القرار لجهة التمويل</li><li>صحة البيانات اللي يقدمها العميل نفسه</li><li>ثبات الأسعار والرسوم الحكومية بعد تاريخ الدراسة</li></ul></div>
-    </div>
-
-    <h3 class="sub-h">كيف نشتغل عليها</h3>
-    <ol class="steps">
-      <li><h3>جلسة الفكرة</h3><p>نفهم المشروع والمكان والميزانية المتاحة وأهدافك.</p></li>
-      <li><h3>جمع البيانات</h3><p>عروض أسعار من ٣ موردين، زيارات للمنافسين، استبيان للعملاء، والتحقق من اشتراطات الموقع.</p></li>
-      <li><h3>التحليل والنموذج المالي</h3><p>نبني الأرقام ونختبرها على أكثر من سيناريو.</p></li>
-      <li><h3>التسليم والنقاش</h3><p>نعرض النتائج ونجاوب على أسئلتك، ونعدّل حسب ملاحظاتك.</p></li>
-    </ol>
-
-    <h3 class="sub-h">وش تستلم</h3>
-    <div class="deliver">
-      <div><b>تقرير الدراسة PDF</b>كل الأقسام مع التوصية النهائية.</div>
-      <div><b>النموذج المالي Excel</b>قابل للتعديل، تغيّر أي رقم وتشوف أثره.</div>
-      <div><b>عرض مختصر</b>شرائح للشريك أو المستثمر أو جهة التمويل.</div>
-      <div><b>بعد الافتتاح</b>لوحة تقارن أرقامك الفعلية بالدراسة شهرياً (خدمة اختيارية).</div>
-    </div>
-  </section>
 
   <section class="block" id="process">
     <div class="sec-head">
@@ -1095,7 +326,7 @@ input.qty{max-width:110px;min-width:64px}
         <h3 style="margin-top:10px;font-size:1.35rem">باقة التجربة المجانية</h3>
         <p>جرّب الأدوات على بياناتك الفعلية بدون دفع، واحجز استشارة أولى نراجع فيها احتياجك. لما يخلص الرصيد، تختار الباقة اللي تناسبك.</p>
         <div class="cta" style="margin-top:16px">
-          <a class="btn btn-primary" href="#tools" data-tool="sales">ابدأ التجربة</a>
+          <a class="btn btn-primary" href="tools.html?tool=sales">ابدأ التجربة</a>
           <a class="btn btn-ghost" href="#contact" data-pkg="الباقة المجانية: استشارة أولى">احجز الاستشارة</a>
         </div>
       </div>
@@ -1244,19 +475,9 @@ input.qty{max-width:110px;min-width:64px}
   </footer>
 </div>
 
-<!-- SheetJS 0.20.3 (fixes CVE-2023-30533 and CVE-2024-22363), served from this site, not a third-party CDN -->
-<script src="assets/vendor/xlsx-0.20.3.full.min.js"></script>
 <script src="assets/i18n.js?v=10"></script>
 <script src="assets/api.js?v=10"></script>
-<script src="assets/site-tools.js?v=10"></script>
+<script src="assets/site-footer.js?v=10"></script>
 <script src="assets/site-discover.js?v=10"></script>
 <script src="assets/site-requests.js?v=10"></script>
-<script src="assets/site-systems.js?v=10"></script>
-<script src="assets/site-feasibility.js?v=10"></script>
-<script src="assets/site-extra.js?v=10"></script>
-
-<script src="assets/manual.js?v=10"></script>
-<script src="assets/products.js?v=10"></script>
-<script src="assets/costing.js?v=10"></script>
-<script src="assets/rent.js?v=10"></script>
 </body></html>

@@ -194,7 +194,10 @@
     window.__daSaveXlsx([{name:"الافتراضات",rows:inputs},{name:"قائمة الدخل",rows:pl},{name:"التكاليف الحكومية",rows:gov.length?gov:[{"البند":"—","سنوياً":0}]},{name:"المؤشرات",rows:kp}],"دراسة-جدوى-مبدئية.xlsx",$("c-xl-st"),function(msg){$("c-xl-st").textContent=msg})});
   $("c-send").addEventListener("click",function(){if(!last)return;var o=last.o,m=last.m,tp=$("c-tpl");
     var txt="أبي دراسة جدوى لمشروع: "+tp.options[tp.selectedIndex].text+"\nتكاليف التأسيس: "+fmt(o.capex)+" ر.س\nعملاء يومياً: "+o.cust+" · متوسط الفاتورة: "+o.ticket+" ر.س\nالموظفين: "+o.sa+" سعودي و"+o.ex+" غير سعودي\nنتيجة الحاسبة: ربح شهري "+fmt(m.monthNetY2)+" ر.س في السنة الثانية، أقصى احتياج "+fmt(m.maxNeed)+" ر.س، استرداد "+payTxt(m.payM);
-    var t=$("f-type"),msg=$("f-msg");if(t)t.value="دراسة جدوى تفصيلية";if(msg)msg.value=txt.slice(0,2000);
-    var c=$("contact");if(c)c.scrollIntoView({behavior:"smooth",block:"start"});setTimeout(function(){var nm=$("f-name");if(nm)nm.focus({preventScroll:true})},500)});
+    var t=$("f-type"),msg=$("f-msg"),c=$("contact");
+    /* نموذج التواصل موجود في الصفحة الرئيسية فقط. من صفحة دراسات الجدوى ننتقل له بالأرقام جاهزة */
+    if(!c){location.href="index.html?pkg="+encodeURIComponent("دراسة جدوى تفصيلية")+"&msg="+encodeURIComponent(txt)+"#contact";return}
+    if(t)t.value="دراسة جدوى تفصيلية";if(msg)msg.value=txt.slice(0,2000);
+    c.scrollIntoView({behavior:"smooth",block:"start"});setTimeout(function(){var nm=$("f-name");if(nm)nm.focus({preventScroll:true})},500)});
   fill("cafe");render();
 })();

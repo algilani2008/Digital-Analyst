@@ -51,7 +51,7 @@
       "</dl></details>" +
       '<div class="prod-grid">' + a.products.slice().sort(function (x, y) { return x.rank - y.rank; }).map(function (p) { return card(p, src); }).join("") + "</div>" +
       '<div class="prod-foot"><p class="fmt">آخر تحديث آلي: <b class="num">' + E(D.updated) + "</b> · " + E(D.method || "") + "</p>" +
-      '<div class="cta"><a class="btn btn-primary btn-sm" href="#costing">احسب تكلفة منتجك وربحك</a><a class="btn btn-ghost btn-sm" href="#contact">اطلب دراسة لمنتجك</a></div></div>';
+      '<div class="cta"><a class="btn btn-primary btn-sm" href="#costing">احسب تكلفة منتجك وربحك</a><a class="btn btn-ghost btn-sm" href="index.html#contact">اطلب دراسة لمنتجك</a></div></div>';
   }
 
   root.addEventListener("click", function (e) {

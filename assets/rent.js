@@ -137,7 +137,7 @@
   function out() {
     var o = document.getElementById("rt-out"); if (!o) return;
     var c = city(st.city), p = pick(), unit = isUnit(st.type), lbl = unit ? "ر.س سنويًا للوحدة" : "ر.س للمتر سنويًا";
-    if (!p) { o.innerHTML = '<p class="verdict">ما عندنا أسعار ' + E(T[st.type][0]) + " في " + E(region(st.region).name) + ' للحين. اكتب إيجارك الفعلي تحت عشان تستخدمه في حاسبة التكلفة، أو <a href="#contact">اطلب دراسة موقع</a>.</p>' + mineBox(null, unit); return; }
+    if (!p) { o.innerHTML = '<p class="verdict">ما عندنا أسعار ' + E(T[st.type][0]) + " في " + E(region(st.region).name) + ' للحين. اكتب إيجارك الفعلي تحت عشان تستخدمه في حاسبة التكلفة، أو <a href="index.html#contact">اطلب دراسة موقع</a>.</p>' + mineBox(null, unit); return; }
     var cur = p.row, q = unit ? Math.max(1, +st.units || 1) : Math.max(1, +st.area || 1), yr = function (v) { return v == null || !isFinite(v) ? null : v * q; };
     var scope = p.level === "district" ? "حي " + st.district : p.level === "city" ? (st.district ? "ما عندنا سعر لحي " + st.district + "، هذا متوسط " + c.n : "متوسط " + c.n) : "ما عندنا أسعار في " + (c ? c.n : "") + "، هذا متوسط المنطقة";
     var flag = cur.sample ? '<span class="flag">' + (cur.auto ? "تقدير ذكاء اصطناعي" : "تقديري") + "</span>" : '<span class="flag good">' + E(DA.CONF[cur.confidence] || "موثق") + "</span>";

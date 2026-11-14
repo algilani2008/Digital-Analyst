@@ -39,9 +39,10 @@
   draw("visits");
 
   /* ---------- contact details: fill these in and they appear across the page ---------- */
+  /* روابط التواصل الأساسية في assets/site-footer.js (يحمّل قبل هذا الملف). نفس بيانات الاتصال هناك. */
   var CONTACT={whatsapp:"966569184730",email:""}; /* whatsapp: international digits only, e.g. 9665XXXXXXXX */
   function $id(i){return document.getElementById(i)}
-  function waLink(text){return CONTACT.whatsapp?"https://wa.me/"+CONTACT.whatsapp.replace(/\D/g,"")+(text?"?text="+encodeURIComponent(text):""):""}
+  function waLink(text){return window.__daWaLink?window.__daWaLink(text):(CONTACT.whatsapp?"https://wa.me/"+CONTACT.whatsapp.replace(/\D/g,"")+(text?"?text="+encodeURIComponent(text):""):"")}
   function mailLink(text){return CONTACT.email?"mailto:"+CONTACT.email+"?subject="+encodeURIComponent("طلب خدمة: العالم الرقمي")+(text?"&body="+encodeURIComponent(text):""):""}
   function reachLinks(text,small){var c=small?" btn-sm":"",out=[];
     var w=waLink(text),m=mailLink(text);
@@ -50,9 +51,18 @@
     return out}
   function fillReach(el,text,small){el.textContent="";reachLinks(text,small).forEach(function(a){el.appendChild(a)})}
   fillReach($id("reach"),"السلام عليكم، اطلعت على خدمات العالم الرقمي وأبي أناقش احتياج منشأتي.");
-  (function(){var f=$id("foot-reach"),parts=[];if(CONTACT.whatsapp)parts.push("واتساب: "+CONTACT.whatsapp);if(CONTACT.email)parts.push(CONTACT.email);f.textContent=parts.join(" · ")})();
 
   var form=$id("req"),sending=false;
+  /* الوصول من صفحة ثانية (الأدوات، الأنظمة، دراسات الجدوى) بنوع خدمة أو رسالة جاهزة: ?pkg=...&msg=... */
+  (function(){
+    var qs=new URLSearchParams(location.search),pkg=qs.get("pkg"),msg=qs.get("msg");
+    if(!pkg&&!msg)return;
+    var sel=$id("f-type");
+    if(pkg&&sel){var opt=[].find.call(sel.options,function(o){return o.value===pkg});if(opt)sel.value=pkg}
+    if(msg)$id("f-msg").value=msg.slice(0,2000);
+    try{history.replaceState(null,"",location.pathname+location.hash)}catch(e){}
+    var c=$id("contact");if(c)setTimeout(function(){c.scrollIntoView({behavior:"smooth",block:"start"});var nm=$id("f-name");if(nm)nm.focus({preventScroll:true})},300);
+  })();
   function looksLikeContact(s){return /^[+\d][\d\s-]{7,16}$/.test(s)||/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s)}
   form.addEventListener("submit",async function(e){
     e.preventDefault();if(sending)return;

@@ -117,7 +117,7 @@
     d.requests.push({ id: uid("r"), no: ++d.meta.seq.request, client_id: c3.id, title: "الفني ما يقدر يغير حالة الطلب", type: "دعم فني", priority: "عالية", status: "جديد", created: now() - 5 * 36e5, updated: now() - 5 * 36e5,
       messages: [{ from: "client", text: "حساب الفني سامي يظهر له الطلب بس ما يقدر يحوله لقيد التنفيذ.", at: now() - 5 * 36e5 }] });
     d.reports.push({ id: uid("t"), client_id: c1.id, title: "تقرير المبيعات الشهري: أكتوبر", kind: "تقرير", url: "", note: "أفضل فرع العزيزية، وفرع النسيم يحتاج مراجعة القهوة المختصة.", period: "2026-10", date: day(-6) });
-    d.reports.push({ id: uid("t"), client_id: c1.id, title: "لوحة المبيعات التفاعلية", kind: "لوحة", url: "https://algilani2008.github.io/Digital-Analyst/#tools", note: "تتحدث أول كل شهر.", period: "", date: day(-20) });
+    d.reports.push({ id: uid("t"), client_id: c1.id, title: "لوحة المبيعات التفاعلية", kind: "لوحة", url: "https://algilani2008.github.io/Digital-Analyst/tools.html?tool=sales", note: "تتحدث أول كل شهر.", period: "", date: day(-20) });
     d.invoices.push({ id: uid("i"), no: ++d.meta.seq.invoice, client_id: c1.id, desc: "باقة النمو: شهر أكتوبر", amount: 3000, vat: 450, total: 3450, issued: day(-35), due: day(-28), status: "مدفوعة", paid_at: day(-30) });
     d.invoices.push({ id: uid("i"), no: ++d.meta.seq.invoice, client_id: c1.id, desc: "باقة النمو: شهر نوفمبر", amount: 3000, vat: 450, total: 3450, issued: day(-5), due: day(2), status: "مستحقة" });
     d.invoices.push({ id: uid("i"), no: ++d.meta.seq.invoice, client_id: c3.id, desc: "الدفعة الثانية: نظام الصيانة", amount: 8000, vat: 1200, total: 9200, issued: day(-20), due: day(-6), status: "مستحقة" });

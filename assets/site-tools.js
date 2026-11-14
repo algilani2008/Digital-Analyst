@@ -324,8 +324,8 @@
   function armed(btn,label){if(btn.dataset.armed==="1")return true;
     var old=btn.textContent;btn.dataset.armed="1";btn.textContent=label;
     setTimeout(function(){if(btn.isConnected){btn.dataset.armed="";btn.textContent=old}},4000);return false}
-  /* wipe this device's data */
-  $("wipe").addEventListener("click",function(){
+  /* wipe this device's data (the button itself lives in index.html's privacy section; see site-footer.js) */
+  if($("wipe"))$("wipe").addEventListener("click",function(){
     if(!armed(this,"اضغط مرة ثانية للتأكيد"))return;this.dataset.armed="";this.textContent="امسح بياناتي من هذا الجهاز";
     try{localStorage.removeItem("da_free")}catch(x){}
     if(window.__daSysWipe)window.__daSysWipe();
