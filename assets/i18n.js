@@ -36,7 +36,7 @@
     [/^بهذي الأرقام تحتاج (\S+) وحدة شهريًا عشان تتعادل، وأنت تتوقع (\S+)\. ارفع الأسعار أو خفّض الثابت قبل أي توسع\.$/, "With these numbers you need $1 units a month to break even, and you expect $2. Raise prices or cut fixed costs before any expansion."],
     [/^صافي الربح يصير (\S+) ر\.س شهريًا \((\S+)\)$/, "Net profit becomes $1 SAR a month ($2)"],
     [/^هامشك (\S+) والتكلفة تحت السيطرة\. هذا مؤشر جيد قبل فرع ثاني، بشرط تثبت الأرقام 3 أشهر متتالية وعندك احتياطي سيولة 3 أشهر من الثابت \((\S+) ر\.س\)\.$/, "Your margin is $1 and costs are under control. A good sign before a second branch, provided the numbers hold for 3 months in a row and you keep a cash reserve of 3 months of fixed costs ($2 SAR)."],
-    [/^(.+) \((ساندويتش|صحن|كوب|علبة|عينة|زجاجة|جرعة)\)$/, function (m) { return t(m[1]) + " (" + t(m[2]) + ")"; }],
+    [/^(.+) \((ساندويتش|صحن|كوب|علبة|عينة|زجاجة|جرعة|وجبة|قطعة|كيس|عبوة|جلسة|باقة)\)$/, function (m) { return t(m[1]) + " (" + t(m[2]) + ")"; }],
     [/^(.+) \((جم|مل|حبة)\)$/, function (m) { return t(m[1]) + " (" + ({ "جم": "g", "مل": "ml", "حبة": "pc" })[m[2]] + ")"; }],
     [/^(.+) في (.+) \(ر\.س للمتر سنويًا\)$/, "$1 in $2 (SAR per m² a year)"], [/^(.+) في (.+) \(ر\.س سنويًا للوحدة\)$/, "$1 in $2 (SAR a year per unit)"],
     [/^بين (\S+) و (\S+)$/, "between $1 and $2"], [/^متوسط (\d+) حي في (.+)$/, "average of $1 districts in $2"],
@@ -50,6 +50,19 @@
     [/^(?:متوسط (.+?)|حي (.+?)|(ما عندنا .+?)) · المصدر: (.+?)(?: · (\d{4}-\d{2}))?(?: · آخر تحديث آلي (\S+))?$/, function (m) { return (m[1] ? t(m[1]) + " average" : m[2] ? m[2] + " district" : t(m[3])) + " · Source: " + t(m[4]) + (m[5] ? " · " + m[5] : "") + (m[6] ? " · last auto-update " + m[6] : ""); }],
     [/^الألوان: سعر (.+) من (\S+) \(فاتح\) إلى (\S+) \(غامق\)\. المنقط ما له سعر\.$/, "Colours: $1 price from $2 (light) to $3 (dark). Dotted = no price."],
     [/^ما فيه أسعار (.+) لأحياء (.+) للحين\.$/, "No $1 prices for districts of $2 yet."],
+    /* المنتجات الأعلى طلباً */
+    [/^السعر لكل (.+)$/, "Price per $1"],
+    [/^ر\.س \/ (.+)$/, "SAR / $1"],
+    [/^يتراوح بين (\S+) و(\S+) ر\.س حسب المكان والجودة$/, "Ranges from $1 to $2 SAR depending on location and quality"],
+    [/^ما عندنا مدى سعري مؤكد$/, "We have no confirmed price range"],
+    [/^(\d+) من 100 مقارنة ببقية منتجات نفس النشاط(?: · (.+))?$/, function (m) { return m[1] + " out of 100 compared with the other products in the same activity" + (m[2] ? " · " + t(m[2]) : ""); }],
+    [/^قوة الطلب (\d+) من 100$/, "Demand strength $1 out of 100"],
+    [/^تقدير أولي(?:: (.+))?$/, function (m) { return "Initial estimate" + (m[1] ? ": " + t(m[1]) : ""); }],
+    [/^(\d+)% من المستطلعين$/, "$1% of those surveyed"],
+    [/^أعلى فئة مطلوبة في التوصيل: (\d+)% من المستطلعين$/, "Top category ordered on delivery: $1% of those surveyed"],
+    [/^(\d+)% من المستطلعين، وترتفع في (.+) إلى (\d+)%$/, "$1% of those surveyed, rising to $3% in $2"],
+    [/^استطلاع Dodo Brands مع YouGov لـ(\S+) مستهلك سعودي: الفئات الأكثر طلباً في التوصيل$/, "Dodo Brands / YouGov survey of $1 Saudi consumers: the most ordered delivery categories"],
+    [/^تقييم العملاء: (\S+) من 5$/, "Customer rating: $1 out of 5"],
     [/^(.+) \*$/, "$1 *"], [/^(.+) ●$/, "$1 ●"]
   ];
 
@@ -98,5 +111,5 @@
   button();
   if (lang !== "en") return;
   document.documentElement.classList.add("i18n-wait"); setTimeout(function () { document.documentElement.classList.remove("i18n-wait"); }, 2500);
-  var s = document.createElement("script"); s.src = BASE + "assets/i18n-en.js?v=9"; s.onload = start; s.onerror = function () { document.documentElement.classList.remove("i18n-wait"); }; document.head.appendChild(s);
+  var s = document.createElement("script"); s.src = BASE + "assets/i18n-en.js?v=10"; s.onload = start; s.onerror = function () { document.documentElement.classList.remove("i18n-wait"); }; document.head.appendChild(s);
 })();

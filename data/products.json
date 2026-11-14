@@ -1,0 +1,55 @@
+{
+ "version": 1,
+ "updated": "2026-11-14",
+ "method": "تحديث أسبوعي بالذكاء الاصطناعي: يبحث في تقارير السوق المنشورة واستطلاعات المستهلك ومنصات التقييم (قوقل ومنصات التوصيل) والمصادر الرسمية، ويرتب المنتجات الأعلى طلباً في كل نشاط، ويكتب مؤشر الطلب وتقييم العملاء بمصدره. القائمة استرشادية للتخطيط، وليست إحصاءً رسمياً للمبيعات.",
+ "scales": {
+  "demand": "مؤشر الطلب 0 إلى 100: مبني على حصة المنتج في الاستطلاعات والتقارير المنشورة، وعلى اهتمام البحث. ليس حصة سوق فعلية.",
+  "rating": "متوسط تقييم العملاء من 5، من قوقل أو منصات التوصيل، مع عدد التقييمات لما يكون منشوراً."
+ },
+ "sources": [
+  {"id": "dodo-yougov-2025", "title": "استطلاع Dodo Brands مع YouGov لـ2000 مستهلك سعودي: الفئات الأكثر طلباً في التوصيل", "url": "https://dodobrands.io/blog/article/pizza-dominates-uae-saudi-delivery/", "date": "2025-08-01"}
+ ],
+ "activities": [
+  {"id": "rest", "name": "مطاعم ووجبات سريعة", "name_en": "Restaurants & fast food", "products": [
+   {"name": "برجر لحم", "name_en": "Beef burger", "unit": "ساندويتش", "rank": 1, "demand": 47, "price": {"min": 16, "avg": 27, "max": 48}, "rating": null, "confidence": "report", "sources": ["dodo-yougov-2025"], "note": "أعلى فئة مطلوبة في التوصيل: 47% من المستطلعين"},
+   {"name": "بيتزا", "name_en": "Pizza", "unit": "قطعة", "rank": 2, "demand": 41, "price": {"min": 25, "avg": 45, "max": 90}, "rating": null, "confidence": "report", "sources": ["dodo-yougov-2025"], "note": "41% من المستطلعين"},
+   {"name": "شاورما وكباب", "name_en": "Shawarma & kebab", "unit": "ساندويتش", "rank": 3, "demand": 38, "price": {"min": 8, "avg": 15, "max": 28}, "rating": null, "confidence": "report", "sources": ["dodo-yougov-2025"], "note": "38% من المستطلعين، وترتفع في الدمام إلى 54%"},
+   {"name": "دجاج مقلي", "name_en": "Fried chicken", "unit": "وجبة", "rank": 4, "demand": 33, "price": {"min": 18, "avg": 32, "max": 60}, "rating": null, "confidence": "report", "sources": ["dodo-yougov-2025"], "note": "33% من المستطلعين"},
+   {"name": "كبسة ومندي", "name_en": "Kabsa & mandi", "unit": "صحن", "rank": 5, "demand": 30, "price": {"min": 22, "avg": 38, "max": 75}, "rating": null, "confidence": "estimate", "sources": [], "note": "تقدير أولي: طبق رئيسي في المطاعم الشعبية والعائلية"},
+   {"name": "فطور شعبي (فول وتميس)", "name_en": "Local breakfast (foul & tameez)", "unit": "صحن", "rank": 6, "demand": 24, "price": {"min": 6, "avg": 12, "max": 22}, "rating": null, "confidence": "estimate", "sources": [], "note": "تقدير أولي: طلب صباحي عالٍ قرب المكاتب والأحياء"}
+  ]},
+  {"id": "cafe", "name": "كافيهات ومشروبات", "name_en": "Cafés & drinks", "products": [
+   {"name": "سبانش لاتيه", "name_en": "Spanish latte", "unit": "كوب", "rank": 1, "demand": 45, "price": {"min": 12, "avg": 19, "max": 28}, "rating": null, "confidence": "estimate", "sources": [], "note": "تقدير أولي: الأكثر طلباً في الكافيهات السعودية"},
+   {"name": "قهوة مختصة مقطرة", "name_en": "Specialty filter coffee", "unit": "كوب", "rank": 2, "demand": 34, "price": {"min": 14, "avg": 22, "max": 35}, "rating": null, "confidence": "estimate", "sources": [], "note": "تقدير أولي"},
+   {"name": "آيس لاتيه ومشروبات باردة", "name_en": "Iced latte & cold drinks", "unit": "كوب", "rank": 3, "demand": 32, "price": {"min": 13, "avg": 20, "max": 30}, "rating": null, "confidence": "estimate", "sources": [], "note": "تقدير أولي: يرتفع في الصيف"},
+   {"name": "قهوة سعودية وشاي", "name_en": "Saudi coffee & tea", "unit": "كوب", "rank": 4, "demand": 26, "price": {"min": 5, "avg": 11, "max": 20}, "rating": null, "confidence": "estimate", "sources": [], "note": "تقدير أولي"},
+   {"name": "كيك وحلى مع القهوة", "name_en": "Cake & sweets with coffee", "unit": "قطعة", "rank": 5, "demand": 22, "price": {"min": 10, "avg": 18, "max": 32}, "rating": null, "confidence": "estimate", "sources": [], "note": "تقدير أولي: يرفع متوسط الفاتورة"}
+  ]},
+  {"id": "bakery", "name": "مخابز وحلويات", "name_en": "Bakeries & sweets", "products": [
+   {"name": "كرواسون", "name_en": "Croissant", "unit": "حبة", "rank": 1, "demand": 38, "price": {"min": 4, "avg": 8, "max": 15}, "rating": null, "confidence": "estimate", "sources": [], "note": "تقدير أولي"},
+   {"name": "كيك بالقطعة", "name_en": "Cake slice", "unit": "قطعة", "rank": 2, "demand": 33, "price": {"min": 10, "avg": 18, "max": 30}, "rating": null, "confidence": "estimate", "sources": [], "note": "تقدير أولي"},
+   {"name": "معجنات وفطائر", "name_en": "Savoury pastries", "unit": "حبة", "rank": 3, "demand": 31, "price": {"min": 3, "avg": 6, "max": 12}, "rating": null, "confidence": "estimate", "sources": [], "note": "تقدير أولي"},
+   {"name": "كوكيز", "name_en": "Cookies", "unit": "حبة", "rank": 4, "demand": 25, "price": {"min": 5, "avg": 10, "max": 18}, "rating": null, "confidence": "estimate", "sources": [], "note": "تقدير أولي"},
+   {"name": "خبز يومي", "name_en": "Daily bread", "unit": "كيس", "rank": 5, "demand": 20, "price": {"min": 2, "avg": 5, "max": 10}, "rating": null, "confidence": "estimate", "sources": [], "note": "تقدير أولي: هامش منخفض وتكرار عالٍ"}
+  ]},
+  {"id": "perfume", "name": "عطور وعناية", "name_en": "Perfumes & care", "products": [
+   {"name": "عطر شرقي 50 مل", "name_en": "Oriental perfume 50 ml", "unit": "زجاجة", "rank": 1, "demand": 40, "price": {"min": 90, "avg": 190, "max": 450}, "rating": null, "confidence": "estimate", "sources": [], "note": "تقدير أولي: يرتفع في المواسم والأعياد"},
+   {"name": "بخور ودهن عود", "name_en": "Bakhoor & oud oil", "unit": "علبة", "rank": 2, "demand": 36, "price": {"min": 50, "avg": 140, "max": 600}, "rating": null, "confidence": "estimate", "sources": [], "note": "تقدير أولي"},
+   {"name": "معطر جسم ومزيل عرق", "name_en": "Body mist & deodorant", "unit": "عبوة", "rank": 3, "demand": 28, "price": {"min": 20, "avg": 45, "max": 90}, "rating": null, "confidence": "estimate", "sources": [], "note": "تقدير أولي"},
+   {"name": "عينات ومجموعات هدايا", "name_en": "Samples & gift sets", "unit": "علبة", "rank": 4, "demand": 24, "price": {"min": 60, "avg": 160, "max": 400}, "rating": null, "confidence": "estimate", "sources": [], "note": "تقدير أولي: أقوى في رمضان والأعياد"}
+  ]},
+  {"id": "retail", "name": "متاجر وتجزئة", "name_en": "Shops & retail", "products": [
+   {"name": "ملابس جاهزة", "name_en": "Ready-to-wear clothing", "unit": "قطعة", "rank": 1, "demand": 35, "price": {"min": 40, "avg": 120, "max": 400}, "rating": null, "confidence": "estimate", "sources": [], "note": "تقدير أولي"},
+   {"name": "إكسسوارات الجوال", "name_en": "Phone accessories", "unit": "قطعة", "rank": 2, "demand": 30, "price": {"min": 15, "avg": 55, "max": 180}, "rating": null, "confidence": "estimate", "sources": [], "note": "تقدير أولي: هامش مرتفع ودوران سريع"},
+   {"name": "مستلزمات منزلية", "name_en": "Home essentials", "unit": "قطعة", "rank": 3, "demand": 27, "price": {"min": 10, "avg": 45, "max": 160}, "rating": null, "confidence": "estimate", "sources": [], "note": "تقدير أولي"},
+   {"name": "ألعاب وهدايا", "name_en": "Toys & gifts", "unit": "قطعة", "rank": 4, "demand": 22, "price": {"min": 20, "avg": 70, "max": 250}, "rating": null, "confidence": "estimate", "sources": [], "note": "تقدير أولي: موسمي"}
+  ]},
+  {"id": "salon", "name": "صالونات وخدمات", "name_en": "Salons & services", "products": [
+   {"name": "قص وتصفيف", "name_en": "Haircut & styling", "unit": "جلسة", "rank": 1, "demand": 42, "price": {"min": 25, "avg": 55, "max": 150}, "rating": null, "confidence": "estimate", "sources": [], "note": "تقدير أولي"},
+   {"name": "عناية بالبشرة", "name_en": "Skincare session", "unit": "جلسة", "rank": 2, "demand": 30, "price": {"min": 80, "avg": 180, "max": 450}, "rating": null, "confidence": "estimate", "sources": [], "note": "تقدير أولي"},
+   {"name": "مانيكير وباديكير", "name_en": "Manicure & pedicure", "unit": "جلسة", "rank": 3, "demand": 26, "price": {"min": 50, "avg": 110, "max": 250}, "rating": null, "confidence": "estimate", "sources": [], "note": "تقدير أولي"},
+   {"name": "باقات شهرية", "name_en": "Monthly packages", "unit": "باقة", "rank": 4, "demand": 18, "price": {"min": 200, "avg": 450, "max": 1200}, "rating": null, "confidence": "estimate", "sources": [], "note": "تقدير أولي: ترفع تكرار الزيارة"}
+  ]}
+ ],
+ "log": [{"at": "2026-11-14", "note": "إنشاء الملف: فئات المطاعم من استطلاع Dodo Brands مع YouGov، والباقي تقديرات أولية قبل أول تحديث آلي."}]
+}

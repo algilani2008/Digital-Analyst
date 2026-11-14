@@ -1,17 +1,20 @@
 # تحديث أسعار الإيجار بالذكاء الاصطناعي كل أسبوع، أو يدويًا من تبويب Actions.
-name: تحديث أسعار الإيجار
+name: التحديث الأسبوعي للبيانات
 on:
   schedule:
     - cron: "20 23 * * 5"   # السبت 2:20 فجرًا بتوقيت الرياض
   workflow_dispatch:
     inputs:
       cities:
-        description: "مدن محددة مفصولة بفاصلة (فاضي = كل المدن)"
+        description: "مدن محددة للإيجارات، مفصولة بفاصلة (فاضي = كل المدن)"
+        required: false
+      activities:
+        description: "أنشطة محددة للمنتجات (rest,cafe,bakery,perfume,retail,salon)"
         required: false
 permissions:
   contents: write
   pages: write
-concurrency: rents
+concurrency: weekly-data
 jobs:
   update:
     runs-on: ubuntu-latest
@@ -21,7 +24,7 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 20
-      - name: البحث وتحديث الأسعار
+      - name: تحديث أسعار الإيجار
         env:
           # المفاتيح الثلاثة اختيارية، يكفي واحد. لو أكثر من واحد، كل نموذج يبحث لحاله ونعتمد اللي يتفقون عليه.
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -34,14 +37,27 @@ jobs:
           RENTS_PROVIDERS: ${{ vars.RENTS_PROVIDERS }}
           RENTS_CITIES: ${{ github.event.inputs.cities }}
         run: node scripts/update-rents.mjs
+      - name: تحديث المنتجات الأعلى طلباً
+        if: always()
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
+          CLAUDE_MODEL: ${{ vars.CLAUDE_MODEL }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL }}
+          RENTS_MODE: ${{ vars.RENTS_MODE }}
+          RENTS_PROVIDERS: ${{ vars.RENTS_PROVIDERS }}
+          PRODUCTS_ACTIVITIES: ${{ github.event.inputs.activities }}
+        run: node scripts/update-products.mjs
       - name: نشر التحديث
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if git diff --quiet data/rents.json; then echo "ما فيه تغيير"; exit 0; fi
+          if git diff --quiet data/rents.json data/products.json; then echo "ما فيه تغيير"; exit 0; fi
           git config user.name "rents-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/rents.json
-          git commit -m "تحديث أسعار الإيجار $(TZ=Asia/Riyadh date +%F)"
+          git add data/rents.json data/products.json
+          git commit -m "تحديث أسبوعي للبيانات $(TZ=Asia/Riyadh date +%F)"
           git push
           gh api -X POST "repos/${{ github.repository }}/pages/builds" || true
