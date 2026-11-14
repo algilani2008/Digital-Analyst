@@ -204,8 +204,8 @@
   function loadLeaflet() {
     if (window.L) return Promise.resolve();
     return new Promise(function (res, rej) {
-      var css = document.createElement("link"); css.rel = "stylesheet"; css.href = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"; document.head.appendChild(css);
-      var s = document.createElement("script"); s.src = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"; s.onload = res; s.onerror = rej; document.head.appendChild(s);
+      var css = document.createElement("link"); css.rel = "stylesheet"; css.href = BASE + "assets/vendor/leaflet/leaflet.css"; document.head.appendChild(css);
+      var s = document.createElement("script"); s.src = BASE + "assets/vendor/leaflet/leaflet.js"; s.onload = res; s.onerror = rej; document.head.appendChild(s);
     });
   }
   function start() {

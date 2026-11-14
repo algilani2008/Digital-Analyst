@@ -16,7 +16,19 @@
     var b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
     return Array.from(new Uint8Array(b)).map(function (x) { return x.toString(16).padStart(2, "0"); }).join("");
   }
-  async function hashPw(pw, salt) { return sha(salt + ":" + pw); }
+  /* كلمات المرور في الوضع التجريبي: PBKDF2-SHA256 بـ 210 ألف دورة. الحسابات القديمة (SHA-256) تترقى عند أول دخول ناجح.
+     هذا يحمي النسخة المحفوظة في المتصفح فقط؛ الحماية الفعلية تجي مع الخادم (password_hash في PHP). */
+  var PB_ITER = 210000;
+  async function hashPw(pw, salt) {
+    var enc = new TextEncoder(), key = await crypto.subtle.importKey("raw", enc.encode(pw), "PBKDF2", false, ["deriveBits"]);
+    var bits = await crypto.subtle.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt: enc.encode(salt), iterations: PB_ITER }, key, 256);
+    return "p2$" + Array.from(new Uint8Array(bits)).map(function (x) { return x.toString(16).padStart(2, "0"); }).join("");
+  }
+  async function checkPw(u, pw) {
+    if (String(u.pass).indexOf("p2$") === 0) return u.pass === await hashPw(pw, u.salt);
+    if (u.pass !== await sha(u.salt + ":" + pw)) return false;
+    u.pass = await hashPw(pw, u.salt); return true;   // ترقية الحساب القديم
+  }
   function strong(pw) { return typeof pw === "string" && pw.length >= 8 && /[A-Za-z]/.test(pw) && /\d/.test(pw); }
   function genPassword() {
     var a = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789", r = new Uint32Array(10), s = "";
@@ -160,7 +172,7 @@
       if (MODE === "server") { var j = await http("/auth/login", { username: username, password: pw, role: role }); localStorage.setItem(SKEY, JSON.stringify(Object.assign(j.session, { exp: now() + 8 * 36e5 }))); return session(); }
       var t = throttle(username); if (t.blocked) throw new Error("محاولات كثيرة. جرّب بعد 10 دقائق.");
       var d = db(), u = d.users.find(function (x) { return x.username === username && x.role === role; });
-      if (!u || u.pass !== await hashPw(pw, u.salt)) { t.fail(); throw new Error("اسم المستخدم أو كلمة المرور غير صحيحة."); }
+      if (!u || !(await checkPw(u, pw))) { t.fail(); throw new Error("اسم المستخدم أو كلمة المرور غير صحيحة."); }
       if (!u.active) throw new Error("الحساب موقوف. تواصل مع المحلل الرقمي.");
       if (role === "client") { var c = d.clients.find(function (x) { return x.id === u.client_id; }); if (!c || c.status === "ended") throw new Error("انتهى اشتراكك. تواصل معنا لتجديده."); }
       t.clear(); u.last_login = now(); logAct(d, u.name, "تسجيل دخول"); store(d); return setSession(u);
@@ -171,7 +183,7 @@
       if (!strong(newPw)) throw new Error("كلمة المرور الجديدة 8 أحرف على الأقل وفيها حرف ورقم.");
       if (MODE === "server") return http("/auth/password", { old: oldPw, new: newPw });
       var d = db(), u = d.users.find(function (x) { return x.id === s.uid; });
-      if (!u || (!s.must_change && u.pass !== await hashPw(oldPw, u.salt))) throw new Error("كلمة المرور الحالية غير صحيحة.");
+      if (!u || (!s.must_change && !(await checkPw(u, oldPw)))) throw new Error("كلمة المرور الحالية غير صحيحة.");
       u.salt = uid("s"); u.pass = await hashPw(newPw, u.salt); u.must_change = false; logAct(d, u.name, "غيّر كلمة المرور"); store(d);
       s.must_change = false; localStorage.setItem(SKEY, JSON.stringify(s));
     },

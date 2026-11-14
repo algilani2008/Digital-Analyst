@@ -54,6 +54,15 @@
     }
   });
   document.addEventListener("input", function (e) { var box = e.target.closest(".manual"); if (box) { clearTimeout(box._t); box._t = setTimeout(function () { store(box.id.slice(4), box); }, 400); } });
+  /* سحب وإفلات ملف Excel أو CSV على لوحة الأداة: يمر على نفس مسار زر الرفع (نفس الفحص والرصيد) */
+  ["sales", "traffic"].forEach(function (tool) {
+    var inp = document.getElementById("f-" + tool), zone = inp && inp.closest(".tool"); if (!zone) return;
+    ["dragenter", "dragover"].forEach(function (ev) { zone.addEventListener(ev, function (e) { if (e.dataTransfer && [].indexOf.call(e.dataTransfer.types || [], "Files") >= 0) { e.preventDefault(); zone.classList.add("drop-on"); } }); });
+    ["dragleave", "drop"].forEach(function (ev) { zone.addEventListener(ev, function () { zone.classList.remove("drop-on"); }); });
+    zone.addEventListener("drop", function (e) { var f = e.dataTransfer && e.dataTransfer.files; if (!f || !f.length) return; e.preventDefault();
+      if (zone.hidden || zone.offsetParent === null) return;
+      try { var dt = new DataTransfer(); dt.items.add(f[0]); inp.files = dt.files; inp.dispatchEvent(new Event("change", { bubbles: true })); } catch (x) {} });
+  });
   /* لصق جدول من Excel: يوزّع الأعمدة والصفوف ابتداءً من الخانة الحالية */
   document.addEventListener("paste", function (e) {
     var inp = e.target, box = inp.closest && inp.closest(".manual"); if (!box || inp.tagName !== "INPUT") return;
